@@ -47,6 +47,7 @@ Walking Skeleton (Heroku): https://csci3100-group9-project-c5b9f4042600.herokuap
 - Deployment: Heroku
 
 ### Pages
+- login page
 - homepage (listed items + search function + filter function)
 - community page
 - chatpage 
