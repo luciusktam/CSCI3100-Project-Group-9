@@ -46,7 +46,12 @@ Walking Skeleton (Heroku): https://csci3100-group9-project-c5b9f4042600.herokuap
 - CI: GitHub Actions
 - Deployment: Heroku
 
-
+### Pages
+- homepage (listed items + search function + filter function)
+- community page
+- chatpage 
+- search result page
+- profile
 
 ## Feature Ownership
 
@@ -54,9 +59,9 @@ Primary = main implementer. Secondary = support/reviewer + contributed commits/t
 
 | Feature Name | Primary Developer | Secondary Developer | Notes |
 | --- | --- | --- | --- |
-| Project skeleton + repo setup |  |  | Rails 7 init, initial structure. |
-| Deployment (Heroku) |  |  | Heroku config + deploy steps. |
-| CI pipeline (GitHub Actions) |  |  | Run RSpec + Cucumber in CI. |
+| Project skeleton + repo setup | Au Chi Hin | Lau Chi Ho | Rails 7 init, initial structure. |
+| Deployment (Heroku) | Lau Chi Ho |  | Heroku config + deploy steps. |
+| CI pipeline (GitHub Actions) | Au Chi Hin |  | Run RSpec + Cucumber in CI. |
 | User auth + roles |  |  | Auth + authorization boundaries. |
 | CUHK email verification (@link.cuhk.edu.hk) |  |  | Domain restriction + verification flow. |
 | Listings CRUD |  |  | Create/edit/delete listings + validations. |
