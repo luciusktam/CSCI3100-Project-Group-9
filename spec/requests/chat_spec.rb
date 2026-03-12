@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe "Chats", type: :request do
-  describe "GET /index" do
+  describe "GET /chat" do
     it "returns http success" do
-      get "/chat/index"
+      get "/chat"
       expect(response).to have_http_status(:success)
     end
   end

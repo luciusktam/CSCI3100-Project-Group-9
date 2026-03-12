@@ -1,21 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe "Listings", type: :request do
-  describe "GET /index" do
+  describe "GET /listings" do
     it "returns http success" do
-      get "/listings/index"
+      get "/listings"
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe "GET /new" do
+  describe "GET /listings/new" do
     it "returns http success" do
       get "/listings/new"
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe "GET /show" do
+  describe "GET /listings/show" do
     it "returns http success" do
       get "/listings/show"
       expect(response).to have_http_status(:success)
