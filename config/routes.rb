@@ -1,10 +1,17 @@
 Rails.application.routes.draw do
-  # Set root to home#index
+  # Root path - homepage
   root "home#index"
 
-  # If you have PWA routes, keep them:
-  # get "up" => "rails/health#show", as: :rails_health_check
-  # get 'service-worker' => 'pwa#service_worker'
-  # get 'manifest' => 'pwa#manifest'
+  # Basic pages
+  get "community", to: "community#index"
+  get "chat", to: "chat#index"
+  get "profile", to: "profile#index"
+  get "sell", to: "listings#new"
+  get 'login', to: 'login#index'
+  
+  # Listings routes (basic CRUD for now)
+  resources :listings, only: [:index, :show, :new, :create]
+  
+  # Search route
+  get "search", to: "listings#index"
 end
-# Updated routes
