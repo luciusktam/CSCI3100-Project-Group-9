@@ -8,20 +8,25 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-admin_email = ENV.fetch("SEED_ADMIN_EMAIL", "admin@link.cuhk.edu.hk").downcase
-admin_password = ENV.fetch("SEED_ADMIN_PASSWORD", "TempPass123!")
+if Rails.env.development? || Rails.env.test?
+  admin_email = ENV["SEED_ADMIN_EMAIL"]&.downcase
+  admin_password = ENV["SEED_ADMIN_PASSWORD"]
 
-if admin_email.end_with?("@link.cuhk.edu.hk")
-	admin = User.find_or_initialize_by(email: admin_email)
-	admin.assign_attributes(
-		username: "admin",
-		password: admin_password,
-		password_confirmation: admin_password,
-		role: :admin,
-		email_verified: true,
-		verified_at: Time.current
-	)
-	admin.save!
-else
-	warn "SEED_ADMIN_EMAIL must end with @link.cuhk.edu.hk"
+  if admin_email.blank? || admin_password.blank?
+    warn "Skipping admin seed: set SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD in your .env to seed an admin account."
+  elsif !admin_email.end_with?("@link.cuhk.edu.hk")
+    warn "Skipping admin seed: SEED_ADMIN_EMAIL must end with @link.cuhk.edu.hk"
+  else
+    admin = User.find_or_initialize_by(email: admin_email)
+    admin.assign_attributes(
+      username: "admin",
+      password: admin_password,
+      password_confirmation: admin_password,
+      role: :admin,
+      email_verified: true,
+      verified_at: Time.current
+    )
+    admin.save!
+    puts "Admin account seeded: #{admin_email}"
+  end
 end

@@ -113,7 +113,8 @@ When("I follow the verification link in the email") do
 	else
 		@verification_email.body.decoded
 	end
-	token_match = body.match(%r{/verify/([A-Za-z0-9_-]+)})
+	token_match = body.match(%r{https?://\S*/verify/(\S+)}i) ||
+	              body.match(%r{/verify/([0-9a-f]+)})
 	expect(token_match).not_to be_nil, "Could not find a /verify/:token link in the email body"
 	visit "/verify/#{token_match[1]}"
 end
