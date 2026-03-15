@@ -68,7 +68,7 @@ Primary = main implementer. Secondary = support/reviewer + contributed commits/t
 | Listings CRUD |  |  | Create/edit/delete listings + validations. |
 | Image uploads |  |  | Active Storage (or equivalent). |
 | Item status workflow |  |  | Available → Reserved → Sold. |
-| Search & filtering (fuzzy search) |  |  | Keyword search + filters. |
+| Search & filtering |  |  | Keyword search + filters + fuzzy search. |
 | Community/college feature |  |  | College grouping/community space. |
 | ActionCable chat/notifications |  |  | Real-time messaging + notifications. |
 | RSpec + SimpleCov |  |  | Unit tests + coverage evidence. |
