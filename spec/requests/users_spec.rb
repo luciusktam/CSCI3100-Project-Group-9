@@ -1,8 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "Email verification flow", type: :request do
+  include ActiveJob::TestHelper
+
   before do
     ActionMailer::Base.deliveries.clear
+    clear_enqueued_jobs
+    clear_performed_jobs
   end
 
   let(:verification_token) { SecureRandom.hex(32) }
@@ -65,28 +69,33 @@ RSpec.describe "Email verification flow", type: :request do
       recipient_email = "newreg_#{SecureRandom.hex(4)}@link.cuhk.edu.hk"
 
       expect {
-        post users_path, params: {
-          user: {
-            email:                 recipient_email,
-            username:              "newreguser",
-            password:              "Password123",
-            password_confirmation: "Password123"
+        perform_enqueued_jobs do
+          post users_path, params: {
+            user: {
+              email:                 recipient_email,
+              username:              "newreguser",
+              password:              "Password123",
+              password_confirmation: "Password123"
+            }
           }
-        }
+        end
       }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
 
     it "sends the verification email to the registered address" do
       recipient_email = "newreg2_#{SecureRandom.hex(4)}@link.cuhk.edu.hk"
 
-      post users_path, params: {
-        user: {
-          email:                 recipient_email,
-          username:              "newreguser2",
-          password:              "Password123",
-          password_confirmation: "Password123"
+      perform_enqueued_jobs do
+        post users_path, params: {
+          user: {
+            email:                 recipient_email,
+            username:              "newreguser2",
+            password:              "Password123",
+            password_confirmation: "Password123"
+          }
         }
-      }
+      end
+
       email = ActionMailer::Base.deliveries.last
       expect(email.to).to include(recipient_email)
       expect(email.subject).to include("Verify your CUHK email address")
