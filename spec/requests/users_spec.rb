@@ -39,14 +39,14 @@ RSpec.describe "Email verification flow", type: :request do
       end
     end
 
-    context "when the token has already been used" do
+    context "when the token has already been used (token cleared)" do
       before { user.update!(email_verified: true, verified_at: Time.current, verification_token: nil) }
 
-      it "redirects to login with an already-verified message" do
+      it "redirects to root with an invalid-link message" do
         get verify_email_path(token: verification_token)
-        expect(response).to redirect_to(login_path)
+        expect(response).to redirect_to(root_path)
         follow_redirect!
-        expect(response.body).to include("Email already verified.")
+        expect(response.body).to include("Invalid or expired verification link.")
       end
     end
 
