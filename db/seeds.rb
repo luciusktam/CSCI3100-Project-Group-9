@@ -9,7 +9,7 @@
 #   end
 
 if Rails.env.development? || Rails.env.test?
-  admin_email = ENV["SEED_ADMIN_EMAIL"]&.downcase
+  admin_email = ENV["SEED_ADMIN_EMAIL"].to_s.strip.downcase
   admin_password = ENV["SEED_ADMIN_PASSWORD"]
 
   if admin_email.blank? || admin_password.blank?

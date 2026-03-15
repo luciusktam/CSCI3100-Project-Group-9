@@ -5,6 +5,7 @@ require 'cucumber/rails'
 require 'capybara/rails'
 require 'capybara/cucumber'
 require 'active_job/test_helper'
+ActiveJob::Base.queue_adapter = :test
 
 require 'rspec/expectations'
 World(RSpec::Matchers)
