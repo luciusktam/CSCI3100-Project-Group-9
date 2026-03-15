@@ -1,2 +1,31 @@
-<h1>Login#index</h1>
-<p>Find me in app/views/login/index.html.erb</p>
+<div class="app auth-page">
+	<header class="navbar auth-navbar">
+		<%= link_to root_path, class: "logo" do %>
+			 CUSHMS
+		<% end %>
+		<div class="right-corner"></div>
+	</header>
+
+	<section class="auth-layout auth-layout-single">
+		<div class="auth-card-grid">
+			<section class="auth-card">
+				<h2>Login</h2>
+				<%= form_with url: login_path, method: :post, local: true, class: "auth-form" do |form| %>
+					<div class="field-group">
+						<%= form.label :email, "CUHK Email" %>
+						<%= form.email_field :email, name: :email, placeholder: "yourname@link.cuhk.edu.hk", required: true %>
+					</div>
+
+					<div class="field-group">
+						<%= form.label :password, "Password" %>
+						<%= form.password_field :password, name: :password, required: true %>
+					</div>
+
+					<%= form.submit "Login", class: "search-btn auth-submit" %>
+				<% end %>
+
+				<p class="auth-switch">Not registered yet? <%= link_to "Click here to register", register_path, class: "auth-inline-link" %></p>
+			</section>
+		</div>
+	</section>
+</div>

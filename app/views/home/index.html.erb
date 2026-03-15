@@ -1,9 +1,9 @@
 <div class="app">
     <!-- header with login on the upper right corner -->
     <header class="navbar">
-        <div class="logo">
-            <i class="fas fa-exchange-alt"></i> CUSHMS
-        </div>
+        <%= link_to root_path, class: "logo" do %>
+            CUSHMS
+        <% end %>
         <div class="nav-links">
             <%= link_to community_path do %>
                 <i class="fas fa-users"></i> Community
@@ -19,8 +19,25 @@
             <% end %>
         </div>
         <div class="right-corner">
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+                <i class="fas fa-moon"></i>
+                <span>Dark</span>
+            </button>
+            <% if user_signed_in? %>
+                <span class="session-badge">
+                    <i class="fas fa-user-check"></i>
+                    <%= current_user.username %>
+                    <% if current_user.admin? %>
+                        <strong>Admin</strong>
+                    <% end %>
+                </span>
+                <%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                <% end %>
+            <% else %>
             <%= link_to login_path, class: "login-btn" do %>
                 <i class="fas fa-sign-in-alt"></i> Login
+            <% end %>
             <% end %>
         </div>
     </header>
@@ -43,9 +60,9 @@
                 <i class="fas fa-arrow-right"></i> Search
             <% end %>
         </div>
-        <div class="filter-chip" style="display: flex; align-items: center; justify-content: space-between;">
-            <h2><i class="fas fa-sliders-h" style="margin-right: 10px; color:#2563eb;"></i> Filters</h2>
-            <span class="filter-tag" style="display: inline-flex; align-items: center; gap: 5px; color: #2563eb; cursor: pointer;"> 
+        <div class="filter-chip filter-chip-row">
+            <h2><i class="fas fa-sliders-h filter-title-icon"></i> Filters</h2>
+            <span class="filter-tag filter-clear"> 
                 <i class="fas fa-trash-alt"></i> clear all
             </span>
         </div>
@@ -53,9 +70,9 @@
 
     <!-- listed items (homepage product grid) -->
     <div class="section-header">
-        <h2><i class="fas fa-store-alt" style="margin-right: 10px; color:#2563eb;"></i> Fresh listings</h2>
+        <h2>Fresh listings</h2>
         <%= link_to listings_path do %>
-            view all <i class="fas fa-chevron-right" style="font-size:0.8rem;"></i>
+            view all <i class="fas fa-chevron-right section-link-icon"></i>
         <% end %>
     </div>
 
