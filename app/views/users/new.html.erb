@@ -1,0 +1,54 @@
+<div class="app auth-page">
+	<header class="navbar auth-navbar">
+		<%= link_to root_path, class: "logo" do %>
+			CUSHMS
+		<% end %>
+		<div class="right-corner">
+			<%= link_to root_path, class: "login-btn" do %>
+				<i class="fas fa-home"></i> Home
+			<% end %>
+		</div>
+	</header>
+
+	<section class="auth-layout auth-layout-single">
+		<div class="auth-card-grid">
+			<section class="auth-card">
+				<h2>Register</h2>
+				<% if @user&.errors&.any? %>
+					<div class="form-errors">
+						<% @user.errors.full_messages.each do |message| %>
+							<p><%= message %></p>
+						<% end %>
+					</div>
+				<% end %>
+
+				<%= form_with model: @user, url: users_path, local: true, class: "auth-form" do |form| %>
+					<div class="field-group">
+						<%= form.label :email, "CUHK Email" %>
+						<%= form.email_field :email, placeholder: "yourname@link.cuhk.edu.hk", required: true %>
+					</div>
+
+					<div class="field-group">
+						<%= form.label :username %>
+						<%= form.text_field :username, placeholder: "cuhkstudent", required: true %>
+					</div>
+
+					<div class="field-group">
+						<%= form.label :password %>
+						<%= form.password_field :password, required: true %>
+						<p class="field-hint">At least 8 characters.</p>
+					</div>
+
+					<div class="field-group">
+						<%= form.label :password_confirmation, "Confirm password" %>
+						<%= form.password_field :password_confirmation, required: true %>
+					</div>
+
+					<%= form.submit "Create account", class: "search-btn auth-submit" %>
+				<% end %>
+
+				<p class="auth-switch">Already registered? <%= link_to "Click here to login", login_path, class: "auth-inline-link" %></p>
+			</section>
+		</div>
+	</section>
+</div>
