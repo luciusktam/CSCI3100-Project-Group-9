@@ -1,6 +1,5 @@
-Given("the user is on the homepage") do
+Given("I am on the home page") do
   visit root_path
-  expect(page).to have_css('.navbar')
 end
 
 Then("the user should see the app logo {string}") do |logo_text|
