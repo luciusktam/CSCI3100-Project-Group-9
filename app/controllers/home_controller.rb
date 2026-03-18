@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def index
-    @fresh_listings = []
+     @fresh_listings = Listing.order(created_at: :desc).limit(6)
   end
   
   def login

@@ -2,6 +2,7 @@ class User < ApplicationRecord
   PASSWORD_RESET_EXPIRY = 30.minutes
 
   has_one_attached :avatar
+  has_many :listings, dependent: :destroy
 
   has_secure_password
 

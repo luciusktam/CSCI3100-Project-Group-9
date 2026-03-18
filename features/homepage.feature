@@ -33,6 +33,8 @@ Feature: Homepage
 
   @navigation
   Scenario: Navigate to profile page from homepage
+      Given a verified user exists with email "testuser@cuhk.edu.hk" and password "password123"
+      And the user is logged in as "testuser@cuhk.edu.hk" with password "password123"
     When the user clicks the "Profile" page button
     Then the user should be redirected to the profile page
 
@@ -146,6 +148,7 @@ Feature: Homepage
   @listings
   Scenario: Interact with product cards
     Given the product grid displays multiple items
+      Given there are listings in the product grid
     When the user clicks on the product card for "Film Camera"
     Then the user should be redirected to that product's detail page
     And they should see the full details of "Film Camera"

@@ -70,3 +70,19 @@ Then("they should see the full details of {string}") do |product_name|
   expect(page).to have_content(product_name)
   expect(page).to have_css('h1, h2', text: product_name)
 end
+When("the user is logged in as {string} with password {string}") do |email, password|
+  visit login_path
+  fill_in "CUHK Email", with: email
+  fill_in "Password", with: password
+  click_button "Login"
+  expect(page).to have_current_path(root_path)
+end
+
+Given("there are listings in the product grid") do
+  Listing.create!(title: "Film Camera", price: 299, location: "CUHK", category: "Electronics")
+  Listing.create!(title: "Leather Sofa", price: 450, location: "Sha Tin", category: "Furniture")
+  Listing.create!(title: "Jacket", price: 89, location: "Kowloon Tong", category: "Fashion")
+  visit root_path
+  expect(page).to have_css('.product-grid')
+  expect(page).to have_link("Film Camera")
+end
