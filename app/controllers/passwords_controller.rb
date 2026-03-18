@@ -9,8 +9,9 @@ class PasswordsController < ApplicationController
     user = User.find_by(email: email)
 
     if user
-      user.generate_password_reset_token!
-      UserMailer.password_reset_email(user).deliver_now
+      token = user.generate_password_reset_token!
+      user.update!(reset_password_sent_at: Time.current)
+      UserMailer.password_reset_email(user, token).deliver_later
     end
 
     redirect_to login_path, notice: "If that email exists, a password reset link has been sent."
@@ -39,7 +40,8 @@ class PasswordsController < ApplicationController
   private
 
   def load_user_from_token
-    @user = User.find_by(reset_password_token: params[:token])
+    token = params[:token].to_s
+    @user = User.all.find { |u| u.reset_password_token_matches?(token) }
     return if @user
 
     redirect_to forgot_password_path, alert: "Invalid reset link."

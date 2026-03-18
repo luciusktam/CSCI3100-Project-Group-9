@@ -17,19 +17,37 @@ class User < ApplicationRecord
 
   before_validation :normalize_email
 
+  # Active Storage avatar variants for performance
+  def avatar_profile
+    avatar.variant(resize_to_fill: [96, 96]) if avatar.attached?
+  end
+
+  def avatar_badge
+    avatar.variant(resize_to_fill: [22, 22]) if avatar.attached?
+  end
+
   def generate_password_reset_token!
-    update!(
-      reset_password_token: SecureRandom.hex(32),
-      reset_password_sent_at: Time.current
-    )
+    # Generate a random token and store its digest
+    token = SecureRandom.hex(32)
+    digest = BCrypt::Password.create(token)
+    update!(reset_password_token_digest: digest)
+    token # Return the plaintext token to send in email
+  end
+
+  def reset_password_token_matches?(token)
+    return false if reset_password_token_digest.blank?
+    
+    BCrypt::Password.new(reset_password_token_digest) == token
+  rescue BCrypt::Errors::InvalidHash
+    false
   end
 
   def clear_password_reset_token!
-    update!(reset_password_token: nil, reset_password_sent_at: nil)
+    update!(reset_password_token_digest: nil)
   end
 
   def password_reset_token_expired?
-    reset_password_sent_at.blank? || reset_password_sent_at < PASSWORD_RESET_EXPIRY.ago
+    reset_password_token_digest.blank? || reset_password_sent_at.blank? || reset_password_sent_at < PASSWORD_RESET_EXPIRY.ago
   end
 
   private

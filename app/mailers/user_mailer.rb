@@ -4,16 +4,16 @@ class UserMailer < ApplicationMailer
     @verify_url = verify_email_url(token: user.verification_token)
     mail(
       to:      user.email,
-      subject: "CUMarket \u2013 Verify your CUHK email address"
+      subject: "CUMarket – Verify your CUHK email address"
     )
   end
 
-  def password_reset_email(user)
+  def password_reset_email(user, token)
     @user = user
-    @reset_url = edit_password_url(token: user.reset_password_token)
+    @reset_url = edit_password_url(token: token)
     mail(
       to:      user.email,
-      subject: "CUMarket \u2013 Reset your password"
+      subject: "CUMarket – Reset your password"
     )
   end
 end
