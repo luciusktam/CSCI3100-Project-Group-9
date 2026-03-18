@@ -1,2 +1,59 @@
-<h1>Profile#index</h1>
-<p>Find me in app/views/profile/index.html.erb</p>
+<div class="app auth-page">
+	<header class="navbar auth-navbar">
+		<%= link_to root_path, class: "logo" do %>
+			CUSHMS
+		<% end %>
+		<div class="right-corner">
+			<%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
+				<i class="fas fa-sign-out-alt"></i> Logout
+			<% end %>
+		</div>
+	</header>
+
+	<section class="auth-layout auth-layout-single">
+		<div class="auth-card-grid">
+			<section class="auth-card profile-card">
+				<h2>My Profile</h2>
+
+				<% if current_user.errors.any? %>
+					<div class="form-errors">
+						<% current_user.errors.full_messages.each do |message| %>
+							<p><%= message %></p>
+						<% end %>
+					</div>
+				<% end %>
+
+				<%= form_with model: current_user, url: profile_path, method: :patch, local: true, class: "auth-form profile-form" do |form| %>
+					<div class="profile-avatar">
+						<% if current_user.avatar.attached? %>
+						<%= image_tag current_user.avatar, alt: "Profile icon", class: "profile-avatar-image" %>
+						<% end %>
+					</div>
+
+					<div class="field-group">
+						<%= form.label :avatar, "Profile icon" %>
+						<%= form.file_field :avatar, accept: "image/*" %>
+					</div>
+
+					<div class="field-group">
+						<%= form.label :username, "Name" %>
+						<%= form.text_field :username, required: true %>
+					</div>
+
+					<p class="profile-line"><strong>Email:</strong> <%= current_user.email %></p>
+
+					<%= form.submit "Save profile", class: "search-btn auth-submit" %>
+				<% end %>
+
+				<div class="profile-actions">
+					<%= button_to delete_profile_path,
+												method: :delete,
+												class: "login-btn delete-account-btn",
+												data: { turbo_confirm: "Delete your account permanently? This action cannot be undone." } do %>
+						<i class="fas fa-user-times"></i> Delete account
+					<% end %>
+				</div>
+			</section>
+		</div>
+	</section>
+</div>

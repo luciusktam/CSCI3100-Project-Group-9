@@ -8,11 +8,14 @@ class CreateUsers < ActiveRecord::Migration[8.1]
       t.boolean :email_verified, null: false, default: false
       t.string :verification_token
       t.datetime :verified_at
+      t.string :reset_password_token
+      t.datetime :reset_password_sent_at
 
       t.timestamps
     end
 
     add_index :users, :email, unique: true
     add_index :users, :verification_token, unique: true
+    add_index :users, :reset_password_token, unique: true
   end
 end

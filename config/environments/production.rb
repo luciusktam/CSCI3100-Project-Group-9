@@ -55,9 +55,7 @@ Rails.application.configure do
 
   # Gmail OAuth2 sender. Set GMAIL_ADDRESS, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET,
   # GOOGLE_REFRESH_TOKEN, and APP_HOST as environment variables.
-  require Rails.root.join("lib/gmail_oauth2_delivery")
   config.action_mailer.delivery_method = :gmail_oauth2
-  config.action_mailer.add_delivery_method :gmail_oauth2, GmailOauth2Delivery
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default_url_options = {
     host:     ENV.fetch("APP_HOST", "localhost"),

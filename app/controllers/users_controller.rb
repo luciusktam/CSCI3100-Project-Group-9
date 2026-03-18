@@ -30,6 +30,23 @@ class UsersController < ApplicationController
     end
   end
 
+  def resend_verification
+    email = params[:email].to_s.strip.downcase
+    user = User.find_by(email: email)
+
+    if user && !user.email_verified?
+      # Regenerate token and enqueue email asynchronously
+      user.update(verification_token: SecureRandom.hex(32))
+      UserMailer.verification_email(user).deliver_later if user.persisted?
+    end
+
+    redirect_to login_path, notice: "If the account exists and is unverified, a new verification email has been sent."
+  rescue StandardError => e
+    # Log error but don't expose details to user
+    Rails.logger.error("Resend verification failed: #{e.message}")
+    redirect_to login_path, notice: "If the account exists and is unverified, a new verification email has been sent."
+  end
+
   private
 
   def user_params

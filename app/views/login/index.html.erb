@@ -10,10 +10,17 @@
 		<div class="auth-card-grid">
 			<section class="auth-card">
 				<h2>Login</h2>
+				<% if @unverified_email.present? %>
+					<div class="verify-reminder-badge">
+						<i class="fas fa-envelope-open-text"></i>
+						<span>Email not verified yet.</span>
+						<%= button_to "Resend verification email", resend_verification_email_path, method: :post, params: { email: @unverified_email }, class: "search-btn resend-verify-btn" %>
+					</div>
+				<% end %>
 				<%= form_with url: login_path, method: :post, local: true, class: "auth-form" do |form| %>
 					<div class="field-group">
 						<%= form.label :email, "CUHK Email" %>
-						<%= form.email_field :email, name: :email, placeholder: "yourname@link.cuhk.edu.hk", required: true %>
+						<%= form.email_field :email, name: :email, placeholder: "yourname@link.cuhk.edu.hk", value: @prefill_email || params[:email], required: true %>
 					</div>
 
 					<div class="field-group">
@@ -23,6 +30,7 @@
 
 					<%= form.submit "Login", class: "search-btn auth-submit" %>
 				<% end %>
+				<p class="auth-switch"><%= link_to "Forgot password?", forgot_password_path, class: "auth-inline-link" %></p>
 
 				<p class="auth-switch">Not registered yet? <%= link_to "Click here to register", register_path, class: "auth-inline-link" %></p>
 			</section>

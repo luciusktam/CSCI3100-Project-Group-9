@@ -1,0 +1,38 @@
+<div class="app auth-page">
+  <header class="navbar auth-navbar">
+    <%= link_to root_path, class: "logo" do %>
+      CUSHMS
+    <% end %>
+    <div class="right-corner"></div>
+  </header>
+
+  <section class="auth-layout auth-layout-single">
+    <div class="auth-card-grid">
+      <section class="auth-card">
+        <h2>Reset password</h2>
+
+        <% if @user.errors.any? %>
+          <div class="form-errors">
+            <% @user.errors.full_messages.each do |message| %>
+              <p><%= message %></p>
+            <% end %>
+          </div>
+        <% end %>
+
+        <%= form_with model: @user, url: update_password_path(token: params[:token]), method: :patch, local: true, class: "auth-form" do |form| %>
+          <div class="field-group">
+            <%= form.label :password, "New password" %>
+            <%= form.password_field :password, required: true %>
+          </div>
+
+          <div class="field-group">
+            <%= form.label :password_confirmation, "Confirm new password" %>
+            <%= form.password_field :password_confirmation, required: true %>
+          </div>
+
+          <%= form.submit "Update password", class: "search-btn auth-submit" %>
+        <% end %>
+      </section>
+    </div>
+  </section>
+</div>

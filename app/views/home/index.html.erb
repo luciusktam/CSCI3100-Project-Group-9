@@ -25,7 +25,11 @@
             </button>
             <% if user_signed_in? %>
                 <span class="session-badge">
-                    <i class="fas fa-user-check"></i>
+                    <% if current_user.avatar.attached? %>
+                        <%= image_tag current_user.avatar, alt: "User icon", class: "session-avatar-image" %>
+                    <% else %>
+                        <i class="fas fa-user-circle session-avatar-icon"></i>
+                    <% end %>
                     <%= current_user.username %>
                     <% if current_user.admin? %>
                         <strong>Admin</strong>
