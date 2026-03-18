@@ -30,6 +30,18 @@ class UsersController < ApplicationController
     end
   end
 
+  def resend_verification
+    email = params[:email].to_s.strip.downcase
+    user = User.find_by(email: email)
+
+    if user && !user.email_verified?
+      user.update!(verification_token: SecureRandom.hex(32))
+      UserMailer.verification_email(user).deliver_now
+    end
+
+    redirect_to login_path, notice: "If the account exists and is unverified, a new verification email has been sent."
+  end
+
   private
 
   def user_params
