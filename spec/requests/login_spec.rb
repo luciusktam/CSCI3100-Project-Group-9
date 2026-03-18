@@ -43,14 +43,14 @@ RSpec.describe "Logins", type: :request do
     it "rejects an unverified user" do
       post login_path, params: { email: unverified_user.email, password: "Password123" }
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include("Your CUHK email has not been verified yet. Please check your email.")
     end
 
     it "rejects a wrong password" do
       post login_path, params: { email: verified_user.email, password: "WrongPassword123" }
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include("Invalid email or password.")
     end
   end
