@@ -1,6 +1,13 @@
 # CSCI3100-Project Group 9
 # CUSHMS — CUHK Second-Hand Marketplace SaaS
 
+## To Start Dev
+```
+bundle install
+rails db:setup 
+rails server
+```
+
 
 ## Overview
 CUSHMS is a CUHK-focused second-hand marketplace for students to buy/sell items (textbooks, furniture, daily goods).
@@ -62,9 +69,10 @@ Primary = main implementer. Secondary = support/reviewer + contributed commits/t
 | --- | --- | --- | --- |
 | Project skeleton + repo setup | Au Chi Hin | Lau Chi Ho | Rails 7 init, initial structure. |
 | Deployment (Heroku) | Lau Chi Ho |  | Heroku config + deploy steps. |
-| CI pipeline (GitHub Actions) | Au Chi Hin |  | Run RSpec + Cucumber in CI. |
-| User auth + roles |  |  | Auth + authorization boundaries. |
-| CUHK email verification (@link.cuhk.edu.hk) |  |  | Domain restriction + verification flow. |
+| CI pipeline (GitHub Actions) | Au Chi Hin | Tam Yiu Hei | Run RSpec + Cucumber in CI. |
+| User auth + roles | Tam Yiu Hei |  | Auth + authorization boundaries. |
+| User Profile | Tam Yiu Hei |  | User Profile for edit info |
+| CUHK email verification (@link.cuhk.edu.hk) | Tam Yiu Hei |  | Domain restriction + verification flow. |
 | Listings CRUD |  |  | Create/edit/delete listings + validations. |
 | Image uploads |  |  | Active Storage (or equivalent). |
 | Item status workflow |  |  | Available → Reserved → Sold. |
