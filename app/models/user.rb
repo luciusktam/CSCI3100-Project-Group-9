@@ -17,15 +17,6 @@ class User < ApplicationRecord
 
   before_validation :normalize_email
 
-  # Active Storage avatar variants for performance
-  def avatar_profile
-    avatar.variant(resize_to_fill: [96, 96]) if avatar.attached?
-  end
-
-  def avatar_badge
-    avatar.variant(resize_to_fill: [22, 22]) if avatar.attached?
-  end
-
   def generate_password_reset_token!
     # Generate a random token and store its digest
     token = SecureRandom.hex(32)

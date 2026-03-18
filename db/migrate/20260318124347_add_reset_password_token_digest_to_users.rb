@@ -4,10 +4,7 @@ class AddResetPasswordTokenDigestToUsers < ActiveRecord::Migration[8.1]
     add_column :users, :reset_password_token_digest, :string
     add_index :users, :reset_password_token_digest, unique: true
 
-    # Add timestamp for tracking when reset token was issued
-    add_column :users, :reset_password_sent_at, :datetime
-
-    # Remove old plaintext token column
+    # Remove old plaintext token column (reset_password_sent_at already exists from create_users)
     if column_exists?(:users, :reset_password_token)
       remove_index :users, :reset_password_token if index_exists?(:users, :reset_password_token)
       remove_column :users, :reset_password_token, :string
