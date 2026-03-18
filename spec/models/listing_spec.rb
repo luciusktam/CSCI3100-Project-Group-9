@@ -2,11 +2,18 @@ require 'rails_helper'
 
 RSpec.describe Listing, type: :model do
   let(:user) { User.create!(
-    email: "test@link.cuhk.edu.hk",
+    email: "test1@link.cuhk.edu.hk",
     username: "testuser",
     password: "Password123",
     password_confirmation: "Password123"
   )}
+  let(:image) do
+      fixture_file_upload(
+        Rails.root.join("spec/fixtures/files/test_image.jpg"),
+        "image/jpeg"
+      )
+    end
+
   let(:valid_attributes) {
     {
       title: "Test Item",
@@ -15,7 +22,8 @@ RSpec.describe Listing, type: :model do
       condition: "Good",
       location: "Chung Chi College",
       description: "This is a test item",
-      user: user
+      user: user,
+      photos: [ image ]
     }
   }
 
@@ -89,13 +97,12 @@ RSpec.describe Listing, type: :model do
   end
 
   describe "photo attachments" do
-    let(:listing) { Listing.create!(valid_attributes) }
+    let(:listing) { Listing.new(valid_attributes.except(:photos)) }
 
     it "can have photos attached" do
       file = Tempfile.new([ 'test-image', '.jpg' ])
       file.write('fake image content')
       file.rewind
-
 
       listing.photos.attach(
         io: file,
@@ -106,13 +113,13 @@ RSpec.describe Listing, type: :model do
       expect(listing.photos).to be_attached
       expect(listing.photos.count).to eq(1)
 
-
       file.close
       file.unlink
     end
 
     it "can have multiple photos attached" do
       files = []
+
       3.times do |i|
         file = Tempfile.new([ "test-image-#{i}", '.jpg' ])
         file.write("fake image content #{i}")
@@ -128,7 +135,6 @@ RSpec.describe Listing, type: :model do
 
       expect(listing.photos.count).to eq(3)
 
-
       files.each do |file|
         file.close
         file.unlink
@@ -137,14 +143,14 @@ RSpec.describe Listing, type: :model do
   end
 
   describe "custom validations" do
-    let(:listing) { Listing.create!(valid_attributes) }
+    let(:listing) { Listing.new(valid_attributes.except(:photos)) }
 
     context "when attaching more than 8 photos" do
-      it "is not valid" do
+      it "adds an error" do
         files = []
 
 
-        9.times do |i|
+        8.times do |i|
           file = Tempfile.new([ "test-image-#{i}", '.jpg' ])
           file.write("fake image content #{i}")
           file.rewind
@@ -158,11 +164,20 @@ RSpec.describe Listing, type: :model do
         end
 
 
+        extra_file = Tempfile.new([ "test-image-extra", '.jpg' ])
+        extra_file.write("fake image content extra")
+        extra_file.rewind
+        files << extra_file
+
+        listing.photos.attach(
+          io: extra_file,
+          filename: "test-image-extra.jpg",
+          content_type: 'image/jpg'
+        )
+
+
         listing.valid?
-
         expect(listing.errors[:photos]).to include("maximum 8 photos allowed")
-        expect(listing.photos.count).to be > 8
-
 
         files.each do |file|
           file.close

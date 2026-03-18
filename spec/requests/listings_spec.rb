@@ -110,10 +110,6 @@ RSpec.describe "Listings", type: :request do
   end
 
   describe "POST /sell" do
-    before do
-      file_path = Rails.root.join("spec/fixtures/files/test_image.jpg")
-    end
-
     let(:image) do
       fixture_file_upload(
         Rails.root.join("spec/fixtures/files/test_image.jpg"),
