@@ -6,6 +6,15 @@ class Listing < ApplicationRecord
   validates :category, presence: true
   validates :condition, presence: true
   validate :photos_count_within_limit
+  validate :photos_must_be_attached
+
+  private
+
+  def photos_must_be_attached
+    unless photos.attached?
+      errors.add(:photos, "must be attached")
+    end
+  end
 
   def photos_count_within_limit
     return unless photos.attached?

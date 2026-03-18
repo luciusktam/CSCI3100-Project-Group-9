@@ -14,6 +14,32 @@ RSpec.describe "Listings", type: :request do
     )
   end
 
+  def create_listing_with_photo(attributes = {})
+    listing = Listing.new(
+      title: attributes[:title] || "Default Title",
+      price: attributes[:price] || 100,
+      category: attributes[:category] || "Electronics",
+      condition: attributes[:condition] || "Good",
+      location: attributes[:location] || "Campus",
+      description: attributes[:description] || "Default description",
+      user: attributes[:user] || user
+    )
+
+    file_path = Rails.root.join("spec/fixtures/files/test_image.jpg")
+
+
+
+
+    listing.photos.attach(
+      io: File.open(file_path),
+      filename: 'test_image.jpg',
+      content_type: 'image/jpeg'
+    )
+
+    listing.save!
+    listing
+  end
+
   def login(user)
     post login_path, params: {
       email: user.email,
@@ -28,7 +54,7 @@ RSpec.describe "Listings", type: :request do
     end
 
     it "displays listings" do
-      Listing.create!(
+      create_listing_with_photo(
         title: "Laptop",
         price: 500,
         category: "Electronics",
@@ -39,7 +65,6 @@ RSpec.describe "Listings", type: :request do
       )
 
       get listings_path
-
       expect(response.body).to include("Laptop")
     end
   end
@@ -52,7 +77,6 @@ RSpec.describe "Listings", type: :request do
 
     it "returns success when logged in" do
       login(user)
-
       get sell_path
       expect(response).to have_http_status(:success)
     end
@@ -60,7 +84,7 @@ RSpec.describe "Listings", type: :request do
 
   describe "GET /listings/:id" do
     let!(:listing) do
-      Listing.create!(
+      create_listing_with_photo(
         title: "Test Item",
         price: 100,
         category: "Electronics",
@@ -86,6 +110,10 @@ RSpec.describe "Listings", type: :request do
   end
 
   describe "POST /sell" do
+    before do
+      file_path = Rails.root.join("spec/fixtures/files/test_image.jpg")
+    end
+
     let(:image) do
       fixture_file_upload(
         Rails.root.join("spec/fixtures/files/test_image.jpg"),
