@@ -1,29 +1,76 @@
 <div class="app">
-  <%= render "home/header" %>
+   <header class="navbar">
+        <%= link_to root_path, class: "logo" do %>
+            CUMarket
+        <% end %>
+        <div class="nav-links">
+            <%= link_to community_path do %>
+                <i class="fas fa-users"></i> Community
+            <% end %>
+            <%= link_to chat_path do %>
+                <i class="fas fa-comment-dots"></i> Chat
+            <% end %>
+            <%= link_to sell_path do %>
+                <i class="fas fa-euro-sign"></i> Sell
+            <% end %>
+            <%= link_to profile_path do %>
+                <i class="fas fa-user-circle"></i> Profile
+            <% end %>
+        </div>
+        <div class="right-corner">
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+                <i class="fas fa-moon"></i>
+                <span>Dark</span>
+            </button>
+            <% if user_signed_in? %>
+                <span class="session-badge">
+                    <i class="fas fa-user-check"></i>
+                    <%= current_user.username %>
+                    <% if current_user.admin? %>
+                        <strong>Admin</strong>
+                    <% end %>
+                </span>
+                <%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                <% end %>
+            <% else %>
+            <%= link_to login_path, class: "login-btn" do %>
+                <i class="fas fa-sign-in-alt"></i> Login
+            <% end %>
+            <% end %>
+        </div>
+    </header>
 
-  <!-- 新增物品表單 -->
   <div class="new-listing-container">
     <div class="form-card">
       <h2 class="form-title">Create a new listing</h2>
 
       <%= form_with model: @listing,
-                    url: listings_path,
+                    url: sell_path,
                     local: true,
                     multipart: true,
+                    data: { turbo: false },
                     class: "styled-form" do |f| %>
 
-        <!-- 更漂亮的 Image 上傳區域 -->
         <div class="form-group image-upload-group">
-          <%= f.label :photos, "Images", class: "form-label" %>
-          <div class="upload-area" id="upload-area">
+          <%= f.label :photos, "Images (8 images maximum)", class: "form-label" %>
+          
+          <div class="upload-container">
+          
             <%= f.file_field :photos, 
                              multiple: true, 
                              accept: "image/*", 
-                             class: "file-input-hidden" %>
-            <div class="upload-placeholder">
+                             class: "file-input-hidden",
+                             id: "photo-upload" %>
+            
+           
+            <div class="preview-grid" id="preview-grid"></div>
+            
+       
+            <div class="upload-area" id="upload-area">
               <i class="fas fa-cloud-upload-alt"></i>
-              <p>Click to upload or drag & drop photos here</p>
-              <small>10 photos at most</small>
+              <p>click to upload images</p>
+              <small>maximum 8 photos (uploaded <span id="photo-count">0</span>/8)</small>
             </div>
           </div>
         </div>
@@ -47,10 +94,7 @@
         <div class="form-row">
           <div class="form-group">
             <%= f.label :price, class: "form-label" %>
-            <div class="price-input-group">
-              <span class="currency-symbol">$</span>
-              <%= f.number_field :price, step: 0.01, placeholder: "0.00", class: "form-input price-input" %>
-            </div>
+              <%= f.number_field :price, step: 1, placeholder: "$0.00", class: "form-input price-input" %>
           </div>
         </div>
 
@@ -64,7 +108,7 @@
         <div class="form-row">
           <div class="form-group">
             <%= f.label :location, class: "form-label" %>
-            <%= f.text_field :location, placeholder: "e.g. CUHK, Sha Tin", class: "form-input" %>
+            <%= f.text_field :location, placeholder: "Chung Chi College", class: "form-input" %>
           </div>
         </div>
 
@@ -83,3 +127,112 @@
     </div>
   </div>
 </div>
+
+<!-- JavaScript -->
+
+<script>
+  let imageUploaderInitialized = false;
+
+  function initImageUploader() {
+   
+    if (imageUploaderInitialized) return;
+    imageUploaderInitialized = true;
+
+    const fileInput = document.getElementById('photo-upload');
+    const uploadArea = document.getElementById('upload-area');
+    const previewGrid = document.getElementById('preview-grid');
+    const photoCountSpan = document.getElementById('photo-count');
+
+    if (!fileInput || !uploadArea || !previewGrid || !photoCountSpan) return;
+
+    let currentFiles = [];
+    const MAX_PHOTOS = 8;
+
+
+    fileInput.value = '';
+    currentFiles = [];
+    previewGrid.innerHTML = '';
+    photoCountSpan.textContent = '0';
+
+    function updatePhotoCount() {
+      photoCountSpan.textContent = currentFiles.length;
+    }
+
+    function syncFilesToInput() {
+      const dataTransfer = new DataTransfer();
+      currentFiles.forEach(file => dataTransfer.items.add(file));
+      fileInput.files = dataTransfer.files;
+    }
+
+    function renderPreviews() {
+      previewGrid.innerHTML = '';
+
+      currentFiles.forEach((file, index) => {
+        const previewItem = document.createElement('div');
+        previewItem.className = 'preview-item';
+        previewItem.dataset.index = index;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          previewItem.innerHTML = `
+            <img src="${e.target.result}" alt="Preview ${index + 1}">
+            <button type="button" class="remove-image" data-index="${index}">
+              <i class="fas fa-times"></i>
+            </button>
+          `;
+        };
+        reader.readAsDataURL(file);
+        previewGrid.appendChild(previewItem);
+      });
+    }
+
+    function handleFiles(newFiles) {
+      const validFiles = Array.from(newFiles).filter(file => file.type.startsWith('image/'));
+
+      if (currentFiles.length + validFiles.length > MAX_PHOTOS) {
+        alert(`Maximum ${MAX_PHOTOS} photos allowed`);
+        return;
+      }
+
+      currentFiles = [...currentFiles, ...validFiles];
+      syncFilesToInput();
+      renderPreviews();
+      updatePhotoCount();
+    }
+
+    function removeImage(indexToRemove) {
+      currentFiles.splice(indexToRemove, 1);
+      syncFilesToInput();
+      renderPreviews();
+      updatePhotoCount();
+    }
+
+    uploadArea.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+
+    fileInput.addEventListener('change', (e) => {
+      handleFiles(e.target.files);
+      
+    });
+
+    previewGrid.addEventListener('click', (e) => {
+      const removeBtn = e.target.closest('.remove-image');
+      if (removeBtn) {
+        e.stopPropagation();
+        const index = parseInt(removeBtn.dataset.index, 10);
+        removeImage(index);
+      }
+    });
+
+  }
+
+ 
+  document.addEventListener('turbo:load', initImageUploader);
+
+
+  if (document.readyState === 'complete') {
+    initImageUploader();
+  }
+</script>

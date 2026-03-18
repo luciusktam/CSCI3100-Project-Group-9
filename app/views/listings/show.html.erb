@@ -1,2 +1,44 @@
-<h1>Listings#show</h1>
-<p>Find me in app/views/listings/show.html.erb</p>
+<p id="notice"><%= notice %></p>
+
+<h1><%= @listing.title %></h1>
+
+<p>
+  <strong>User:</strong>
+  <%= @listing.user.username %>
+</p>
+
+
+<p>
+  <strong>Price: $<%= number_with_precision(@listing.price, precision: 2) %></strong>
+  
+</p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @listing.category %>
+</p>
+
+<p>
+  <strong>Condition:</strong>
+  <%= @listing.condition %>
+</p>
+
+<p>
+  <strong>Location:</strong>
+  <%= @listing.location %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @listing.description %>
+</p>
+
+<% if @listing.photos.attached? %>
+  <div class="photos">
+    <% @listing.photos.each do |photo| %>
+      <%= image_tag photo %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= link_to 'Back', listings_path %>
