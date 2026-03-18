@@ -51,3 +51,22 @@ end
 Then("the user should be redirected to the login page") do
   expect(page).to have_current_path(login_path)
 end
+
+Given("the product grid displays multiple items") do
+  expect(page).to have_css('.listings-grid, .product-grid, [class*="grid"]')
+end
+
+When("the user clicks on the product card for {string}") do |product_name|
+  within('.listings-grid, .product-grid, [class*="grid"]') do
+    click_link product_name
+  end
+end
+
+Then("the user should be redirected to that product's detail page") do
+  expect(page).to have_current_path(%r{/listings/\d+}, ignore_query: true)
+end
+
+Then("they should see the full details of {string}") do |product_name|
+  expect(page).to have_content(product_name)
+  expect(page).to have_css('h1, h2', text: product_name)
+end
