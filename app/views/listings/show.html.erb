@@ -69,7 +69,7 @@
       <img id="modalImg">
     </div>
 
-    <!-- 🔥 TITLE + PRICE -->
+    
     <div class="listing-header">
       <h1><%= @listing.title %></h1>
       <div class="price">
@@ -78,7 +78,7 @@
     </div>
 
     <hr>
-    <!-- 🔥 INFO SECTION -->
+   
     <div class="listing-info-grid">
       <div class="info-row">
         <div class="info-col">
@@ -116,12 +116,33 @@
     
 
     
-
     <div class="listing-actions">
-      <%= link_to chat_path, class: "submit-btn" do %>
-        💬 Chat with seller
+      <% if user_signed_in? && current_user == @listing.user %>
+        
+        <div class="owner-actions">
+
+          <%= link_to edit_listing_path(@listing), class: "submit-btn" do %>
+            <i class="fas fa-edit"></i> Edit Listing
+          <% end %>
+          
+          <%= button_to @listing, method: :delete, 
+                class: "delete-btn", 
+                form: { style: 'display: inline;' } do %>
+            <i class="fas fa-trash-alt"></i> Delete Listing
+          <% end %>
+        </div>
+      <% else %>
+    
+        <%= link_to chat_path(seller_id: @listing.user.id, listing_id: @listing.id), 
+              class: "submit-btn" do %>
+          <i class="fas fa-comment"></i>
+          Chat with seller
+        <% end %>
       <% end %>
     </div>
+
+
+   
 
   </div>
 </div>

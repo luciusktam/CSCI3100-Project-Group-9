@@ -159,4 +159,26 @@ RSpec.describe "Listings", type: :request do
       expect(response).to have_http_status(:unprocessable_entity)
     end
   end
+
+  describe "DELETE /listings/:id" do
+    let!(:listing) do
+      create_listing_with_photo(
+        title: "Test Item",
+        user: user
+      )
+    end
+
+    context "when logged in as owner" do
+      before { login(user) }
+
+      it "deletes the listing" do
+        expect {
+          delete listing_path(listing)
+        }.to change(Listing, :count).by(-1)
+
+        expect(response).to redirect_to(listings_path)
+        expect(flash[:notice]).to eq("Listing deleted successfully！")
+      end
+    end
+  end
 end

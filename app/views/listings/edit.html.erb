@@ -1,0 +1,337 @@
+<div class="app">
+   <header class="navbar">
+        <%= link_to root_path, class: "logo" do %>
+            CUMarket
+        <% end %>
+        <div class="nav-links">
+            <%= link_to community_path do %>
+                <i class="fas fa-users"></i> Community
+            <% end %>
+            <%= link_to chat_path do %>
+                <i class="fas fa-comment-dots"></i> Chat
+            <% end %>
+            <%= link_to sell_path do %>
+                <i class="fas fa-euro-sign"></i> Sell
+            <% end %>
+            <%= link_to profile_path do %>
+                <i class="fas fa-user-circle"></i> Profile
+            <% end %>
+        </div>
+        <div class="right-corner">
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+                <i class="fas fa-moon"></i>
+                <span>Dark</span>
+            </button>
+            <% if user_signed_in? %>
+                <span class="session-badge">
+                    <i class="fas fa-user-check"></i>
+                    <%= current_user.username %>
+                    <% if current_user.admin? %>
+                        <strong>Admin</strong>
+                    <% end %>
+                </span>
+                <%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                <% end %>
+            <% else %>
+            <%= link_to login_path, class: "login-btn" do %>
+                <i class="fas fa-sign-in-alt"></i> Login
+            <% end %>
+            <% end %>
+        </div>
+    </header>
+
+  <div class="new-listing-container">
+    <div class="form-card">
+      <h2 class="form-title">Edit listing</h2>
+
+      <%= form_with model: @listing,
+                    url: listing_path(@listing),
+                    method: :patch,
+                    local: true,
+                    multipart: true,
+                    data: { turbo: false },
+                    class: "styled-form" do |f| %>
+
+        <div class="form-group image-upload-group">
+          <%= f.label :photos, "Images (8 images maximum)", class: "form-label" %>
+          
+          <div class="upload-container">
+          
+            <%= f.file_field :photos, 
+                             multiple: true, 
+                             accept: "image/*", 
+                             class: "file-input-hidden",
+                             id: "photo-upload" %>
+            
+        
+            <div class="preview-grid" id="preview-grid">
+              <% if @listing.photos.attached? %>
+                <% @listing.photos.each do |photo| %>
+                  <div class="preview-item existing-photo" data-photo-id="<%= photo.id %>">
+                    <%= image_tag photo, class: "existing-image" %>
+                    <button type="button" class="remove-image" data-photo-id="<%= photo.id %>">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+            
+            <%= hidden_field_tag :remove_photos, "", id: "remove-photos" %>
+            
+            <div class="upload-area" id="upload-area">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>click to add more images</p>
+              <small>maximum 8 photos (uploaded <span id="photo-count"><%= @listing.photos.count %></span>/8)</small>
+            </div>
+          </div>
+          <p class="form-help-text">You can upload up to 8 images. Click the × button to remove existing images.</p>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <%= f.label :category, class: "form-label" %>
+            <%= f.select :category, ["Electronics", "Textbooks", "Furniture", "Clothing", "Others"], 
+                         { include_blank: "Select a category" },
+                         class: "form-select" %>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <%= f.label :title, "Listing title", class: "form-label" %>
+            <%= f.text_field :title, placeholder: "What are you selling?", class: "form-input", maxlength: 40 %>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <%= f.label :price, class: "form-label" %>
+            <%= f.number_field :price, step: 1, placeholder: "$0.00", class: "form-input price-input" %>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <%= f.label :condition, class: "form-label" %>
+            <%= f.select :condition, ["New", "Like New", "Good", "Fair", "Poor"], {}, class: "form-select" %>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <%= f.label :location, class: "form-label" %>
+            <%= f.text_field :location, placeholder: "Chung Chi College", class: "form-input" %>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <%= f.label :description, class: "form-label" %>
+            <%= f.text_area :description, rows: 6, placeholder: "Describe your item in detail...", class: "form-input form-textarea" %>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <%= f.submit "Update listing", class: "submit-btn" %>
+          <%= link_to "Cancel", @listing, class: "cancel-btn" %>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+  let imageUploaderInitialized = false;
+
+  function initImageUploader() {
+    if (imageUploaderInitialized) return;
+    imageUploaderInitialized = true;
+
+    const fileInput = document.getElementById('photo-upload');
+    const uploadArea = document.getElementById('upload-area');
+    const previewGrid = document.getElementById('preview-grid');
+    const photoCountSpan = document.getElementById('photo-count');
+    const removePhotosInput = document.getElementById('remove-photos');
+
+    if (!fileInput || !uploadArea || !previewGrid || !photoCountSpan) return;
+
+    let currentFiles = [];
+    let photosToRemove = [];
+    const MAX_PHOTOS = 8;
+    
+
+    const existingPhotosCount = document.querySelectorAll('.existing-photo').length;
+    let currentTotalPhotos = existingPhotosCount;
+
+    function updatePhotoCount() {
+      photoCountSpan.textContent = currentTotalPhotos;
+    }
+
+    function syncFilesToInput() {
+      const dataTransfer = new DataTransfer();
+      currentFiles.forEach(file => dataTransfer.items.add(file));
+      fileInput.files = dataTransfer.files;
+    }
+
+    function renderPreviews() {
+   
+      const newPreviews = document.querySelectorAll('.preview-item:not(.existing-photo)');
+      newPreviews.forEach(item => item.remove());
+
+
+      currentFiles.forEach((file, index) => {
+        const previewItem = document.createElement('div');
+        previewItem.className = 'preview-item new-photo';
+        previewItem.dataset.newIndex = index;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          previewItem.innerHTML = `
+            <img src="${e.target.result}" alt="Preview ${index + 1}">
+            <button type="button" class="remove-new-image" data-new-index="${index}">
+              <i class="fas fa-times"></i>
+            </button>
+          `;
+        };
+        reader.readAsDataURL(file);
+        previewGrid.appendChild(previewItem);
+      });
+    }
+
+    function handleFiles(newFiles) {
+      const validFiles = Array.from(newFiles).filter(file => file.type.startsWith('image/'));
+
+      if (currentTotalPhotos + validFiles.length > MAX_PHOTOS) {
+        alert(`Maximum ${MAX_PHOTOS} photos allowed`);
+        return;
+      }
+
+      currentFiles = [...currentFiles, ...validFiles];
+      currentTotalPhotos = existingPhotosCount + currentFiles.length;
+      syncFilesToInput();
+      renderPreviews();
+      updatePhotoCount();
+    }
+
+    function removeExistingImage(photoId) {
+      if (!confirm('Are you sure you want to remove this image?')) return;
+      
+      const photoElement = document.querySelector(`[data-photo-id="${photoId}"]`);
+      if (photoElement) {
+        photoElement.remove();
+        photosToRemove.push(photoId);
+        removePhotosInput.value = photosToRemove.join(',');
+        
+   
+        currentTotalPhotos = document.querySelectorAll('.existing-photo').length + currentFiles.length;
+        updatePhotoCount();
+      }
+    }
+
+    function removeNewImage(indexToRemove) {
+      currentFiles.splice(indexToRemove, 1);
+      currentTotalPhotos = existingPhotosCount + currentFiles.length;
+      syncFilesToInput();
+      renderPreviews();
+      updatePhotoCount();
+    }
+
+    uploadArea.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+
+    fileInput.addEventListener('change', (e) => {
+      handleFiles(e.target.files);
+      fileInput.value = ''; 
+    });
+
+    
+    previewGrid.addEventListener('click', (e) => {
+      const removeBtn = e.target.closest('.remove-image');
+      if (removeBtn) {
+        e.stopPropagation();
+        const photoId = removeBtn.dataset.photoId;
+        if (photoId) {
+          removeExistingImage(photoId);
+        }
+      }
+    });
+
+    previewGrid.addEventListener('click', (e) => {
+      const removeBtn = e.target.closest('.remove-new-image');
+      if (removeBtn) {
+        e.stopPropagation();
+        const index = parseInt(removeBtn.dataset.newIndex, 10);
+        removeNewImage(index);
+      }
+    });
+
+
+    updatePhotoCount();
+  }
+
+
+  document.addEventListener('turbo:load', initImageUploader);
+  if (document.readyState === 'complete') {
+    initImageUploader();
+  }
+</script>
+
+<style>
+
+.existing-photo {
+  position: relative;
+  border: 2px solid #4CAF50;
+}
+
+.existing-photo::after {
+  content: 'Existing';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background: #4CAF50;
+  color: white;
+  font-size: 10px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  opacity: 0.8;
+}
+
+.new-photo {
+  position: relative;
+  border: 2px dashed #2196F3;
+}
+
+.form-help-text {
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+}
+
+.cancel-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #6c757d;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-left: 10px;
+}
+
+.cancel-btn:hover {
+  background-color: #5a6268;
+  color: white;
+  text-decoration: none;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+</style>
