@@ -16,4 +16,11 @@ class ApplicationController < ActionController::Base
   def user_signed_in?
     current_user.present?
   end
+
+  def authenticate_user!
+  return if user_signed_in?
+
+  flash[:alert] = "Please log in before listing items for sale"
+  redirect_to login_path, status: :see_other   # ← 這一行最標準
+  end
 end

@@ -1,8 +1,7 @@
 <div class="app">
-    <!-- header with login on the upper right corner -->
-    <header class="navbar">
+     <header class="navbar">
         <%= link_to root_path, class: "logo" do %>
-            CUSHMS
+            CUMarket
         <% end %>
         <div class="nav-links">
             <%= link_to community_path do %>
@@ -72,7 +71,6 @@
         </div>
     </div>
 
-    <!-- listed items (homepage product grid) -->
     <div class="section-header">
         <h2>Fresh listings</h2>
         <%= link_to listings_path do %>
@@ -80,20 +78,18 @@
         <% end %>
     </div>
 
-    <div class="product-grid">
-        <% if @fresh_listings.present? %>
-            <% @fresh_listings.each do |listing| %>
-                <%= link_to listing_path(listing), class: "product-card" do %>
-                    <!-- You'll add image here later with ActiveStorage -->
-                    <div class="product-card-content">
-                        <h3><%= listing.title %></h3>
-                        <p class="price"><%= number_to_currency(listing.price) %></p>
-                        <p class="location"><%= listing.location %></p>
-                    </div>
-                <% end %>
-            <% end %>
-        <% else %>
-            <p class="no-listings">No listings yet. Be the first to sell something!</p>
-        <% end %>
+    <% if @latest_listings.any? %>
+    <div class="listings-grid">
+      <% @latest_listings.each do |listing| %>
+        <%= render partial: "listings/listing_card", locals: { listing: listing } %>
+      <% end %>
     </div>
+  <% else %>
+    <div class="no-listings">
+      <i class="fas fa-box-open"></i>
+      <h3>No listings yet</h3>
+      <p>Be the first to list an item!</p>
+      <%= link_to "Create a Listing", sell_path, class: "create-listing-btn" %>
+    </div>
+  <% end %>
 </div>

@@ -19,6 +19,7 @@ end
 
 # Isolate scenario state to avoid cross-scenario data and mail/job leakage.
 Before do
+  Listing.delete_all
   User.delete_all
   ActionMailer::Base.deliveries.clear
   clear_enqueued_jobs
