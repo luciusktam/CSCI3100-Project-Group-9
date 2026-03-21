@@ -60,12 +60,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_18_023450) do
     t.string "email", null: false
     t.boolean "email_verified", default: false, null: false
     t.string "password_digest", null: false
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token_digest"
     t.integer "role", default: 0, null: false
     t.datetime "updated_at", null: false
     t.string "username", null: false
     t.string "verification_token"
     t.datetime "verified_at"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token_digest"], name: "index_users_on_reset_password_token_digest", unique: true
     t.index ["verification_token"], name: "index_users_on_verification_token", unique: true
   end
 
