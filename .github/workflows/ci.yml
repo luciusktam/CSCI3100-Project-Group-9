@@ -39,14 +39,13 @@ jobs:
       - name: Install dependencies
         run: bundle install
 
-      - name: Install Chromium and ChromeDriver
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y chromium-browser chromium-chromedriver
-          sudo ln -sf /usr/bin/chromium-browser /usr/bin/google-chrome
-          sudo ln -sf /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
-          google-chrome --version
-          chromedriver --version
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Install ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
+
+      
 
       # ==================== RSpec Tests ====================
 
