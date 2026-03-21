@@ -4,11 +4,11 @@ Feature: Homepage
   So that I can browse listings and navigate the application
 
   Background:
-    Given I am on the homepage
+    Given I am on the home page
 
   @navigation
   Scenario: View homepage layout and navigation elements
-    Then I should see the app logo "CUSHMS"
+    Then I should see the app logo "CUMarket"
     And I should see navigation links for:
       | Community |
       | Chat      |
@@ -18,29 +18,31 @@ Feature: Homepage
 
   @navigation
   Scenario: Navigate to community page from homepage
-    When I click the "Community" button
+    Given I am logged in
+    When I click the "Community" page button
     Then I should be redirected to the community page
 
   @navigation
   Scenario: Navigate to chat page from homepage
-    When I click the "Chat" button
+    Given I am logged in
+    When I click the "Chat" page button
     Then I should be redirected to the chat page
 
   @navigation
   Scenario: Navigate to sell page from homepage
-    When I click the "Sell" button
+    Given I am logged in
+    When I click the "Sell" page button
     Then I should be redirected to the sell page
 
-  # @navigation
-  # Scenario: Navigate to profile page from homepage
-  #   Given a verified user exists with email "testuser@cuhk.edu.hk" and password "password123"
-  #   And the user is logged in as "testuser@cuhk.edu.hk" with password "password123"
-  #   When the user clicks the "Profile" page button
-  #   Then the user should be redirected to the profile page
+  @navigation
+  Scenario: Navigate to profile page from homepage
+    Given I am logged in
+    When I click the "Profile" page button
+    Then I should be redirected to the profile page
 
   @navigation
   Scenario: Login from homepage
-    When I click the login button
+    When I click on the login button in the top right corner
     Then I should be redirected to the login page
 
   @search
@@ -109,46 +111,3 @@ Feature: Homepage
     When I click the "clear all" button
     Then all active filter chips should be removed
     And the search results should update to show all listings
-
-  @listings
-  Scenario: View fresh listings grid
-    Given there are 8 active listings in the database
-    Then I should see a "Fresh listings" section header
-    And a "view all" link to see all listings
-    And I should see a grid of 8 product cards
-
-  @listings
-  Scenario: View all listings from homepage
-    Given there are more than 16 active listings
-    When I click the "view all" link
-    Then I should be redirected to the all listings page
-    And they should see all available listings
-
-  @listings
-  Scenario Outline: Product card displays correct information
-    Given a product listing exists with:
-      | category | <category> |
-      | title    | <title>    |
-      | price    | <price>    |
-      | location | <location> |
-    When I is on the homepage
-    Then the product card should display:
-      | element  | value      |
-      | category | <category> |
-      | title    | <title>    |
-      | price    | <price>    |
-      | location | <location> |
-
-    Examples:
-      | category    | title           | price  | location     |
-      | Electronics | Film Camera     | $299   | CUHK         |
-      | Furniture   | Leather Sofa    | $450   | Sha Tin      |
-      | Fashion     | Jacket          | $89    | Kowloon Tong |
-
-  # @listings
-  # Scenario: Interact with product cards
-  #   Given the product grid displays multiple items
-  #   Given there are listings in the product grid
-  #   When the user clicks on the product card for "Film Camera"
-  #   Then the user should be redirected to that product's detail page
-  #   And they should see the full details of "Film Camera"

@@ -44,14 +44,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_18_124347) do
 
   create_table "listings", force: :cascade do |t|
     t.string "category"
-    t.string "condition"
     t.datetime "created_at", null: false
     t.text "description"
-    t.string "location"
-    t.decimal "price"
-    t.string "title"
+    t.string "location", null: false
+    t.decimal "price", precision: 10, scale: 2, null: false
+    t.string "title", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
+    t.index ["created_at"], name: "index_listings_on_created_at"
     t.index ["user_id"], name: "index_listings_on_user_id"
   end
 

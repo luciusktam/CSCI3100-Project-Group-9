@@ -1,4 +1,3 @@
-
 Given("I am not logged in") do
   click_button "Logout" if page.has_button?("Logout")
 end
