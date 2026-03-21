@@ -1399,3 +1399,298 @@ body.dark-mode hr {
   margin-top: 4px;
   display: block;
 }
+
+
+.listings-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.listings-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+
+.listing-card {
+  background: var(--window-light);
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.listing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Image Wrapper */
+.listing-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* 1:1 Aspect Ratio */
+  overflow: hidden;
+  background: var(--surface-soft);
+}
+
+.listing-card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.listing-card:hover .listing-card-image {
+  transform: scale(1.05);
+}
+
+.listing-image-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--surface-soft), var(--bg-light-alt));
+}
+
+.listing-image-placeholder i {
+  font-size: 3rem;
+  color: var(--accent-gold);
+  opacity: 0.5;
+}
+
+/* Card Content */
+.listing-card-content {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.listing-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.listing-card-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-purple);
+  margin-bottom: 0.75rem;
+}
+
+
+.listing-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.listing-category,
+.listing-seller,
+.listing-location,
+.listing-condition {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.listing-category i,
+.listing-seller i,
+.listing-location i,
+.listing-condition i {
+  width: 16px;
+  font-size: 0.85rem;
+  color: var(--accent-gold);
+}
+
+
+
+
+
+.no-listings {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--window-light);
+  border-radius: 24px;
+}
+
+.no-listings i {
+  font-size: 4rem;
+  color: var(--accent-gold);
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.no-listings h3 {
+  font-size: 1.5rem;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.no-listings p {
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.create-listing-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-strong));
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 40px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+.create-listing-btn:hover {
+  transform: translateY(-2px);
+  color: white;
+}
+
+body.dark-mode .listing-card {
+  background: var(--window-dark);
+}
+
+body.dark-mode .listing-image-placeholder {
+  background: #373b44;
+}
+
+body.dark-mode .listing-card-title {
+  color: #e5e7eb;
+}
+
+body.dark-mode .listing-card-price {
+  color: var(--accent-gold-soft);
+}
+
+body.dark-mode .listing-category,
+body.dark-mode .listing-seller,
+body.dark-mode .listing-location,
+body.dark-mode .listing-condition {
+  color: #9ca3af;
+}
+
+body.dark-mode .listing-card-meta {
+  border-top-color: #454a54;
+}
+
+body.dark-mode .no-listings {
+  background: var(--window-dark);
+}
+
+@media (max-width: 1024px) {
+  .listings-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .listings-page {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .listings-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .page-title {
+    font-size: 1.75rem;
+  }
+  
+  .listings-page {
+    padding: 1rem;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding: 1rem;
+}
+
+.pagination a, 
+.pagination span.current {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.pagination a {
+  background: var(--window-light);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.pagination a:hover {
+  background: var(--accent-purple);
+  color: white;
+  border-color: var(--accent-purple);
+}
+
+.pagination span.current {
+  background: var(--accent-purple);
+  color: white;
+  border: 1px solid var(--accent-purple);
+}
+
+.pagination .disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

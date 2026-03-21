@@ -1,8 +1,8 @@
 class HomeController < ApplicationController
   def index
-    @fresh_listings = []
+    @latest_listings = Listing.order(created_at: :desc).limit(8)
   end
-  
+
   def login
   end
 

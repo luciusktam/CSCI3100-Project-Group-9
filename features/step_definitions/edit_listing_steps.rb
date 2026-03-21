@@ -1,4 +1,3 @@
-# Given steps
 
 Given("I am logged in as a different user") do
   click_button "Logout"
@@ -17,7 +16,6 @@ Given("I am logged in as a different user") do
   expect(page).to have_content(@user.username)
 end
 
-# When steps
 When("I visit the edit page for my listing") do
   visit edit_listing_path(@listing)
 end
@@ -57,7 +55,6 @@ When("I remove the title") do
   fill_in "Listing title", with: ""
 end
 
-# Then steps
 Then("I should see an update success message") do
   expect(page).to have_content("Listing updated successfully！")
 end
@@ -96,20 +93,4 @@ end
 
 Then("I should be redirected to the listing page") do
   expect(page).to have_current_path(listing_path(@listing))
-end
-
-# Helper method
-def attach_test_photo_to_listing(listing, filename)
-  temp_file = Tempfile.new([ "test_photo", '.jpg' ])
-  temp_file.write("\xFF\xD8\xFF\xE0\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00")
-  temp_file.rewind
-
-  listing.photos.attach(
-    io: File.open(temp_file.path),
-    filename: filename,
-    content_type: 'image/jpeg'
-  )
-ensure
-  temp_file.close
-  temp_file.unlink
 end

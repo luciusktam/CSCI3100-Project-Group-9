@@ -67,7 +67,7 @@ Then("my listing should be visible with all details") do
   expect(page).to have_content("Good")
   expect(page).to have_content("Chung Chi College")
   expect(page).to have_content("A vintage film camera in good condition")
-  expect(page).to have_css("img", count: 2)
+  expect(page).to have_css(".listing-image", count: 2)
 end
 
 When("I do not fill in all required fields") do

@@ -3,7 +3,7 @@ class ListingsController < ApplicationController
   before_action :set_listing, only: [ :show, :edit, :update, :destroy ]
   before_action :authorize_user!, only: [ :edit, :update, :destroy ]
   def index
-    @listings = Listing.all.order(created_at: :desc)
+    @listings = Listing.all.order(created_at: :desc).page(params[:page]).per(20)
   end
 
   def new
