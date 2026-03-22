@@ -6,6 +6,7 @@ class CreateListings < ActiveRecord::Migration[8.1]
       t.text :description
       t.string :location, null: false
       t.string :category
+      t.string :condition
       t.references :user, foreign_key: true
       t.timestamps
     end
