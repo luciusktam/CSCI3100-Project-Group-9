@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_many :listings, dependent: :destroy
 
   has_secure_password
+  has_many :listings, dependent: :destroy
 
   enum :role, { user: 0, admin: 1 }, default: :user
 

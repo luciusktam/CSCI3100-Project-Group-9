@@ -22,8 +22,10 @@ Rails.application.routes.draw do
   post "verify/resend", to: "users#resend_verification", as: :resend_verification_email
 
   # Listings routes (basic CRUD for now)
-  resources :listings, only: [:index, :show, :new, :create]
-  
+  resources :listings, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
+  post "sell", to: "listings#create"
+  get "listings/:id", to: "listings#show"
+  get "listings", to: "listings#index"
+
   # Search route
-  get "search", to: "listings#index"
 end

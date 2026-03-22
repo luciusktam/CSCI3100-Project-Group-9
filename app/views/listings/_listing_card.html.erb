@@ -1,0 +1,35 @@
+<%= link_to listing_path(listing), class: "listing-card" do %>
+  <div class="listing-image-wrapper">
+    <% if listing.photos.attached? && listing.photos.first.present? %>
+      <%= image_tag listing.photos.first, class: "listing-card-image", alt: listing.title %>
+    <% else %>
+      <div class="listing-image-placeholder">
+        <i class="fas fa-image"></i>
+      </div>
+    <% end %>
+  </div>
+  
+  <div class="listing-card-content">
+    <h3 class="listing-card-title"><%= listing.title %></h3>
+    <div class="listing-card-price">$<%= number_with_precision(listing.price, precision: 2) %></div>
+    
+    <div class="listing-card-meta">
+      <span class="listing-category">
+        <i class="fas fa-tag"></i>
+        <%= listing.category %>
+      </span>
+      <span class="listing-seller">
+        <i class="fas fa-user"></i>
+        <%= listing.user.username %>
+      </span>
+      <span class="listing-location">
+        <i class="fas fa-map-marker-alt"></i>
+        <%= listing.location.presence || "Location not specified" %>
+      </span>
+      <span class="listing-condition">
+        <i class="fas fa-clipboard-list"></i>
+        <%= listing.condition %>
+      </span>
+    </div>
+  </div>
+<% end %>

@@ -1,2 +1,168 @@
-<h1>Listings#show</h1>
-<p>Find me in app/views/listings/show.html.erb</p>
+<div class="app">
+   <header class="navbar">
+        <%= link_to root_path, class: "logo" do %>
+            CUMarket
+        <% end %>
+        <div class="nav-links">
+            <%= link_to community_path do %>
+                <i class="fas fa-users"></i> Community
+            <% end %>
+            <%= link_to chat_path do %>
+                <i class="fas fa-comment-dots"></i> Chat
+            <% end %>
+            <%= link_to sell_path do %>
+                <i class="fas fa-euro-sign"></i> Sell
+            <% end %>
+            <%= link_to profile_path do %>
+                <i class="fas fa-user-circle"></i> Profile
+            <% end %>
+        </div>
+        <div class="right-corner">
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+                <i class="fas fa-moon"></i>
+                <span>Dark</span>
+            </button>
+            <% if user_signed_in? %>
+                <span class="session-badge">
+                    <i class="fas fa-user-check"></i>
+                    <%= current_user.username %>
+                    <% if current_user.admin? %>
+                        <strong>Admin</strong>
+                    <% end %>
+                </span>
+                <%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                <% end %>
+            <% else %>
+            <%= link_to login_path, class: "login-btn" do %>
+                <i class="fas fa-sign-in-alt"></i> Login
+            <% end %>
+            <% end %>
+        </div>
+    </header>
+
+
+  <div class="listing-container">
+  <% photo_count = @listing.photos.count %>
+    <div class="image-banner">
+      <% if photo_count > 3 %>
+        <button class="nav-btn prev" onclick="scrollGallery(-1)">❮</button>
+      <% end %>
+
+      <div class="image-track" id="imageTrack">
+        <% @listing.photos.each do |photo| %>
+          <div class="image-wrapper">
+            <%= image_tag photo, class: "listing-image", onclick: "openModal(this.src)" %>
+          </div>
+        <% end %>
+      </div>
+
+      <% if photo_count > 3 %>
+        <button class="nav-btn next" onclick="scrollGallery(1)">❯</button>
+      <% end %>
+
+    
+    </div>
+
+  
+    <div id="imageModal" class="modal" onclick="closeModal()">
+      <img id="modalImg">
+    </div>
+
+    
+    <div class="listing-header">
+      <h1><%= @listing.title %></h1>
+      <div class="price">
+        $<%= number_with_precision(@listing.price, precision: 2) %>
+      </div>
+    </div>
+
+    <hr>
+   
+    <div class="listing-info-grid">
+      <div class="info-row">
+        <div class="info-col">
+          <div class="info-item">
+            <span class="info-label">Seller</span>
+            <span class="info-value"><%= @listing.user.username %></span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Category</span>
+            <span class="info-value"><%= @listing.category %></span>
+          </div>
+        </div>
+        <div class="info-col">
+          <div class="info-item">
+            <span class="info-label">Condition</span>
+            <span class="info-value"><%= @listing.condition %></span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Location</span>
+            <span class="info-value"><%= @listing.location %></span>
+          </div>
+        </div>
+
+        <div class="info-col description-col">
+          <div class="info-item description-item">
+            <span class="info-label">Description</span>
+            <span class="info-value description-text"><%= simple_format(@listing.description) %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    
+
+    
+    <div class="listing-actions">
+      <% if user_signed_in? && current_user == @listing.user %>
+        
+        <div class="owner-actions">
+
+          <%= link_to edit_listing_path(@listing), class: "submit-btn" do %>
+            <i class="fas fa-edit"></i> Edit Listing
+          <% end %>
+          
+          <%= button_to @listing, method: :delete, 
+                class: "delete-btn", 
+                form: { style: 'display: inline;' } do %>
+            <i class="fas fa-trash-alt"></i> Delete Listing
+          <% end %>
+        </div>
+      <% else %>
+    
+        <%= link_to chat_path(seller_id: @listing.user.id, listing_id: @listing.id), 
+              class: "submit-btn" do %>
+          <i class="fas fa-comment"></i>
+          Chat with seller
+        <% end %>
+      <% end %>
+    </div>
+
+
+   
+
+  </div>
+</div>
+
+<script>
+function scrollGallery(direction) {
+  const track = document.getElementById("imageTrack");
+  const scrollAmount = track.clientWidth; // 每次滑一頁
+  track.scrollLeft += direction * scrollAmount;
+}
+
+function openModal(src) {
+  const modal = document.getElementById("imageModal");
+  const img = document.getElementById("modalImg");
+
+  img.src = src;
+  modal.style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("imageModal").style.display = "none";
+}
+</script>

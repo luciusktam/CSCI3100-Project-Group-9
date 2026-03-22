@@ -1,0 +1,352 @@
+<div class="app">
+   <header class="navbar">
+        <%= link_to root_path, class: "logo" do %>
+            CUMarket
+        <% end %>
+        <div class="nav-links">
+            <%= link_to community_path do %>
+                <i class="fas fa-users"></i> Community
+            <% end %>
+            <%= link_to chat_path do %>
+                <i class="fas fa-comment-dots"></i> Chat
+            <% end %>
+            <%= link_to sell_path do %>
+                <i class="fas fa-euro-sign"></i> Sell
+            <% end %>
+            <%= link_to profile_path do %>
+                <i class="fas fa-user-circle"></i> Profile
+            <% end %>
+        </div>
+        <div class="right-corner">
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+                <i class="fas fa-moon"></i>
+                <span>Dark</span>
+            </button>
+            <% if user_signed_in? %>
+                <span class="session-badge">
+                    <i class="fas fa-user-check"></i>
+                    <%= current_user.username %>
+                    <% if current_user.admin? %>
+                        <strong>Admin</strong>
+                    <% end %>
+                </span>
+                <%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                <% end %>
+            <% else %>
+            <%= link_to login_path, class: "login-btn" do %>
+                <i class="fas fa-sign-in-alt"></i> Login
+            <% end %>
+            <% end %>
+        </div>
+    </header>
+
+  <div class="new-listing-container">
+    <div class="form-card">
+      <h2 class="form-title">Edit listing</h2>
+
+      <% if flash[:alert] %>
+        <div class="error-messages">
+          <%= flash[:alert] %>
+        </div>
+      <% end %>
+
+      <% if @listing.errors.any? %>
+        <div class="error-messages">
+          <ul>
+            <% @listing.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= form_with model: @listing,
+                    url: listing_path(@listing),
+                    method: :patch,
+                    local: true,
+                    multipart: true,
+                    data: { turbo: false },
+                    class: "styled-form" do |f| %>
+
+        <div class="form-group image-upload-group">
+          <%= f.label :photos, "Images (8 images maximum)", class: "form-label" %>
+          
+          <div class="upload-container">
+          
+            <%= f.file_field :photos, 
+                             multiple: true, 
+                             accept: "image/*", 
+                             class: "file-input-hidden",
+                             id: "photo-upload" %>
+            
+            <div class="preview-grid" id="preview-grid">
+              <% if @listing.photos.attached? %>
+                <% @listing.photos.select(&:persisted?).each do |photo| %>
+                  <div class="preview-item existing-photo" data-photo-id="<%= photo.id %>" data-existing="true">
+                    <%= image_tag photo, class: "existing-image" %>
+                    <button type="button" class="remove-image" data-photo-id="<%= photo.id %>" data-existing="true">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+            
+            <%= hidden_field_tag :remove_photos, "", id: "remove-photos" %>
+            
+            <div class="upload-area" id="upload-area">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>click to add more images</p>
+              <small>maximum 8 photos (uploaded <span id="photo-count"><%= @listing.photos.count %></span>/8)</small>
+            </div>
+          </div>
+          <p class="form-help-text">You can upload up to 8 images. Click the × button to remove existing images.</p>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group <%= 'has-error' if @listing.errors[:category].any? %>">
+            <%= f.label :category, class: "form-label" %>
+            <%= f.select :category, ["Electronics", "Textbooks", "Furniture", "Clothing", "Others"], 
+                         { include_blank: "Select a category" },
+                         class: "form-select" %>
+            <% if @listing.errors[:category].any? %>
+              <span class="error-message"><%= @listing.errors[:category].first %></span>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group <%= 'has-error' if @listing.errors[:title].any? %>">
+            <%= f.label :title, "Listing title", class: "form-label" %>
+            <%= f.text_field :title, placeholder: "What are you selling?", class: "form-input", maxlength: 40 %>
+            <% if @listing.errors[:title].any? %>
+              <span class="error-message"><%= @listing.errors[:title].first %></span>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group <%= 'has-error' if @listing.errors[:price].any? %>">
+            <%= f.label :price, class: "form-label" %>
+            <%= f.number_field :price, step: 1, placeholder: "$0.00", class: "form-input price-input" %>
+            <% if @listing.errors[:price].any? %>
+              <span class="error-message"><%= @listing.errors[:price].first %></span>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group <%= 'has-error' if @listing.errors[:condition].any? %>">
+            <%= f.label :condition, class: "form-label" %>
+            <%= f.select :condition, ["New", "Like New", "Good", "Fair", "Poor"], {}, class: "form-select" %>
+            <% if @listing.errors[:condition].any? %>
+              <span class="error-message"><%= @listing.errors[:condition].first %></span>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group <%= 'has-error' if @listing.errors[:location].any? %>">
+            <%= f.label :location, class: "form-label" %>
+            <%= f.text_field :location, placeholder: "Chung Chi College", class: "form-input" %>
+            <% if @listing.errors[:location].any? %>
+              <span class="error-message"><%= @listing.errors[:location].first %></span>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group <%= 'has-error' if @listing.errors[:description].any? %>">
+            <%= f.label :description, class: "form-label" %>
+            <%= f.text_area :description, rows: 6, placeholder: "Describe your item in detail...", class: "form-input form-textarea" %>
+            <% if @listing.errors[:description].any? %>
+              <span class="error-message"><%= @listing.errors[:description].first %></span>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <%= f.submit "Update listing", class: "submit-btn" %>
+          <%= link_to "Cancel", @listing, class: "cancel-btn" %>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+  let imageUploaderInitialized = false;
+
+  function initImageUploader() {
+    const fileInput = document.getElementById('photo-upload');
+    const uploadArea = document.getElementById('upload-area');
+    const previewGrid = document.getElementById('preview-grid');
+    const photoCountSpan = document.getElementById('photo-count');
+    const removePhotosInput = document.getElementById('remove-photos');
+
+    if (!fileInput || !uploadArea || !previewGrid || !photoCountSpan || !removePhotosInput) return;
+
+    if (imageUploaderInitialized) return;
+    imageUploaderInitialized = true;
+
+    let newFiles = [];
+    let removedPhotoIds = [];
+    const MAX_PHOTOS = 8;
+
+    const existingPhotos = document.querySelectorAll('.preview-item[data-existing="true"]');
+    let existingPhotoCount = existingPhotos.length;
+
+    function updatePhotoCount() {
+      const totalCount = existingPhotoCount + newFiles.length;
+      photoCountSpan.textContent = totalCount;
+    }
+
+    function updateRemovePhotosInput() {
+      removePhotosInput.value = removedPhotoIds.join(',');
+    }
+
+    function renderNewPreviews() {
+      const newPreviews = document.querySelectorAll('.preview-item[data-existing="false"]');
+      newPreviews.forEach(preview => preview.remove());
+
+      newFiles.forEach((file, index) => {
+        const previewItem = document.createElement('div');
+        previewItem.className = 'preview-item new-photo';
+        previewItem.dataset.existing = 'false';
+        previewItem.dataset.newIndex = index; 
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          previewItem.innerHTML = `
+            <img src="${e.target.result}" alt="Preview ${index + 1}">
+            <button type="button" class="remove-image" data-new-index="${index}" data-existing="false">
+              <i class="fas fa-times"></i>
+            </button>
+          `;
+        };
+        reader.readAsDataURL(file);
+        previewGrid.appendChild(previewItem);
+      });
+    }
+
+    function handleFiles(newFilesList) {
+      const validFiles = Array.from(newFilesList).filter(file => file.type.startsWith('image/'));
+      
+      const currentTotal = existingPhotoCount + newFiles.length;
+      
+      if (currentTotal + validFiles.length > MAX_PHOTOS) {
+        alert(`Maximum ${MAX_PHOTOS} photos allowed`);
+        updateFileInput(); 
+        
+        return;
+      }
+
+
+      newFiles = [...newFiles, ...validFiles];
+      
+      updateFileInput();
+      
+      renderNewPreviews();
+      updatePhotoCount();
+      
+
+      console.log('New files in input:', fileInput.files.length);
+    }
+
+    function updateFileInput() {
+
+      const dataTransfer = new DataTransfer();
+      newFiles.forEach(file => dataTransfer.items.add(file));
+      
+
+      fileInput.files = dataTransfer.files;
+    }
+
+    function removeExistingImage(photoId) {
+      const photoElement = document.querySelector(`.preview-item[data-photo-id="${photoId}"]`);
+      if (photoElement) {
+        photoElement.remove();
+        removedPhotoIds.push(photoId);
+        existingPhotoCount--;
+        updateRemovePhotosInput();
+        updatePhotoCount();
+      }
+    }
+
+    function removeNewImage(indexToRemove) {
+      newFiles.splice(indexToRemove, 1);
+      
+      // Update the file input with remaining new files
+      updateFileInput();
+      
+      // Re-render all new previews with updated indices
+      renderNewPreviews();
+      updatePhotoCount();
+      
+    }
+
+    uploadArea.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('drag-over');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('drag-over');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('drag-over');
+      
+      if (e.dataTransfer.files.length > 0) {
+        handleFiles(e.dataTransfer.files);
+      }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      handleFiles(e.target.files);
+    });
+
+    previewGrid.addEventListener('click', (e) => {
+      const removeBtn = e.target.closest('.remove-image');
+      if (removeBtn) {
+        e.stopPropagation();
+        e.preventDefault();
+        
+        if (removeBtn.dataset.existing === 'true') {
+          const photoId = removeBtn.dataset.photoId;
+          if (photoId) {
+            removeExistingImage(photoId);
+          }
+        } else {
+          const newIndex = removeBtn.dataset.newIndex;
+          if (newIndex !== undefined) {
+            removeNewImage(parseInt(newIndex, 10));
+          }
+        }
+      }
+    });
+
+    // Initialize photo count
+    updatePhotoCount();
+    
+
+  }
+
+  document.addEventListener('DOMContentLoaded', initImageUploader);
+  
+  document.addEventListener('turbo:load', initImageUploader);
+  
+  document.addEventListener('turbo:before-cache', () => {
+    imageUploaderInitialized = false;
+  });
+</script>
+
+
