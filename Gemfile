@@ -51,6 +51,9 @@ gem "nokogiri", ">= 1.19.1"
 gem "rack", ">= 3.2.5"
 
 group :development, :test do
+  # Load environment variables from .env in local/dev workflows.
+  gem "dotenv-rails"
+
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
