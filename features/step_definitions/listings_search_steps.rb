@@ -33,11 +33,15 @@ When("I visit the listings page") do
 end
 
 When("I fill in {string} with {string}") do |field, value|
-  fill_in field, with: value
+  within("#listing-search-form") do
+    fill_in field, with: value
+  end
 end
 
 When("I press {string}") do |button|
-  click_button button
+  within("#listing-search-form") do
+    click_button button
+  end
 end
 
 Then("I should see listing title {string}") do |text|
@@ -49,5 +53,7 @@ Then("I should not see listing title {string}") do |text|
 end
 
 When("I select {string} from {string}") do |value, field|
-  select value, from: field
+  within("#listing-search-form") do
+    select value, from: field
+  end
 end

@@ -58,6 +58,21 @@
     <% end %>
   </div>
 
+  <div class="search-filter-bar">
+    <%= form_with url: listings_path, method: :get, local: true, html: { id: "listing-search-form" } do |f| %>
+      <%= f.text_field :q,
+        value: params[:q],
+        placeholder: "Search by title, description or location" %>
+
+      <%= f.select :category,
+        options_for_select(
+          [["All Categories", ""]] + Listing.distinct.pluck(:category).compact.sort.map { |c| [c, c] },
+          params[:category]
+        ) %>
+
+      <%= f.submit "Search" %>
+    <% end %>
+  </div>
 
 
 

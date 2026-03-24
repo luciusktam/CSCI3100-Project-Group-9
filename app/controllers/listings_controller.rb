@@ -15,8 +15,13 @@ class ListingsController < ApplicationController
       )
     end
 
+    if params[:category].present?
+      @listings = @listings.where(category: params[:category])
+    end
+
     @listings = @listings.order(created_at: :desc).page(params[:page]).per(20)
   end
+
 
 
 
