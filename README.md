@@ -1,5 +1,5 @@
 # CSCI3100-Project Group 9
-# CUSHMS — CUHK Second-Hand Marketplace SaaS
+# CUMarket — CUHK Second-Hand Marketplace SaaS
 
 ## To Start Dev
 ```
