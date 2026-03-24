@@ -25,3 +25,15 @@ Feature: search listings
     And I press "Search"
     Then I should see listing title "Study Chair"
     And I should not see listing title "Casio Calculator"
+
+
+  Scenario: filter listings by condition
+    Given the following listings exist:
+      | title            | price | category    | condition | location   | description            |
+      | Study Chair      | 120   | Furniture   | Good      | Sha Tin    | Black wooden chair     |
+      | Casio Calculator | 80    | Electronics | Like New  | Ma On Shan | Scientific calculator  |
+    When I visit the listings page
+    And I select "Good" from "condition"
+    And I press "Search"
+    Then I should see listing title "Study Chair"
+    And I should not see listing title "Casio Calculator"
