@@ -1,0 +1,14 @@
+ => 
+[[32m#<User:0x00007be868ac0c20[0m
+  id: [34m[1m1[0m,
+  created_at: [31m[1m"[0m[31m2026-03-24 13:01:23.427074000 +0000[0m[31m[1m"[0m,
+  email: [31m[1m"[0m[31m[FILTERED][0m[31m[1m"[0m,
+  email_verified: [31m[1m"[0m[31m[FILTERED][0m[31m[1m"[0m,
+  password_digest: [31m[1m"[0m[31m[FILTERED][0m[31m[1m"[0m,
+  reset_password_sent_at: [36m[1mnil[0m,
+  reset_password_token_digest: [36m[1mnil[0m,
+  role: [31m[1m"[0m[31muser[0m[31m[1m"[0m,
+  updated_at: [31m[1m"[0m[31m2026-03-24 13:01:54.595074000 +0000[0m[31m[1m"[0m,
+  username: [31m[1m"[0m[31mtest[0m[31m[1m"[0m,
+  verification_token: [36m[1mnil[0m,
+  verified_at: [31m[1m"[0m[31m2026-03-24 13:01:54.592789000 +0000[0m[31m[1m"[0m[32m>[0m] 
