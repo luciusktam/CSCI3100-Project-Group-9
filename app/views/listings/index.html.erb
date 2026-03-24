@@ -45,7 +45,28 @@
     <h1 class="page-title">Discover amazing items</h1>
   </div>
 
-  <% if @listings.any? %>
+
+
+
+  <div class="search-filter-bar">
+    <%= form_with url: listings_path, method: :get, local: true do |f| %>
+      <%= f.text_field :q,
+        value: params[:q],
+        placeholder: "Search by title, description or location" %>
+
+      <%= f.submit "Search" %>
+    <% end %>
+  </div>
+
+
+
+
+
+
+
+
+
+  <% if @listings.present? && @listings.any? %>
     <div class="listings-grid">
       <% @listings.each do |listing| %>
         <%= render partial: "listings/listing_card", locals: { listing: listing } %>
