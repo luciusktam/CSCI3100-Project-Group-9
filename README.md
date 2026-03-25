@@ -4,8 +4,8 @@
 ## To Start Dev
 ```
 bundle install
-rails db:setup 
-rails server
+bin/rails db:create db:migrate                           
+bin/rails server
 ```
 
 
