@@ -49,7 +49,6 @@ RSpec.describe "Listings", type: :request do
 
 
   describe "GET /listings" do
-
     let!(:study_chair) do
       create_listing_with_photo(
         title: "Study Chair",
@@ -104,7 +103,7 @@ RSpec.describe "Listings", type: :request do
     end
 
     it "filters listings by category" do
-      get listings_path, params: { category: "Furniture" }
+      get listings_path, params: { categories: [ "Furniture" ] }
 
       expect(response).to have_http_status(:success)
       expect(response.body).to include("Study Chair")
@@ -112,7 +111,7 @@ RSpec.describe "Listings", type: :request do
     end
 
     it "filters listings by condition" do
-      get listings_path, params: { condition: "Good" }
+      get listings_path, params: { conditions: [ "Good" ] }
 
       expect(response).to have_http_status(:success)
       expect(response.body).to include("Study Chair")

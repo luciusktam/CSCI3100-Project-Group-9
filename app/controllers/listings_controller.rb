@@ -1,10 +1,11 @@
 class ListingsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_listing, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_user!, only: [:edit, :update, :destroy]
+  before_action :authenticate_user!, only: [ :new, :create, :edit, :update, :destroy ]
+  before_action :set_listing, only: [ :show, :edit, :update, :destroy ]
+  before_action :authorize_user!, only: [ :edit, :update, :destroy ]
 
 
   def index
+    @available_locations = Listing.distinct.order(:location).pluck(:location)
     @listings = Listing.all
 
     if params[:q].present?
@@ -15,16 +16,47 @@ class ListingsController < ApplicationController
       )
     end
 
-    if params[:category].present?
-      @listings = @listings.where(category: params[:category])
+    if params[:categories].present?
+      @listings = @listings.where(category: params[:categories])
     end
 
-    if params[:condition].present?
-      @listings = @listings.where(condition: params[:condition])
+    if params[:conditions].present?
+      @listings = @listings.where(condition: params[:conditions])
     end
-    
+
+    if params[:locations].present?
+      @listings = @listings.where(location: params[:locations])
+    end
+
+    if params[:price_ranges].present?
+      price_conditions = []
+      price_values = []
+
+      params[:price_ranges].each do |range|
+          case range
+          when "under_100"
+            price_conditions << "price < ?"
+            price_values << 100
+          when "100_500"
+            price_conditions << "(price >= ? AND price <= ?)"
+            price_values += [ 100, 500 ]
+          when "500_1000"
+            price_conditions << "(price > ? AND price <= ?)"
+            price_values += [ 500, 1000 ]
+          when "over_1000"
+            price_conditions << "price > ?"
+            price_values << 1000
+          end
+      end
+
+      if price_conditions.any?
+        @listings = @listings.where(price_conditions.join(" OR "), *price_values)
+      end
+    end
+
     @listings = @listings.order(created_at: :desc).page(params[:page]).per(20)
   end
+
 
 
 

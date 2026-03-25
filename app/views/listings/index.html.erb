@@ -1,8 +1,14 @@
+<% selected_categories = Array(params[:categories]).reject(&:blank?) %>
+<% selected_conditions = Array(params[:conditions]).reject(&:blank?) %>
+<% selected_locations  = Array(params[:locations]).reject(&:blank?) %>
+<% selected_price_ranges = Array(params[:price_ranges]).reject(&:blank?) %>
+
 <div class="listings-page">
   <header class="navbar">
     <%= link_to root_path, class: "logo" do %>
       CUMarket
     <% end %>
+
     <div class="nav-links">
       <%= link_to community_path do %>
         <i class="fas fa-users"></i> Community
@@ -17,11 +23,13 @@
         <i class="fas fa-user-circle"></i> Profile
       <% end %>
     </div>
+
     <div class="right-corner">
       <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
         <i class="fas fa-moon"></i>
         <span>Dark</span>
       </button>
+
       <% if user_signed_in? %>
         <span class="session-badge">
           <i class="fas fa-user-check"></i>
@@ -30,6 +38,7 @@
             <strong>Admin</strong>
           <% end %>
         </span>
+
         <%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
           <i class="fas fa-sign-out-alt"></i> Logout
         <% end %>
@@ -40,60 +49,76 @@
       <% end %>
     </div>
   </header>
-  
+
   <div class="listings-header">
     <h1 class="page-title">Discover amazing items</h1>
   </div>
 
-
-
-
   <div class="search-filter-bar">
-    <%= form_with url: listings_path, method: :get, local: true do |f| %>
-      <%= f.text_field :q,
-        value: params[:q],
-        placeholder: "Search by title, description or location" %>
+    <%= form_with url: listings_path,
+              method: :get,
+              local: true,
+              id: "listing-search-form",
+              class: "listing-search-form listing-filters-form" do %>
 
-      <%= f.submit "Search" %>
+      <div class="search-row">
+        <%= text_field_tag :q, params[:q], placeholder: "Search by title", class: "search-input" %>
+        <%= submit_tag "Search", class: "search-button" %>
+      </div>
+
+      <div class="filters-row">
+        <div class="filter-group">
+          <h4>Category</h4>
+          <% ["Electronics", "Textbooks", "Furniture", "Clothing", "Others"].each do |category| %>
+            <label>
+              <%= check_box_tag "categories[]", category, selected_categories.include?(category) %>
+              <%= category %>
+            </label>
+          <% end %>
+        </div>
+
+        <div class="filter-group">
+          <h4>Condition</h4>
+          <% ["New", "Like New", "Good", "Fair", "Poor"].each do |condition| %>
+            <label>
+              <%= check_box_tag "conditions[]", condition, selected_conditions.include?(condition) %>
+              <%= condition %>
+            </label>
+          <% end %>
+        </div>
+
+        <div class="filter-group">
+          <h4>Location</h4>
+          <% ["Sha Tin", "Ma On Shan", "CUHK"].each do |location| %>
+            <label>
+              <%= check_box_tag "locations[]", location, selected_locations.include?(location) %>
+              <%= location %>
+            </label>
+          <% end %>
+        </div>
+
+        <div class="filter-group">
+          <h4>Price</h4>
+          <% [
+            ["Under $100", "under_100"],
+            ["$100 - $500", "100_500"],
+            ["$500 - $1000", "500_1000"],
+            ["Over $1000", "over_1000"]
+          ].each do |label_text, value| %>
+            <label>
+              <%= check_box_tag "price_ranges[]", value, selected_price_ranges.include?(value) %>
+              <%= label_text %>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <%= submit_tag "Apply Filters", class: "apply-button" %>
+        <%= link_to "Clear all", listings_path, class: "clear-button" %>
+      </div>
     <% end %>
   </div>
-
-
-
-
-
-
-
-  <div class="search-filter-bar">
-    <%= form_with url: listings_path, method: :get, local: true, html: { id: "listing-search-form" } do |f| %>
-      <%= f.text_field :q,
-        value: params[:q],
-        placeholder: "Search by title, description or location" %>
-
-      <%= f.select :category,
-        options_for_select(
-          [["All Categories", ""]] + Listing.distinct.pluck(:category).compact.sort.map { |c| [c, c] },
-          params[:category]
-        ) %>
-
-      <%= f.select :condition,
-        options_for_select(
-          [["All Conditions", ""]] + Listing.distinct.pluck(:condition).compact.sort.map { |c| [c, c] },
-          params[:condition]
-        ) %>
-
-
-
-      <%= f.submit "Search" %>
-    <% end %>
-  </div>
-
-
-
-
-
-
-
 
   <% if @listings.present? && @listings.any? %>
     <div class="listings-grid">
@@ -101,13 +126,12 @@
         <%= render partial: "listings/listing_card", locals: { listing: listing } %>
       <% end %>
     </div>
-    
+
     <% if @listings.total_pages > 1 %>
       <div class="pagination">
         <%= paginate @listings %>
       </div>
     <% end %>
-    
   <% else %>
     <div class="no-listings">
       <i class="fas fa-box-open"></i>
@@ -117,4 +141,3 @@
     </div>
   <% end %>
 </div>
-

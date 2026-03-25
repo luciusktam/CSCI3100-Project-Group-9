@@ -52,8 +52,8 @@ Then("I should not see listing title {string}") do |text|
   expect(page).not_to have_content(text)
 end
 
-When("I select {string} from {string}") do |value, field|
+And('I select {string} from {string}') do |value, field|
   within("#listing-search-form") do
-    select value, from: field
+    check(value)
   end
 end
