@@ -47,27 +47,85 @@ RSpec.describe "Listings", type: :request do
     }
   end
 
+
   describe "GET /listings" do
+
+    let!(:study_chair) do
+      create_listing_with_photo(
+        title: "Study Chair",
+        price: 120,
+        category: "Furniture",
+        condition: "Good",
+        location: "Sha Tin",
+        description: "Black wooden chair",
+       user: user
+      )
+    end
+
+    let!(:calculator) do
+      create_listing_with_photo(
+        title: "Casio Calculator",
+        price: 80,
+        category: "Electronics",
+        condition: "Like New",
+        location: "Ma On Shan",
+        description: "Scientific calculator",
+        user: user
+      )
+    end
+
     it "returns http success" do
       get listings_path
       expect(response).to have_http_status(:success)
     end
 
     it "displays listings" do
-      create_listing_with_photo(
-        title: "Laptop",
-        price: 500,
-        category: "Electronics",
-        condition: "Good",
-        location: "Campus",
-        description: "Nice laptop",
-        user: user
-      )
+        create_listing_with_photo(
+          title: "Laptop",
+          price: 500,
+          category: "Electronics",
+          condition: "Good",
+          location: "Campus",
+          description: "Nice laptop",
+          user: user
+        )
 
-      get listings_path
-      expect(response.body).to include("Laptop")
+        get listings_path
+        expect(response.body).to include("Laptop")
+    end
+
+
+    it "filters listings by keyword" do
+      get listings_path, params: { q: "chair" }
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include("Study Chair")
+      expect(response.body).not_to include("Casio Calculator")
+    end
+
+    it "filters listings by category" do
+      get listings_path, params: { category: "Furniture" }
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include("Study Chair")
+      expect(response.body).not_to include("Casio Calculator")
+    end
+
+    it "filters listings by condition" do
+      get listings_path, params: { condition: "Good" }
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include("Study Chair")
+      expect(response.body).not_to include("Casio Calculator")
     end
   end
+
+
+
+
+
+
+
 
   describe "GET /sell" do
     it "redirects when not logged in" do
