@@ -1,0 +1,108 @@
+<% selected_categories = Array(params[:categories]).reject(&:blank?) %>
+<% selected_conditions = Array(params[:conditions]).reject(&:blank?) %>
+<% selected_locations  = Array(params[:locations]).reject(&:blank?) %>
+<% selected_price_ranges = Array(params[:price_ranges]).reject(&:blank?) %>
+
+<% price_labels = {
+  "under_100" => "Under $100",
+  "100_500" => "$100 - $500",
+  "500_1000" => "$500 - $1000",
+  "over_1000" => "Over $1000"
+} %>
+
+<div class="search-section search-section-modern">
+  <%= form_with url: listings_path, method: :get, local: true, class: "modern-search-form" do %>
+    <div class="search-row modern-search-row">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <%= text_field_tag :q, params[:q], placeholder: "Search for an item" %>
+      </div>
+
+      <div class="filter-dropdowns">
+        <button type="button" class="filter-tag filter-toggle" data-target="category-panel">
+          <i class="fas fa-tag"></i> Category
+        </button>
+
+        <button type="button" class="filter-tag filter-toggle" data-target="price-panel">
+          <i class="fas fa-dollar-sign"></i> Price
+        </button>
+
+        <button type="button" class="filter-tag filter-toggle" data-target="location-panel">
+          <i class="fas fa-map-pin"></i> Location
+        </button>
+
+        <button type="button" class="filter-tag filter-toggle" data-target="condition-panel">
+          <i class="fas fa-star"></i> Condition
+        </button>
+      </div>
+
+      <%= submit_tag "Search", class: "search-btn" %>
+    </div>
+
+    <div class="filter-chip filter-chip-row selected-filters-bar">
+      <div class="filters-left">
+        <h2><i class="fas fa-sliders-h filter-title-icon"></i> Filters</h2>
+
+        <div class="selected-chips">
+          <% selected_categories.each do |category| %>
+            <span class="selected-chip"><%= category %></span>
+          <% end %>
+
+          <% selected_conditions.each do |condition| %>
+            <span class="selected-chip"><%= condition %></span>
+          <% end %>
+
+          <% selected_locations.each do |location| %>
+            <span class="selected-chip"><%= location %></span>
+          <% end %>
+
+          <% selected_price_ranges.each do |price_range| %>
+            <span class="selected-chip"><%= price_labels[price_range] || price_range %></span>
+          <% end %>
+        </div>
+      </div>
+
+      <%= link_to listings_path, class: "filter-tag filter-clear" do %>
+        <i class="fas fa-trash-alt"></i> clear all
+      <% end %>
+    </div>
+
+    <div class="filter-panels">
+      <div id="category-panel" class="filter-panel hidden">
+        <% ["Electronics", "Textbooks", "Furniture", "Clothing", "Others"].each do |category| %>
+          <label class="filter-option">
+            <%= check_box_tag "categories[]", category, selected_categories.include?(category) %>
+            <span><%= category %></span>
+          </label>
+        <% end %>
+      </div>
+
+      <div id="price-panel" class="filter-panel hidden">
+        <% [["Under $100", "under_100"], ["$100 - $500", "100_500"], ["$500 - $1000", "500_1000"], ["Over $1000", "over_1000"]].each do |label_text, value| %>
+          <label class="filter-option">
+            <%= check_box_tag "price_ranges[]", value, selected_price_ranges.include?(value) %>
+            <span><%= label_text %></span>
+          </label>
+        <% end %>
+      </div>
+
+      <div id="location-panel" class="filter-panel hidden">
+        <% Listing.distinct.order(:location).pluck(:location).reject(&:blank?).each do |location| %>
+          <label class="filter-option">
+            <%= check_box_tag "locations[]", location, selected_locations.include?(location) %>
+            <span><%= location %></span>
+          </label>
+        <% end %>
+      </div>
+
+      <div id="condition-panel" class="filter-panel hidden">
+        <% ["New", "Like New", "Good", "Fair", "Poor"].each do |condition| %>
+          <label class="filter-option">
+            <%= check_box_tag "conditions[]", condition, selected_conditions.include?(condition) %>
+            <span><%= condition %></span>
+          </label>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
