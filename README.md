@@ -73,8 +73,8 @@ Primary = main implementer. Secondary = support/reviewer + contributed commits/t
 | User auth + roles | Tam Yiu Hei |  | Auth + authorization boundaries. |
 | User Profile | Tam Yiu Hei |  | User Profile for edit info |
 | CUHK email verification (@link.cuhk.edu.hk) | Tam Yiu Hei |  | Domain restriction + verification flow. |
-| Listings CRUD |  |  | Create/edit/delete listings + validations. |
-| Image uploads |  |  | Active Storage (or equivalent). |
+| Listings CRUD | Au Chi Hin |  | Create/edit/delete listings + validations. |
+| Image uploads | Au Chi Hin |  | Active Storage (or equivalent). |
 | Item status workflow |  |  | Available → Reserved → Sold. |
 | Search & filtering | Lau Yat Laam |  | Keyword search + filters + fuzzy search. |
 | Community/college feature |  |  | College grouping/community space. |
