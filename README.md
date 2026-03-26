@@ -4,8 +4,12 @@
 ## To Start Dev
 ```
 bundle install
-bin/rails db:create db:migrate                           
+bin/rails generate migration EnablePgSearchForListings
+bin/rails db:create db:migrate
+bundle exec rspec
+bundle exec cucumber
 bin/rails server
+
 ```
 
 
