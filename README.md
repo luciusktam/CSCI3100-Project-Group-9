@@ -97,7 +97,7 @@ Primary = main implementer. Secondary = support/reviewer + contributed commits/t
 
 ### Installation
 ```bash
-git clone [<REPO_URL>](https://github.com/CSCI3100-Project-Group-9/CSCI3100-Project-Group-9.git)
+git clone https://github.com/CSCI3100-Project-Group-9/CSCI3100-Project-Group-9.git
 cd CSCI3100-Project-Group-9
 bundle install
 bin/rails generate migration EnablePgSearchForListings
