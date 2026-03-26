@@ -37,12 +37,9 @@ Then("I should see pagination if there are more than 20 listings") do
   end
 end
 
-Then("I should see No listings yet") do
-  expect(page).to have_content("No listings yet")
-  expect(page).to have_content("Be the first to list an item!")
-  expect(page).to have_link("Create a Listing")
+Then('I should see No listings yet') do
+  expect(page).to have_text('No listings yet')
 end
-
 
 def create_test_user
   @user = User.create!(

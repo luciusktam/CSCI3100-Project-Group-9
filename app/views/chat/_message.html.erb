@@ -1,0 +1,9 @@
+<div class="message-bubble <%= message.user == current_user ? 'sent' : 'received' %>" data-message-id="<%= message.id %>">
+  <%= message.content %>
+  <div class="message-time">
+    <%= time_ago_in_words(message.created_at) %> ago
+    <% if message.user == current_user %>
+      <i class="fas fa-check message-status"></i>
+    <% end %>
+  </div>
+</div>

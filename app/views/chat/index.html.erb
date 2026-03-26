@@ -45,37 +45,94 @@
         </div>
     </header>
 
-    <div class="main-chat-layout">
-        <div class="chat-sidebar">
-            <div class="search-container">
-                <input type="text" id="searchUsers" placeholder="Search users or chats...">
-            </div>
+        <div class="main-chat-layout">
+            <div class="chat-sidebar">
+                <div class="search-container">
+                    <input type="text" id="searchUsers" placeholder="Search users or chats">
+                </div>
             <div class="user-list" id="userListContainer">
-                <div style="padding: 20px; text-align:center; color:var(--text-muted);">
-                    <i class="fas fa-search"></i> Find a seller to chat with!
+            <% if @chat_users.any? %>
+                <% @chat_users.each do |user| %>
+                <% conversation = Conversation.find_or_create_between(current_user, user) %>
+                <% unread_count = conversation.unread_count_for(current_user) %>
+                <div class="user-item <%= 'active' if @other_user && @other_user.id == user.id %>" 
+                    data-user-id="<%= user.id %>" 
+                    data-username="<%= user.username %>">
+                    <div class="user-avatar">
+                        <%= user.username.first.upcase %>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">
+                            <%= user.username %>
+                            <% if unread_count > 0 %>
+                                <span class="unread-badge"><%= unread_count %></span>
+                            <% end %>
+                        </div>
+                        <div class="user-status">
+                            <%= conversation.last_message&.content&.truncate(30) || "Click to start chatting" %>
+                        </div>
+                    </div>
+                    <div class="conversation-time">
+                    <%= time_ago_in_words(conversation.updated_at) %> ago
+                    </div>
                 </div>
+            <% end %>
+        <% else %>
+            <div class="empty-user-list">
+            <i class="fas fa-comments"></i>
+            <p>Find a seller to chat with!</p>
+            <small>Click "Chat with seller" on any listing to start a conversation</small>
             </div>
-        </div>
-
-        <div class="chat-window" id="chatWindow">
-            <div class="chat-placeholder" id="chatPlaceholder">
-                <i class="fas fa-comments placeholder-icon"></i>
-                <div class="placeholder-text">
-                    <strong>No conversation selected</strong><br>
-                    Choose a user to start messaging.
-                </div>
-            </div>
-            <div id="activeChatView" style="display: none; flex-direction: column; height: 100%;">
-                <div class="chat-header" id="activeChatHeader">
-                    <div class="user-avatar" id="activeAvatar">?</div>
-                    <div class="chat-header-name" id="activeUserName"></div>
-                </div>
-                <div class="messages-area" id="messagesArea"></div>
-                <div class="chat-input-area">
-                    <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off">
-                    <button class="send-btn" id="sendMessageBtn"><i class="fas fa-paper-plane"></i></button>
-                </div>
-            </div>
+        <% end %>
         </div>
     </div>
+    
+    <div class="chat-window" id="chatWindow">
+        <!-- Placeholder when no conversation selected -->
+        <div class="chat-placeholder" id="chatPlaceholder" style="<%= @other_user ? 'display: none;' : 'display: flex;' %>">
+        <i class="fas fa-comments placeholder-icon"></i>
+        <div class="placeholder-text">
+            <strong>No conversation selected</strong><br>
+            Choose a user to start messaging.
+        </div>
+        </div>
+        
+        <!-- Active chat view -->
+        <div id="activeChatView" style="<%= @other_user ? 'display: flex;' : 'display: none;' %>; flex-direction: column; height: 100%;">
+        <div class="chat-header" id="activeChatHeader">
+            <div class="user-avatar" id="activeAvatar">
+            <%= @other_user&.username&.first&.upcase || '?' %>
+            </div>
+            <div class="chat-header-name" id="activeUserName">
+            <%= @other_user&.username || '' %>
+            </div>
+        </div>
+        <div class="messages-area" id="messagesArea">
+            <% if @messages && @messages.any? %>
+            <% @messages.each do |message| %>
+                <div class="message-bubble <%= message.user == current_user ? 'sent' : 'received' %>">
+                <%= message.content %>
+                <div class="message-time">
+                    <%= time_ago_in_words(message.created_at) %> ago
+                    <% if message.user == current_user %>
+                    <i class="fas fa-check message-status"></i>
+                    <% end %>
+                </div>
+                </div>
+            <% end %>
+            <% else %>
+            <div class="empty-chat-note">No messages yet. Start the conversation!</div>
+            <% end %>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off">
+            <button class="send-btn" id="sendMessageBtn">
+            <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+        </div>
+    </div>
+    </div>
 </div>
+
+<%= javascript_include_tag 'chat', defer: true %>

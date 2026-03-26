@@ -19,6 +19,8 @@ end
 
 # Isolate scenario state to avoid cross-scenario data and mail/job leakage.
 Before do
+  Message.destroy_all
+  Conversation.destroy_all
   Listing.delete_all
   User.delete_all
   ActionMailer::Base.deliveries.clear

@@ -7,6 +7,10 @@ gem "propshaft"
 # Use PostgreSQL as the database for Active Record
 gem "pg", "~> 1.5"
 
+# Use PostgreSQL trigram to do fuzzy match，then use pg_search to pack up on Rails 
+gem "pg_search"
+
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]

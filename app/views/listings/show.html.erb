@@ -133,7 +133,7 @@
         </div>
       <% else %>
     
-        <%= link_to chat_path(seller_id: @listing.user.id, listing_id: @listing.id), 
+        <%= link_to chat_with_user_path(@listing.user), 
               class: "submit-btn" do %>
           <i class="fas fa-comment"></i>
           Chat with seller

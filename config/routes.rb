@@ -4,7 +4,6 @@ Rails.application.routes.draw do
 
   # Basic pages
   get "community", to: "community#index"
-  get "chat", to: "chat#index"
   get "profile", to: "profile#index"
   patch "profile", to: "profile#update"
   delete "profile", to: "profile#destroy", as: :delete_profile
@@ -17,7 +16,7 @@ Rails.application.routes.draw do
   patch "reset_password/:token", to: "passwords#update", as: :update_password
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
-  resources :users, only: [:new, :create]
+  resources :users, only: [:show, :new, :create]
   get  "verify/:token", to: "users#verify", as: :verify_email
   post "verify/resend", to: "users#resend_verification", as: :resend_verification_email
 
@@ -27,5 +26,9 @@ Rails.application.routes.draw do
   get "listings/:id", to: "listings#show"
   get "listings", to: "listings#index"
 
-  # Search route
+  # Chat route
+  get 'chat', to: 'chat#index'
+  get 'chat/:user_id', to: 'chat#show', as: 'chat_with_user'
+  get 'chat/:user_id/messages', to: 'chat#messages'
+  post 'chat/:user_id/send_message', to: 'chat#send_message'
 end

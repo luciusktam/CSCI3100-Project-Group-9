@@ -42,6 +42,13 @@ class User < ApplicationRecord
     reset_password_token_digest.blank? || reset_password_sent_at.blank? || reset_password_sent_at < PASSWORD_RESET_EXPIRY.ago
   end
 
+  has_many :conversations_as_user1, class_name: "Conversation", foreign_key: "user1_id", dependent: :destroy
+  has_many :conversations_as_user2, class_name: "Conversation", foreign_key: "user2_id", dependent: :destroy
+  
+  def conversations
+    Conversation.where("user1_id = ? OR user2_id = ?", id, id).order(updated_at: :desc)
+  end
+  
   private
 
   def normalize_email
