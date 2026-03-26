@@ -1,95 +1,70 @@
 <div class="app">
-     <header class="navbar">
-        <%= link_to root_path, class: "logo" do %>
-            CUMarket
-        <% end %>
-        <div class="nav-links">
-            <%= link_to community_path do %>
-                <i class="fas fa-users"></i> Community
-            <% end %>
-            <%= link_to chat_path do %>
-                <i class="fas fa-comment-dots"></i> Chat
-            <% end %>
-            <%= link_to sell_path do %>
-                <i class="fas fa-euro-sign"></i> Sell
-            <% end %>
-            <%= link_to profile_path do %>
-                <i class="fas fa-user-circle"></i> Profile
-            <% end %>
-        </div>
-        <div class="right-corner">
-            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
-                <i class="fas fa-moon"></i>
-                <span>Dark</span>
-            </button>
-            <% if user_signed_in? %>
-                <span class="session-badge">
-                    <% if current_user.avatar.attached? %>
-                        <%= image_tag current_user.avatar, alt: "User icon", class: "session-avatar-image" %>
-                    <% else %>
-                        <i class="fas fa-user-circle session-avatar-icon"></i>
-                    <% end %>
-                    <%= current_user.username %>
-                    <% if current_user.admin? %>
-                        <strong>Admin</strong>
-                    <% end %>
-                </span>
-                <%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                <% end %>
-            <% else %>
-            <%= link_to login_path, class: "login-btn" do %>
-                <i class="fas fa-sign-in-alt"></i> Login
-            <% end %>
-            <% end %>
-        </div>
-    </header>
+  <header class="navbar">
+    <%= link_to root_path, class: "logo" do %>
+      CUMarket
+    <% end %>
 
-    <!-- homepage: search + filter function -->
-    <div class="search-section">
-        <div class="search-row">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <%= text_field_tag :search, params[:search], 
-                      placeholder: "Search for an item",
-                      id: "search-input" %>
-            </div>
-            <div class="filter-dropdowns">
-                <span class="filter-tag"><i class="fas fa-tag"></i> Category</span>
-                <span class="filter-tag"><i class="fas fa-dollar-sign"></i> Price</span>
-                <span class="filter-tag"><i class="fas fa-map-pin"></i> Location</span>
-            </div>
-            <%= button_tag class: "search-btn" do %>
-                <i class="fas fa-arrow-right"></i> Search
-            <% end %>
-        </div>
-        <div class="filter-chip filter-chip-row">
-            <h2><i class="fas fa-sliders-h filter-title-icon"></i> Filters</h2>
-            <span class="filter-tag filter-clear"> 
-                <i class="fas fa-trash-alt"></i> clear all
-            </span>
-        </div>
+    <div class="nav-links">
+      <%= link_to community_path do %>
+        <i class="fas fa-users"></i> Community
+      <% end %>
+      <%= link_to chat_path do %>
+        <i class="fas fa-comment-dots"></i> Chat
+      <% end %>
+      <%= link_to sell_path do %>
+        <i class="fas fa-euro-sign"></i> Sell
+      <% end %>
+      <%= link_to profile_path do %>
+        <i class="fas fa-user-circle"></i> Profile
+      <% end %>
     </div>
 
-    <div class="section-header">
-        <h2>Fresh listings</h2>
-        <%= link_to listings_path do %>
-            view all <i class="fas fa-chevron-right section-link-icon"></i>
+    <div class="right-corner">
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+        <i class="fas fa-moon"></i>
+        <span>Dark</span>
+      </button>
+
+      <% if user_signed_in? %>
+        <span class="session-badge">
+          <% if current_user.avatar.attached? %>
+            <%= image_tag current_user.avatar, alt: "User icon", class: "session-avatar-image" %>
+          <% else %>
+            <i class="fas fa-user-circle session-avatar-icon"></i>
+          <% end %>
+          <%= current_user.username %>
+          <% if current_user.admin? %>
+            <strong>Admin</strong>
+          <% end %>
+        </span>
+
+        <%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
+          <i class="fas fa-sign-out-alt"></i> Logout
         <% end %>
+      <% else %>
+        <%= link_to login_path, class: "login-btn" do %>
+          <i class="fas fa-sign-in-alt"></i> Login
+        <% end %>
+      <% end %>
+    </div>
+  </header>
+
+  <%= render "listings/search_filters" %>
+
+  <section class="fresh-listings-section">
+    <div class="section-header">
+      <h2>Fresh listings</h2>
+      <%= link_to "view all", listings_path, class: "view-all-link" %>
     </div>
 
     <% if @latest_listings.any? %>
-    <div class="listings-grid">
-      <% @latest_listings.each do |listing| %>
-        <%= render partial: "listings/listing_card", locals: { listing: listing } %>
-      <% end %>
-    </div>
-  <% else %>
-    <div class="no-listings">
-      <i class="fas fa-box-open"></i>
-      <h3>No listings yet</h3>
-      <p>Be the first to list an item!</p>
-      <%= link_to "Create a Listing", sell_path, class: "create-listing-btn" %>
-    </div>
-  <% end %>
-</div>
+      <div class="listings-grid">
+        <% @latest_listings.each do |listing| %>
+          <%= render "listings/listing_card", listing: listing %>
+        <% end %>
+      </div>
+    <% else %>
+      <p>No listings yet</p>
+    <% end %>
+  </section>
+

@@ -3,6 +3,7 @@
     <%= link_to root_path, class: "logo" do %>
       CUMarket
     <% end %>
+
     <div class="nav-links">
       <%= link_to community_path do %>
         <i class="fas fa-users"></i> Community
@@ -17,11 +18,13 @@
         <i class="fas fa-user-circle"></i> Profile
       <% end %>
     </div>
+
     <div class="right-corner">
       <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
         <i class="fas fa-moon"></i>
         <span>Dark</span>
       </button>
+
       <% if user_signed_in? %>
         <span class="session-badge">
           <i class="fas fa-user-check"></i>
@@ -30,6 +33,7 @@
             <strong>Admin</strong>
           <% end %>
         </span>
+
         <%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
           <i class="fas fa-sign-out-alt"></i> Logout
         <% end %>
@@ -40,31 +44,35 @@
       <% end %>
     </div>
   </header>
-  
-  <div class="listings-header">
-    <h1 class="page-title">Discover amazing items</h1>
+
+<h1 class="form-title">Discover Amazing Items</h1>
+
+
+  <%= render "listings/search_filters" %>
+
+  <div class="section-header">
+    <div class="section-actions">
+      <%= link_to "Create a Listing", sell_path, class: "create-listing-btn always-visible" %>
+    </div>
   </div>
 
-  <% if @listings.any? %>
+  <% if @listings.present? && @listings.any? %>
     <div class="listings-grid">
       <% @listings.each do |listing| %>
         <%= render partial: "listings/listing_card", locals: { listing: listing } %>
       <% end %>
     </div>
-    
+
     <% if @listings.total_pages > 1 %>
       <div class="pagination">
         <%= paginate @listings %>
       </div>
     <% end %>
-    
   <% else %>
     <div class="no-listings">
       <i class="fas fa-box-open"></i>
       <h3>No listings yet</h3>
       <p>Be the first to list an item!</p>
-      <%= link_to "Create a Listing", sell_path, class: "create-listing-btn" %>
     </div>
   <% end %>
 </div>
-
