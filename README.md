@@ -9,7 +9,6 @@ bin/rails db:create db:migrate
 bundle exec rspec
 bundle exec cucumber
 bin/rails server
-
 ```
 
 
