@@ -11,7 +11,9 @@
 } %>
 
 <div class="search-section search-section-modern">
-  <%= form_with url: listings_path, method: :get, local: true, class: "modern-search-form" do %>
+  <%= form_with url: listings_path, method: :get, local: true,
+              id: "listing-search-form",
+              class: "modern-search-form" do %>
     <div class="search-row modern-search-row">
       <div class="search-box">
         <i class="fas fa-search"></i>

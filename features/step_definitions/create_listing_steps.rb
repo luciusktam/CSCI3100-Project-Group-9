@@ -50,8 +50,8 @@ When("I submit the form") do
   click_button "List it!"
 end
 
-Then("I should see a success message") do
-  expect(page).to have_content("Your item is listed！")
+Then('I should see a success message') do
+  expect(page).to have_text('Your item is listed!')
 end
 
 Then("I should be on the new listing page") do

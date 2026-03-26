@@ -8,30 +8,37 @@ class ListingsController < ApplicationController
     @listings = Listing.all
 
     if params[:q].present?
-      q = "%#{params[:q]}%"
-      @listings = @listings.where(
-        "title ILIKE :q OR description ILIKE :q OR location ILIKE :q",
-        q: q
-      )
+      @listings = @listings.search_by_keyword(params[:q])
     end
 
-    if params[:categories].present?
-      @listings = @listings.where(category: params[:categories])
-    end
+    category_values =
+      if params[:categories].present?
+        Array(params[:categories]).reject(&:blank?)
+      elsif params[:category].present?
+        [ params[:category] ]
+      else
+        []
+      end
+    @listings = @listings.where(category: category_values) if category_values.any?
 
-    if params[:conditions].present?
-      @listings = @listings.where(condition: params[:conditions])
-    end
+    condition_values =
+      if params[:conditions].present?
+        Array(params[:conditions]).reject(&:blank?)
+      elsif params[:condition].present?
+        [ params[:condition] ]
+      else
+        []
+      end
+    @listings = @listings.where(condition: condition_values) if condition_values.any?
 
-    if params[:locations].present?
-      @listings = @listings.where(location: params[:locations])
-    end
+    location_values = Array(params[:locations]).reject(&:blank?)
+    @listings = @listings.where(location: location_values) if location_values.any?
 
     if params[:price_ranges].present?
       price_conditions = []
       price_values = []
 
-      params[:price_ranges].each do |range|
+      Array(params[:price_ranges]).each do |range|
         case range
         when "under_100"
           price_conditions << "price < ?"
@@ -48,13 +55,13 @@ class ListingsController < ApplicationController
         end
       end
 
-      if price_conditions.any?
-        @listings = @listings.where(price_conditions.join(" OR "), *price_values)
-      end
+      @listings = @listings.where(price_conditions.join(" OR "), *price_values) if price_conditions.any?
     end
 
     @listings = @listings.order(created_at: :desc).page(params[:page]).per(20)
   end
+
+
   def new
     @listing = Listing.new
   end
@@ -63,10 +70,8 @@ class ListingsController < ApplicationController
     @listing = Listing.new(listing_params)
     @listing.user = current_user
 
-
-
     if @listing.save
-      flash[:notice] = "Your item is listed！"
+      flash[:notice] = "Your item is listed!"
       redirect_to @listing
     else
       render :new, status: :unprocessable_entity
@@ -75,48 +80,47 @@ class ListingsController < ApplicationController
 
   def show
   end
+
   def edit
   end
 
-def update
-  @listing.assign_attributes(listing_params.except(:photos))
-  current_photo_count = @listing.photos.count
+  def update
+    @listing.assign_attributes(listing_params.except(:photos))
+    current_photo_count = @listing.photos.count
 
-  photos_to_remove = params[:remove_photos].present? ? params[:remove_photos].split(",").map(&:strip) : []
+    photos_to_remove = params[:remove_photos].present? ? params[:remove_photos].split(",").map(&:strip) : []
+    new_photos = listing_params[:photos].present? ? listing_params[:photos].reject(&:blank?) : []
 
+    final_photo_count = current_photo_count - photos_to_remove.size + new_photos.size
 
-  new_photos = listing_params[:photos].present? ? listing_params[:photos].reject(&:blank?) : []
+    if final_photo_count == 0
+      @listing.errors.add(:photos, "required")
+      render :edit, status: :unprocessable_entity
+      return
+    end
 
-  final_photo_count = current_photo_count - photos_to_remove.size + new_photos.size
+    handle_remove_photos
+    handle_new_photos
 
-
-  if final_photo_count == 0
-    @listing.errors.add(:photos, "required")
-    render :edit, status: :unprocessable_entity
-    return
-  end
-
-  handle_remove_photos
-  handle_new_photos
-
-  if @listing.save
-    if @listing.photos.attached?
-      flash[:notice] = "Listing updated successfully！"
-      redirect_to @listing
+    if @listing.save
+      if @listing.photos.attached?
+        flash[:notice] = "Listing updated successfully！"
+        redirect_to @listing
+      else
+        @listing.errors.add(:photos, "can't be blank")
+        render :edit, status: :unprocessable_entity
+      end
     else
-      @listing.errors.add(:photos, "can't be blank")
       render :edit, status: :unprocessable_entity
     end
-  else
-    render :edit, status: :unprocessable_entity
   end
-end
 
   def destroy
     @listing.destroy
     flash[:notice] = "Listing deleted successfully！"
     redirect_to listings_path
   end
+
 
   private
 
@@ -135,7 +139,6 @@ end
     return unless listing_params[:photos].present?
 
     new_photos = listing_params[:photos].reject(&:blank?)
-
     @listing.photos.attach(new_photos) if new_photos.any?
   end
 
@@ -153,6 +156,7 @@ end
   def listing_params
     params.require(:listing).permit(
       :title, :price, :category, :condition, :location, :description,
-      photos: [])
+      photos: []
+    )
   end
 end
