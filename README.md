@@ -1,11 +1,14 @@
 # CSCI3100-Project Group 9
-# CUSHMS — CUHK Second-Hand Marketplace SaaS
+# CUMarket — CUHK Second-Hand Marketplace SaaS
 
 ## To Start Dev
 ```
 bundle install
-rails db:setup 
-rails server
+bin/rails generate migration EnablePgSearchForListings
+bin/rails db:create db:migrate
+bundle exec rspec
+bundle exec cucumber
+bin/rails server
 ```
 
 
@@ -73,10 +76,10 @@ Primary = main implementer. Secondary = support/reviewer + contributed commits/t
 | User auth + roles | Tam Yiu Hei |  | Auth + authorization boundaries. |
 | User Profile | Tam Yiu Hei |  | User Profile for edit info |
 | CUHK email verification (@link.cuhk.edu.hk) | Tam Yiu Hei |  | Domain restriction + verification flow. |
-| Listings CRUD |  |  | Create/edit/delete listings + validations. |
-| Image uploads |  |  | Active Storage (or equivalent). |
+| Listings CRUD | Au Chi Hin |  | Create/edit/delete listings + validations. |
+| Image uploads | Au Chi Hin |  | Active Storage (or equivalent). |
 | Item status workflow |  |  | Available → Reserved → Sold. |
-| Search & filtering |  |  | Keyword search + filters + fuzzy search. |
+| Search & filtering | Lau Yat Laam |  | Keyword search + filters + fuzzy search. |
 | Community/college feature |  |  | College grouping/community space. |
 | ActionCable chat/notifications |  |  | Real-time messaging + notifications. |
 | RSpec + SimpleCov |  |  | Unit tests + coverage evidence. |
@@ -94,6 +97,10 @@ Primary = main implementer. Secondary = support/reviewer + contributed commits/t
 
 ### Installation
 ```bash
-git clone <REPO_URL>
-cd <PROJECT_FOLDER>
+git clone https://github.com/CSCI3100-Project-Group-9/CSCI3100-Project-Group-9.git
+cd CSCI3100-Project-Group-9
 bundle install
+bin/rails generate migration EnablePgSearchForListings
+bin/rails db:create db:migrate
+bin/rails server
+

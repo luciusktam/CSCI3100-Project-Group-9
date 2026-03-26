@@ -1,2 +1,81 @@
-<h1>Chat#index</h1>
-<p>Find me in app/views/chat/index.html.erb</p>
+<div class="app">
+    <header class="navbar">
+        <%= link_to root_path, class: "logo" do %>
+            CUMarket
+        <% end %>
+        <div class="nav-links">
+            <%= link_to community_path do %>
+                <i class="fas fa-users"></i> Community
+            <% end %>
+            <%= link_to chat_path do %>
+                <i class="fas fa-comment-dots"></i> Chat
+            <% end %>
+            <%= link_to sell_path do %>
+                <i class="fas fa-euro-sign"></i> Sell
+            <% end %>
+            <%= link_to profile_path do %>
+                <i class="fas fa-user-circle"></i> Profile
+            <% end %>
+        </div>
+        <div class="right-corner">
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+                <span>Dark</span>
+            </button>
+            <% if user_signed_in? %>
+                <span class="session-badge">
+                    <% if current_user.avatar.attached? %>
+                        <%= image_tag current_user.avatar, alt: "User icon", class: "session-avatar-image" %>
+                    <% else %>
+                        <i class="fas fa-user-circle session-avatar-icon"></i>
+                    <% end %>
+                    <%= current_user.username %>
+                    <% if current_user.admin? %>
+                        <strong>Admin</strong>
+                    <% end %>
+                </span>
+                <%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                <% end %>
+            <% else %>
+            <%= link_to login_path, class: "login-btn" do %>
+                <i class="fas fa-sign-in-alt"></i> Login
+            <% end %>
+            <% end %>
+        </div>
+    </header>
+
+    <div class="main-chat-layout">
+        <div class="chat-sidebar">
+            <div class="search-container">
+                <input type="text" id="searchUsers" placeholder="Search users or chats...">
+            </div>
+            <div class="user-list" id="userListContainer">
+                <div style="padding: 20px; text-align:center; color:var(--text-muted);">
+                    <i class="fas fa-search"></i> Find a seller to chat with!
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-placeholder" id="chatPlaceholder">
+                <i class="fas fa-comments placeholder-icon"></i>
+                <div class="placeholder-text">
+                    <strong>No conversation selected</strong><br>
+                    Choose a user to start messaging.
+                </div>
+            </div>
+            <div id="activeChatView" style="display: none; flex-direction: column; height: 100%;">
+                <div class="chat-header" id="activeChatHeader">
+                    <div class="user-avatar" id="activeAvatar">?</div>
+                    <div class="chat-header-name" id="activeUserName"></div>
+                </div>
+                <div class="messages-area" id="messagesArea"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off">
+                    <button class="send-btn" id="sendMessageBtn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
