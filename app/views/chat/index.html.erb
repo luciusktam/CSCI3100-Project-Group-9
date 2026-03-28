@@ -1,4 +1,14 @@
 <div class="app">
+    <script>
+    // Auto-refresh the page once to ensure JavaScript loads properly
+    (function() {
+        if (!window.location.search.includes('refreshed=true')) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('refreshed', 'true');
+        window.location.href = url.toString();
+        }
+    })();
+    </script>
     <header class="navbar">
         <%= link_to root_path, class: "logo" do %>
             CUMarket
@@ -55,9 +65,7 @@
                 <% @chat_users.each do |user| %>
                 <% conversation = Conversation.find_or_create_between(current_user, user) %>
                 <% unread_count = conversation.unread_count_for(current_user) %>
-                <div class="user-item <%= 'active' if @other_user && @other_user.id == user.id %>" 
-                    data-user-id="<%= user.id %>" 
-                    data-username="<%= user.username %>">
+                <%= link_to chat_with_user_path(user), class: "user-item #{'active' if @other_user && @other_user.id == user.id}", data: { user_id: user.id, username: user.username } do %>
                     <div class="user-avatar">
                         <%= user.username.first.upcase %>
                     </div>
@@ -73,9 +81,9 @@
                         </div>
                     </div>
                     <div class="conversation-time">
-                    <%= time_ago_in_words(conversation.updated_at) %> ago
+                        <%= time_ago_in_words(conversation.updated_at) %> ago
                     </div>
-                </div>
+                <% end %>
             <% end %>
         <% else %>
             <div class="empty-user-list">
@@ -97,7 +105,6 @@
         </div>
         </div>
         
-        <!-- Active chat view -->
         <div id="activeChatView" style="<%= @other_user ? 'display: flex;' : 'display: none;' %>; flex-direction: column; height: 100%;">
         <div class="chat-header" id="activeChatHeader">
             <div class="user-avatar" id="activeAvatar">

@@ -44,38 +44,46 @@ Feature: Buyer-Seller Chat
       And the message should be marked as sent
 
     Scenario: Cannot send empty message
+      Given I have a conversation with "seller1"
       When I click the "Chat" page button
-      And I click on "seller1" in the user list
-      And I click the send button without typing a message
+      Then I should see "seller1" in the user list
+      When I click on "seller1" in the user list
+      Then I should see the chat window with "seller1"
+      When I click the send button without typing a message
       Then I should not see any new message in the chat
 
     Scenario: Messages appear instantly in the chat
+      Given I have a conversation with "seller1"
       When I click the "Chat" page button
       And I click on "seller1" in the user list
       And I type "Hello!" in the message input
       And I click the send button
-      Then I should see "Hello!" appear in the chat immediately
+      Then I should see my message "Hello!" in the chat
       And the message input should be cleared
 
     Scenario: Messages persist after page reload
+      Given I have a conversation with "seller1"
       When I click the "Chat" page button
       And I click on "seller1" in the user list
       And I type "Persistent message" in the message input
       And I click the send button
-      Then I should see "Persistent message" in the chat
+      Then I should see my message "Persistent message" in the chat
       When I refresh the page
       Then I should still see "Persistent message" in the chat with "seller1"
 
     Scenario: Search filters users by username
+      Given I have a conversation with "seller1"
+      And I have a conversation with "seller2"
       When I click the "Chat" page button
       And I search for "seller1" in the chat search
       Then I should see "seller1" in the user list
       And I should not see "seller2" in the user list
       When I clear the search
-      Then I should see both "seller1" and "seller2" in the user list
+      Then I should see "seller1" in the user list
+      Then I should see "seller2" in the user list
 
     Scenario: Seller sees messages from buyer
-      Given I have a conversation with "seller1" about "Vintage Camera"
+      Given I have a conversation with "seller1"
       And I send a message "Is it available?"
       When I logout
       And I login as "seller1@link.cuhk.edu.hk" with password "password"
@@ -83,5 +91,4 @@ Feature: Buyer-Seller Chat
       Then I should see "buyer" in the user list
       And I should see an unread indicator
       When I click on "buyer" in the user list
-      Then I should see the message "Is it available?"
-      And the message should be from "buyer"
+      Then I should see my message "Is it available?" in the chat

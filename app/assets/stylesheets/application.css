@@ -1864,7 +1864,7 @@ body.dark-mode .field-group input[type="file"]::file-selector-button:hover {
     border-radius: 28px;
     background: var(--window-light);
     box-shadow: 0 8px 20px rgba(0,0,0,0.03);
-    min-height: 90vh
+    min-height: 80vh
 }
 
 .chat-sidebar {

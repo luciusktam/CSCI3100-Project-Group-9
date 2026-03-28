@@ -1,7 +1,7 @@
-// Function to initialize chat functionality
 function initializeChat() {
   console.log("Initializing chat...");
   
+  // Get DOM elements
   const userListContainer = document.getElementById('userListContainer');
   const chatPlaceholder = document.getElementById('chatPlaceholder');
   const activeChatView = document.getElementById('activeChatView');
@@ -28,10 +28,11 @@ function initializeChat() {
       .then(response => response.json())
       .then(messages => {
         console.log("Messages received:", messages);
-        if (messagesArea) {
-          messagesArea.innerHTML = '';
+        const currentMessagesArea = document.getElementById('messagesArea');
+        if (currentMessagesArea) {
+          currentMessagesArea.innerHTML = '';
           if (messages.length === 0) {
-            messagesArea.innerHTML = '<div class="empty-chat-note">No messages yet. Start the conversation!</div>';
+            currentMessagesArea.innerHTML = '<div class="empty-chat-note">No messages yet. Start the conversation!</div>';
           } else {
             messages.forEach(message => {
               const messageDiv = document.createElement('div');
@@ -43,9 +44,9 @@ function initializeChat() {
                   ${message.is_current_user ? '<i class="fas fa-check message-status"></i>' : ''}
                 </div>
               `;
-              messagesArea.appendChild(messageDiv);
+              currentMessagesArea.appendChild(messageDiv);
             });
-            messagesArea.scrollTop = messagesArea.scrollHeight;
+            currentMessagesArea.scrollTop = currentMessagesArea.scrollHeight;
           }
         }
       })
@@ -89,11 +90,7 @@ function initializeChat() {
   
   // Handle user clicks in sidebar
   if (userListContainer) {
-    // Remove existing listeners to avoid duplicates
-    const newUserListContainer = userListContainer.cloneNode(true);
-    userListContainer.parentNode.replaceChild(newUserListContainer, userListContainer);
-    
-    newUserListContainer.addEventListener('click', function(e) {
+    userListContainer.addEventListener('click', function(e) {
       const userItem = e.target.closest('.user-item');
       if (userItem) {
         const userId = userItem.dataset.userId;
@@ -106,30 +103,68 @@ function initializeChat() {
   
   // Send message function
   function sendMessage() {
+    console.log("=== SEND MESSAGE CALLED ===");
+    
     if (!currentUserId) {
       console.error('No user selected');
       alert('Please select a user to chat with');
       return;
     }
     
-    const content = messageInput.value.trim();
-    if (!content) return;
+    const currentMessageInput = document.getElementById('messageInput');
+    if (!currentMessageInput) {
+      console.error('Message input not found');
+      return;
+    }
     
-    console.log("Sending message to user:", currentUserId, "Content:", content);
+    const content = currentMessageInput.value.trim();
+    console.log("Content:", content);
+    
+    if (!content) {
+      console.log("No content, returning");
+      return;
+    }
+    
+    const csrfToken = document.querySelector('[name="csrf-token"]');
+    if (!csrfToken) {
+      console.error('CSRF token not found');
+      return;
+    }
+    
+    console.log("Sending to URL:", `/chat/${currentUserId}/send_message`);
     
     fetch(`/chat/${currentUserId}/send_message`, {
       method: 'POST',
       headers: {
-        'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content,
+        'X-CSRF-Token': csrfToken.content,
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
       body: JSON.stringify({ message: { content: content } })
     })
-    .then(response => response.json())
+    .then(response => {
+      console.log("Response status:", response.status);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
     .then(data => {
-      console.log("Send response:", data);
+      console.log("Response data:", data);
       if (data.success) {
+        console.log("Message sent successfully");
+        
+        const currentMessagesArea = document.getElementById('messagesArea');
+        if (!currentMessagesArea) {
+          console.error('Messages area not found');
+          return;
+        }
+        
+        // Remove empty state if present
+        const emptyState = currentMessagesArea.querySelector('.empty-chat-note');
+        if (emptyState) emptyState.remove();
+        
+        // Add new message
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message-bubble sent';
         messageDiv.innerHTML = `
@@ -139,42 +174,56 @@ function initializeChat() {
             <i class="fas fa-check message-status"></i>
           </div>
         `;
+        currentMessagesArea.appendChild(messageDiv);
+        currentMessagesArea.scrollTop = currentMessagesArea.scrollHeight;
         
-        const emptyState = messagesArea.querySelector('.empty-chat-note');
-        if (emptyState) emptyState.remove();
+        // Clear input
+        const currentMessageInput = document.getElementById('messageInput');
+        if (currentMessageInput) currentMessageInput.value = '';
         
-        messagesArea.appendChild(messageDiv);
-        messagesArea.scrollTop = messagesArea.scrollHeight;
-        messageInput.value = '';
+        console.log("Message added to UI");
       } else if (data.errors) {
+        console.log("Errors from server:", data.errors);
         alert(data.errors.join(', '));
       }
     })
     .catch(error => {
       console.error('Error sending message:', error);
+      alert('Failed to send message. Check console for details.');
     });
   }
   
   // Send message on button click
   if (sendButton) {
-    // Remove existing listeners
+    console.log("Adding click listener to send button");
+    // Remove any existing listeners by replacing the button
     const newSendButton = sendButton.cloneNode(true);
     sendButton.parentNode.replaceChild(newSendButton, sendButton);
-    
-    newSendButton.addEventListener('click', sendMessage);
+    newSendButton.addEventListener('click', function(e) {
+      console.log("Send button clicked!");
+      sendMessage();
+    });
+  } else {
+    console.error("Send button not found!");
   }
   
   // Send message on Enter key
-  if (messageInput) {
-    const newMessageInput = messageInput.cloneNode(true);
-    messageInput.parentNode.replaceChild(newMessageInput, messageInput);
+  const messageInputElement = document.getElementById('messageInput');
+  if (messageInputElement) {
+    console.log("Adding keypress listener to message input");
+    const newMessageInput = messageInputElement.cloneNode(true);
+    messageInputElement.parentNode.replaceChild(newMessageInput, messageInputElement);
     
     newMessageInput.addEventListener('keypress', function(e) {
+      console.log("Key pressed:", e.key);
       if (e.key === 'Enter' && !e.shiftKey) {
+        console.log("Enter pressed, sending message");
         e.preventDefault();
         sendMessage();
       }
     });
+  } else {
+    console.error("Message input not found!");
   }
   
   // Search functionality
@@ -203,6 +252,3 @@ document.addEventListener('DOMContentLoaded', initializeChat);
 
 // For Turbo (Rails 7+), also initialize on turbo:load
 document.addEventListener('turbo:load', initializeChat);
-
-// For Turbolinks (Rails 5-6), also initialize on turbolinks:load
-document.addEventListener('turbolinks:load', initializeChat);

@@ -44,6 +44,7 @@ end
   def messages
     @other_user = User.find(params[:user_id])
     @conversation = Conversation.find_or_create_between(current_user, @other_user)
+    @conversation.messages.where(user: @other_user, read: false).update_all(read: true)
     @messages = @conversation.messages.order(created_at: :asc)
     
     render json: @messages.map { |m| 

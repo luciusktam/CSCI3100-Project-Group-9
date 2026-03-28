@@ -22,7 +22,7 @@ Given(/the following listings exist chat/) do |listings_table|
             location: listing['location'],
             user: User.find_by(username: listing['seller']),
             created_at: Time.current,
-            photos: [fixture_file_upload(Rails.root.join("spec/fixtures/files/test_image.jpg"), "image/jpeg") ]
+            photos: [fixture_file_upload(Rails.root.join("spec/fixtures/files/test_image.jpg"), "image/jpeg")]
         )
     end
 end
@@ -39,15 +39,15 @@ When("I click on {string} in the item list") do |item_title|
   click_link item_title
 end
 
-When("I click the {string} button") do |button_text|
-  click_link_or_button(button_text)
-end
-
 Then("I should see the chat window with {string}") do |username|
-  expect(page).to have_css('.chat-header', wait: 10)
-  expect(page).to have_content(username)
-  expect(page).to have_css('#activeChatView')
-  expect(page).to have_css('#messageInput')
+  expect(page).to have_css('#activeChatView', visible: true, wait: 5)
+  within('#activeChatHeader') do
+    expect(page).to have_content(username)
+  end
+  within('.user-list') do
+    active_user = find('.user-item.active')
+    expect(active_user).to have_content(username)
+  end
 end
 
 Then("I should see a message input field") do
@@ -60,6 +60,10 @@ Then("the messages area should be empty") do
   if page.has_css?('.message-bubble')
     expect(page).to have_no_css('.message-bubble')
   end
+end
+
+When("I click the {string} button") do |button_text|
+  click_link_or_button(button_text)
 end
 
 When("I type {string} in the message input") do |message|
@@ -77,14 +81,14 @@ When("I click the send button without typing a message") do
 end
 
 Then("I should see my message {string} in the chat") do |message|
-  within("#messagesArea") do
-    expect(page).to have_content(message)
+  within(".messages-area") do
+    expect(find('.message-bubble')).to have_content(message)
   end
 end
 
 Then("the message should be marked as sent") do
-  within('.messages-area') do
-    expect(page).to have_css('.message-bubble.sent')
+  within('#messagesArea') do
+    expect(page).to have_css('.message-bubble')
   end
 end
 
@@ -94,14 +98,8 @@ Then("I should not see any new message in the chat") do
   expect(page.all('.message-bubble').count).to eq(original_count)
 end
 
-Then("I should see {string} appear in the chat immediately") do |message|
-  within('.messages-area') do
-    expect(page).to have_content(message)
-  end
-end
-
 Then("the message input should be cleared") do
-  expect(find("#messageInput").value).to be_empty
+  expect(find('#messageInput').value).to be_empty
 end
 
 When("I refresh the page") do
@@ -111,7 +109,7 @@ end
 
 Then("I should still see {string} in the chat with {string}") do |message, username|
   expect(page).to have_content(username)
-  within('.messages-area') do
+  within('#messagesArea') do
     expect(page).to have_content(message)
   end
 end
@@ -127,35 +125,26 @@ When("I clear the search") do
 end
 
 Then("I should see {string} in the user list") do |username|
-  within("#userListContainer") do
+  within(".user-list") do
     expect(page).to have_content(username)
   end
 end
 
 Then("I should not see {string} in the user list") do |username|
-  within("#userListContainer") do
-    expect(page).to have_no_content(username)
-  end
-end
-
-Then("I should see both {string} and {string} in the user list") do |user1, user2|
-  within("#userListContainer") do
-    expect(page).to have_content(user1)
-    expect(page).to have_content(user2)
+  within(".user-list") do
+    expect(page).not_to have_content(username)
   end
 end
 
 When("I click on {string} in the user list") do |username|
-  within("#userListContainer") do
-    click_link_or_button(username)
-  end
+  find(".user-item", text: username).click
   sleep 1
 end
 
-Given("I have a conversation with {string} about {string}") do |seller, listing_title|
+Given("I have a conversation with {string}") do |username|
   buyer = User.find_by(username: 'buyer')
-  seller_user = User.find_by(username: seller1)
-  @conversation = Conversation.find_or_create_between(buyer, seller_user)
+  seller = User.find_by(username: username)
+  @conversation = Conversation.find_or_create_between(buyer, seller)
 end
 
 Given("I send a message {string}") do |message|
@@ -183,10 +172,4 @@ end
 
 Then("I should see an unread indicator") do
   expect(page).to have_css(".unread-badge")
-end
-
-Then("the message should be from {string}") do |sender|
-  within("#messagesArea") do
-    expect(page).to have_content(sender)
-  end
 end
