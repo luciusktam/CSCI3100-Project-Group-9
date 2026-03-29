@@ -66,7 +66,7 @@ end
     )
     
     if @message.save
-      render json: { success: true, message: render_message(@message) }
+      render json: { success: true }
     else
       render json: { success: false, errors: @message.errors.full_messages }, status: :unprocessable_entity
     end
@@ -74,7 +74,4 @@ end
   
   private
   
-  def render_message(message)
-    ApplicationController.render(partial: "chat/message", locals: { message: message, current_user: current_user })
-  end
 end

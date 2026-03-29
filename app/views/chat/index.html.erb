@@ -1,14 +1,16 @@
 <div class="app">
-    <script>
-    // Auto-refresh the page once to ensure JavaScript loads properly
-    (function() {
-        if (!window.location.search.includes('refreshed=true')) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('refreshed', 'true');
-        window.location.href = url.toString();
-        }
-    })();
-    </script>
+    <% unless Rails.env.test? %>
+        <script>
+        // Auto-refresh the page once to ensure JavaScript loads properly
+        (function() {
+            if (!window.location.search.includes('refreshed=true')) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('refreshed', 'true');
+            window.location.href = url.toString();
+            }
+        })();
+        </script>
+    <% end %>
     <header class="navbar">
         <%= link_to root_path, class: "logo" do %>
             CUMarket
@@ -96,7 +98,6 @@
     </div>
     
     <div class="chat-window" id="chatWindow">
-        <!-- Placeholder when no conversation selected -->
         <div class="chat-placeholder" id="chatPlaceholder" style="<%= @other_user ? 'display: none;' : 'display: flex;' %>">
         <i class="fas fa-comments placeholder-icon"></i>
         <div class="placeholder-text">
@@ -116,19 +117,19 @@
         </div>
         <div class="messages-area" id="messagesArea">
             <% if @messages && @messages.any? %>
-            <% @messages.each do |message| %>
-                <div class="message-bubble <%= message.user == current_user ? 'sent' : 'received' %>">
-                <%= message.content %>
-                <div class="message-time">
-                    <%= time_ago_in_words(message.created_at) %> ago
-                    <% if message.user == current_user %>
-                    <i class="fas fa-check message-status"></i>
-                    <% end %>
-                </div>
+                <% @messages.each do |message| %>
+                    <div class="message-bubble <%= message.user == current_user ? 'sent' : 'received' %>">
+                    <%= message.content %>
+                    <div class="message-time">
+                        <%= time_ago_in_words(message.created_at) %> ago
+                        <% if message.user == current_user %>
+                        <i class="fas fa-check message-status"></i>
+                        <% end %>
+                    </div>
                 </div>
             <% end %>
             <% else %>
-            <div class="empty-chat-note">No messages yet. Start the conversation!</div>
+                <div class="empty-chat-note">No messages yet. Start the conversation!</div>
             <% end %>
         </div>
         <div class="chat-input-area">
