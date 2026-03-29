@@ -94,6 +94,12 @@ bin/rails server
 - Bundler
 - PostgreSQL (running locally)
 - Node.js (only if your app uses JS tooling; depends on your Rails setup)
+```bash
+rbenv install 3.4.7
+rbenv rehash
+brew install postgresql
+brew services start postgresql
+```
 
 ### Installation
 ```bash
