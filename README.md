@@ -1,16 +1,6 @@
 # CSCI3100-Project Group 9
 # CUMarket — CUHK Second-Hand Marketplace SaaS
 
-## To Start Dev
-```
-bundle install
-bin/rails generate migration EnablePgSearchForListings
-bin/rails db:create db:migrate
-bundle exec rspec
-bundle exec cucumber
-bin/rails server
-```
-
 
 ## Overview
 CUSHMS is a CUHK-focused second-hand marketplace for students to buy/sell items (textbooks, furniture, daily goods).
@@ -85,6 +75,16 @@ Primary = main implementer. Secondary = support/reviewer + contributed commits/t
 | RSpec + SimpleCov |  |  | Unit tests + coverage evidence. |
 | Cucumber BDD scenarios |  |  | Acceptance tests for key user stories. |
 
+
+## To Start Dev
+```
+bundle install
+bin/rails generate migration EnablePgSearchForListings
+bin/rails db:create db:migrate
+bundle exec rspec
+bundle exec cucumber
+bin/rails server
+```
 
 
 ## Getting Started (Local)
