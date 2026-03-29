@@ -8,8 +8,9 @@
       <%= link_to community_path do %>
         <i class="fas fa-users"></i> Community
       <% end %>
-      <%= link_to chat_path do %>
+      <%= link_to chat_path, id: "navChatLink", class: "nav-chat-link" do %>
         <i class="fas fa-comment-dots"></i> Chat
+        <span id="chatNavBadge" class="nav-badge" style="display: none;">0</span>
       <% end %>
       <%= link_to sell_path do %>
         <i class="fas fa-euro-sign"></i> Sell

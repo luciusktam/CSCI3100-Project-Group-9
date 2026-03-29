@@ -72,6 +72,19 @@ end
     end
   end
   
+  def unread_counts
+    unread_counts = {}
+    
+    # Get all users the current user has conversations with
+    User.where.not(id: current_user.id).each do |user|
+      conversation = Conversation.find_or_create_between(current_user, user)
+      count = conversation.unread_count_for(current_user)
+      unread_counts[user.id] = count if count > 0
+    end
+    
+    render json: { unread_counts: unread_counts }
+  end
+
   private
   
 end

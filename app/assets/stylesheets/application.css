@@ -2260,6 +2260,388 @@ body.dark-mode .send-btn:hover {
   white-space: nowrap;
 }
 
+/* Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e0;
+    transition: 0.3s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+}
+
+input:checked + .slider {
+    background-color: #667eea;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.enable-notifications-btn {
+    width: 100%;
+    padding: 8px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-top: 8px;
+    transition: background 0.2s;
+}
+
+.enable-notifications-btn:hover {
+    background: #5a67d8;
+}
+
+.notification-info {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.notification-info small {
+    color: #718096;
+    font-size: 12px;
+}
+
+/* Toast Notifications */
+.notification-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    width: 320px;
+    cursor: pointer;
+    animation: slideIn 0.3s ease;
+    z-index: 10000;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    gap: 12px;
+}
+
+.toast-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #667eea;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.toast-text {
+    flex: 1;
+}
+
+.toast-text strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #333;
+}
+
+.toast-text p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+    padding: 4px;
+    flex-shrink: 0;
+}
+
+.toast-close:hover {
+    color: #333;
+}
+
+/* Update unread badge styling */
+.user-item {
+    position: relative;
+}
+
+.unread-badge {
+    display: inline-block;
+    background: #f56565;
+    color: white;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-left: 8px;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* Dark mode support */
+.dark-mode .notification-settings-dropdown {
+    background: #2d3748;
+    border-color: #4a5568;
+}
+
+.dark-mode .notification-settings-toggle {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+}
+
+.dark-mode .notification-settings-toggle:hover {
+    background: #4a5568;
+}
+
+.dark-mode .notification-toast {
+    background: #2d3748;
+    border: 1px solid #4a5568;
+}
+
+.dark-mode .toast-text strong {
+    color: #e2e8f0;
+}
+
+.dark-mode .toast-text p {
+    color: #a0aec0;
+}
+
+/* Header Chat Button Badge Styles */
+.nav-chat-link {
+    position: relative;
+}
+
+.nav-badge {
+    position: absolute;
+    top: -8px;
+    right: -12px;
+    background-color: #f56565;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: bold;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1.2;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Dark mode support for nav badge */
+body.dark-mode .nav-badge {
+    background-color: #f56565;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Unread badge positioning within user item */
+.user-name {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.unread-badge {
+    display: inline-block;
+    background: #f56565;
+    color: white;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: bold;
+    min-width: 20px;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* Dark mode for unread badge */
+body.dark-mode .unread-badge {
+    background: #f56565;
+    color: white;
+}
+
+/* Toast Notifications */
+.notification-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    width: 340px;
+    cursor: pointer;
+    animation: slideInRight 0.3s ease-out;
+    z-index: 10000;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.toast-content {
+    display: flex;
+    align-items: flex-start;
+    padding: 14px;
+    gap: 12px;
+}
+
+.toast-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-purple), #5b2c83);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.toast-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.toast-text strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #1a202c;
+    font-size: 14px;
+}
+
+.toast-text p {
+    margin: 0;
+    color: #4a5568;
+    font-size: 13px;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #a0aec0;
+    padding: 4px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.toast-close:hover {
+    color: #4a5568;
+}
+
+/* Dark mode toast */
+body.dark-mode .notification-toast {
+    background: #2d3748;
+    border: 1px solid #4a5568;
+}
+
+body.dark-mode .toast-text strong {
+    color: #e2e8f0;
+}
+
+body.dark-mode .toast-text p {
+    color: #a0aec0;
+}
+
+body.dark-mode .toast-close {
+    color: #718096;
+}
+
+body.dark-mode .toast-close:hover {
+    color: #cbd5e0;
+}
+
+
+
+
+
+
+
 
 
 

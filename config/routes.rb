@@ -31,4 +31,11 @@ Rails.application.routes.draw do
   get 'chat/:user_id', to: 'chat#show', as: 'chat_with_user'
   get 'chat/:user_id/messages', to: 'chat#messages'
   post 'chat/:user_id/send_message', to: 'chat#send_message'
+  get 'chat/unread_counts', to: 'chat#unread_counts'
+  resources :chat, only: [:index, :show] do
+    member do
+      post 'send_message'
+      get 'messages'
+    end
+  end
 end

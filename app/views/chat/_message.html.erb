@@ -1,15 +1,13 @@
-<% unless Rails.env.test? %>
-    <script>
-    // Auto-refresh the page once to ensure JavaScript loads properly
-    (function() {
-        if (!window.location.search.includes('refreshed=true')) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('refreshed', 'true');
-        window.location.href = url.toString();
-        }
-    })();
-    </script>
-<% end %>
+<script>
+  // Auto-refresh the page once to ensure JavaScript loads properly
+  (function() {
+      if (!window.location.search.includes('refreshed=true')) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('refreshed', 'true');
+      window.location.href = url.toString();
+      }
+  })();
+</script>
 <div class="message-bubble <%= message.user == current_user ? 'sent' : 'received' %>" data-message-id="<%= message.id %>">
   <%= message.content %>
   <div class="message-time">

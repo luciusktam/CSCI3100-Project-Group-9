@@ -1,6 +1,17 @@
 function initializeChat() {
   console.log("Initializing chat...");
   
+  // Initialize notification manager
+  window.notificationManager = new ChatNotificationManager();
+  
+  // Request desktop notification permission on user interaction
+  const requestPermissionBtn = document.getElementById('enableNotifications');
+  if (requestPermissionBtn) {
+    requestPermissionBtn.addEventListener('click', () => {
+      window.notificationManager.requestDesktopPermission();
+    });
+  }
+  
   // Get DOM elements
   const userListContainer = document.getElementById('userListContainer');
   const chatPlaceholder = document.getElementById('chatPlaceholder');
@@ -17,6 +28,12 @@ function initializeChat() {
   function loadConversation(userId, username) {
     console.log("Loading conversation for:", userId, username);
     currentUserId = userId;
+    window.currentUserId = userId; // Make available globally for notifications
+    
+    // Clear unread count for this user
+    if (window.notificationManager) {
+      window.notificationManager.clearUnreadCount(userId);
+    }
     
     if (activeUserName) activeUserName.textContent = username;
     if (activeAvatar) activeAvatar.textContent = username.charAt(0).toUpperCase();
@@ -38,7 +55,7 @@ function initializeChat() {
               const messageDiv = document.createElement('div');
               messageDiv.className = `message-bubble ${message.is_current_user ? 'sent' : 'received'}`;
               messageDiv.innerHTML = `
-                ${message.content}
+                ${escapeHtml(message.content)}
                 <div class="message-time">
                   ${message.time_ago} ago
                   ${message.is_current_user ? '<i class="fas fa-check message-status"></i>' : ''}
@@ -60,6 +77,13 @@ function initializeChat() {
         item.classList.add('active');
       }
     });
+  }
+  
+  // Escape HTML helper
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
   
   // Check if we're on a specific chat URL
@@ -168,7 +192,7 @@ function initializeChat() {
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message-bubble sent';
         messageDiv.innerHTML = `
-          ${content}
+          ${escapeHtml(content)}
           <div class="message-time">
             just now
             <i class="fas fa-check message-status"></i>
@@ -196,7 +220,6 @@ function initializeChat() {
   // Send message on button click
   if (sendButton) {
     console.log("Adding click listener to send button");
-    // Remove any existing listeners by replacing the button
     const newSendButton = sendButton.cloneNode(true);
     sendButton.parentNode.replaceChild(newSendButton, sendButton);
     newSendButton.addEventListener('click', function(e) {
@@ -245,10 +268,27 @@ function initializeChat() {
       });
     });
   }
+  
+  // Initialize unread counts from server-side badges
+  function initializeUnreadCounts() {
+    const userItems = document.querySelectorAll('.user-item');
+    userItems.forEach(item => {
+      const badge = item.querySelector('.unread-badge');
+      if (badge && badge.textContent) {
+        const userId = item.dataset.userId;
+        const count = parseInt(badge.textContent);
+        if (userId && !isNaN(count)) {
+          window.notificationManager.unreadCount[userId] = count;
+        }
+      }
+    });
+    window.notificationManager.updateHeaderChatButton();
+  }
+  
+  // Call after a short delay to ensure all elements are loaded
+  setTimeout(initializeUnreadCounts, 100);
 }
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', initializeChat);
-
-// For Turbo (Rails 7+), also initialize on turbo:load
 document.addEventListener('turbo:load', initializeChat);
