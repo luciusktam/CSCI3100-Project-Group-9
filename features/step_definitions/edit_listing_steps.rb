@@ -29,6 +29,7 @@ When("I fill in the edit form with updated valid data") do
   fill_in "Listing title", with: "iPhone 12 Pro Max"
   fill_in "Price", with: "650"
   select "Like New", from: "Condition"
+  select "Reserved", from: "Status"
   fill_in "Location", with: "S.H. Ho College"
   fill_in "Description", with: "Updated: Like new condition iPhone 12 Pro Max"
 end
@@ -69,6 +70,7 @@ Then("my listing should show all updated details") do
   expect(page).to have_content("iPhone 12 Pro Max")
   expect(page).to have_content("$650.00")
   expect(page).to have_content("Like New")
+  expect(page).to have_content("RESERVED")
   expect(page).to have_content("S.H. Ho College")
   expect(page).to have_content("Updated: Like new condition iPhone 12 Pro Max")
 end

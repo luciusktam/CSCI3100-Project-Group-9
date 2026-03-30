@@ -22,6 +22,7 @@ RSpec.describe "ListingShowPage", type: :system do
       condition: "Good",
       location: "Campus",
       description: "Item with multiple photos",
+      status: "available",
       user: user
     )
 
@@ -47,6 +48,7 @@ RSpec.describe "ListingShowPage", type: :system do
       category: "Electronics",
       condition: "Good",
       location: "Campus",
+      status: "available",
       description: "Item with one photo",
       user: user
     )
