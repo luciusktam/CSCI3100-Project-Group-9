@@ -22,6 +22,7 @@ RSpec.describe "Listings", type: :request do
       condition: attributes[:condition] || "Good",
       location: attributes[:location] || "Campus",
       description: attributes[:description] || "Default description",
+      status: 'available',
       user: attributes[:user] || user
     )
 
@@ -57,6 +58,7 @@ RSpec.describe "Listings", type: :request do
         condition: "Good",
         location: "Sha Tin",
         description: "Black wooden chair",
+        status: 'available',
        user: user
       )
     end
@@ -69,6 +71,7 @@ RSpec.describe "Listings", type: :request do
         condition: "Like New",
         location: "Ma On Shan",
         description: "Scientific calculator",
+        status: 'available',
         user: user
       )
     end
@@ -86,6 +89,7 @@ RSpec.describe "Listings", type: :request do
           condition: "Good",
           location: "Campus",
           description: "Nice laptop",
+          status: 'available',
           user: user
         )
 
@@ -148,6 +152,7 @@ RSpec.describe "Listings", type: :request do
         condition: "Good",
         location: "Campus",
         description: "A test item",
+        status: 'available',
         user: user
       )
     end
@@ -183,6 +188,7 @@ RSpec.describe "Listings", type: :request do
           condition: "Good",
           location: "Campus",
           description: "Brand new",
+          status: 'available',
           photos: [ image ]
         }
       }
@@ -248,6 +254,7 @@ RSpec.describe "Listings", type: :request do
         condition: "Good",
         location: "Campus",
         description: "Original description",
+        status: 'available',
         user: user
       )
     end
@@ -285,7 +292,9 @@ RSpec.describe "Listings", type: :request do
           category: "Textbooks",
           condition: "Like New",
           location: "United College",
-          description: "Updated description"
+          description: "Updated description",
+          status: 'available'
+
         }
       }
     end
@@ -319,6 +328,7 @@ RSpec.describe "Listings", type: :request do
             condition: "Like New",
             location: "United College",
             description: "Updated description",
+            status: 'available',
             photos: [ new_image ]
           }
         }
@@ -348,6 +358,7 @@ RSpec.describe "Listings", type: :request do
             category: "Textbooks",
             condition: "Like New",
             location: "United College",
+            status: 'available',
             description: "Updated description"
           },
           remove_photos: photo_id_to_remove.to_s
@@ -372,6 +383,7 @@ RSpec.describe "Listings", type: :request do
             category: "Textbooks",
             condition: "Like New",
             location: "United College",
+            status: 'available',
             description: "Updated description"
           },
           remove_photos: photo_id.to_s
@@ -394,6 +406,7 @@ RSpec.describe "Listings", type: :request do
             category: "Textbooks",
             condition: "Like New",
             location: "United College",
+            status: 'available',
             description: "Updated description",
             photos: [ new_image ]
           },
@@ -423,6 +436,7 @@ RSpec.describe "Listings", type: :request do
             category: "Textbooks",
             condition: "Like New",
             location: "United College",
+            status: 'available',
             description: "Updated description",
             photos: new_images
           }
@@ -451,6 +465,7 @@ RSpec.describe "Listings", type: :request do
             category: "Textbooks",
             condition: "Like New",
             location: "United College",
+            status: 'available',
             description: "Updated description",
             photos: [ new_image ]
           }
@@ -482,6 +497,7 @@ RSpec.describe "Listings", type: :request do
             category: "Textbooks",
             condition: "Like New",
             location: "United College",
+            status: 'available',
             description: "Updated description",
             photos: [ new_image ]
           },
@@ -532,7 +548,6 @@ RSpec.describe "Listings", type: :request do
       it "cannot update any listing" do
         patch listing_path(listing), params: valid_update_params
 
-        # Should redirect to login page
         expect(response).to have_http_status(302).or have_http_status(303)
 
         listing.reload

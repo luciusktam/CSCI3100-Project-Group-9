@@ -69,6 +69,7 @@ class ListingsController < ApplicationController
   def create
     @listing = Listing.new(listing_params)
     @listing.user = current_user
+    @listing.status = "available"
 
     if @listing.save
       flash[:notice] = "Your item is listed!"
@@ -155,7 +156,7 @@ class ListingsController < ApplicationController
 
   def listing_params
     params.require(:listing).permit(
-      :title, :price, :category, :condition, :location, :description,
+      :title, :price, :category, :condition, :location, :description, :status,
       photos: []
     )
   end

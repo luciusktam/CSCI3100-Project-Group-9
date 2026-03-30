@@ -50,6 +50,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_26_170900) do
     t.text "description"
     t.string "location", null: false
     t.decimal "price", precision: 10, scale: 2, null: false
+    t.string "status"
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"

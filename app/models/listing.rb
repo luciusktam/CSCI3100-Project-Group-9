@@ -19,6 +19,7 @@ class Listing < ApplicationRecord
 
   validate :photos_count_within_limit
   validate :photos_must_be_attached
+  validates :status, presence: true
 
   private
 
