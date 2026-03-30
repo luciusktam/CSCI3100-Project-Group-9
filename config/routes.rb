@@ -26,16 +26,13 @@ Rails.application.routes.draw do
   get "listings/:id", to: "listings#show"
   get "listings", to: "listings#index"
 
-  # Chat route
-  get 'chat', to: 'chat#index'
-  get 'chat/:user_id', to: 'chat#show', as: 'chat_with_user'
-  get 'chat/:user_id/messages', to: 'chat#messages'
-  post 'chat/:user_id/send_message', to: 'chat#send_message'
+  # Notification
   get 'chat/unread_counts', to: 'chat#unread_counts'
-  resources :chat, only: [:index, :show] do
-    member do
-      post 'send_message'
-      get 'messages'
-    end
-  end
+  post 'chat/update_unread_count', to: 'chat#update_unread_count'
+  
+  # Main chat routes
+  get 'chat', to: 'chat#index', as: 'chat'
+  get 'chat/:user_id', to: 'chat#show', as: 'chat_with_user'
+  get 'chat/:user_id/messages', to: 'chat#messages', as: 'chat_messages'
+  post 'chat/:user_id/send_message', to: 'chat#send_message', as: 'chat_send_message'
 end

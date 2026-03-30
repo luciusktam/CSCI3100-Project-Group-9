@@ -20,7 +20,7 @@ Feature: Notification
         Given I am on the chat page
         And I have a conversation with "seller"
         When "seller" sends me a new message
-        Then I should see a notification badge on the chat sidebar for Bob
+        Then I should see a notification badge on the chat sidebar for "seller"
         And the unread count should be displayed as "1"
 
       Scenario: Notification disappear when clicked

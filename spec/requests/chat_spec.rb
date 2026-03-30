@@ -1,6 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe "Chat", type: :request do
+
+  before(:each) do
+    # Delete messages first (due to foreign key constraints)
+    Message.delete_all
+    # Then delete conversations
+    Conversation.delete_all
+    # Finally delete users
+    User.delete_all
+  end
+
   let!(:buyer) do
     User.create!(
       username: "buyer",
@@ -74,7 +84,7 @@ RSpec.describe "Chat", type: :request do
     it "displays empty state when no conversations" do
       Conversation.destroy_all
       get chat_path
-      expect(response.body).to include("no conversation selected")
+      expect(response.body).to include("No conversation selected")
     end
 
     it "shows conversations when they exist" do

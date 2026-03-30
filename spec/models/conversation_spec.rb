@@ -228,6 +228,16 @@ RSpec.describe Conversation, type: :model do
   end
 
   describe "#unread_count_for" do
+
+    before(:each) do
+      # Delete messages first (due to foreign key constraints)
+      Message.delete_all
+      # Then delete conversations
+      Conversation.delete_all
+      # Finally delete users
+      User.delete_all
+    end
+
     let(:buyer) do
       User.create!(
         username: "buyer",
