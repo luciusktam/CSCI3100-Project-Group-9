@@ -10,10 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_26_170900) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_30_061604) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
-  enable_extension "pg_trgm"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
@@ -48,18 +47,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_26_170900) do
     t.string "condition"
     t.datetime "created_at", null: false
     t.text "description"
-    t.string "location", null: false
-    t.decimal "price", precision: 10, scale: 2, null: false
+    t.string "location"
+    t.decimal "price"
     t.string "status"
-    t.string "title", null: false
+    t.string "title"
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
-    t.index ["category"], name: "index_listings_on_category"
-    t.index ["condition"], name: "index_listings_on_condition"
-    t.index ["created_at"], name: "index_listings_on_created_at"
-    t.index ["description"], name: "index_listings_on_description", opclass: :gin_trgm_ops, using: :gin
-    t.index ["location"], name: "index_listings_on_location"
-    t.index ["title"], name: "index_listings_on_title", opclass: :gin_trgm_ops, using: :gin
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_listings_on_user_id"
   end
 
