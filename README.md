@@ -68,7 +68,7 @@ Primary = main implementer. Secondary = support/reviewer + contributed commits/t
 | CUHK email verification (@link.cuhk.edu.hk) | Tam Yiu Hei |  | Domain restriction + verification flow. |
 | Listings CRUD | Au Chi Hin |  | Create/edit/delete listings + validations. |
 | Image uploads | Au Chi Hin |  | Active Storage (or equivalent). |
-| Item status workflow |  |  | Available → Reserved → Sold. |
+| Item status workflow | Au Chi Hin |  | Available → Reserved → Sold. |
 | Search & filtering | Lau Yat Laam |  | Keyword search + filters + fuzzy search. |
 | Community/college feature |  |  | College grouping/community space. |
 | ActionCable chat/notifications |  |  | Real-time messaging + notifications. |
