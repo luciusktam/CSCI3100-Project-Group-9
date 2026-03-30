@@ -23,6 +23,7 @@ RSpec.describe Listing, type: :model do
       location: "Chung Chi College",
       description: "This is a test item",
       user: user,
+      status: "available",
       photos: [ image ]
     }
   }
