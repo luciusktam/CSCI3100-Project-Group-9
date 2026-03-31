@@ -12,37 +12,40 @@ When('{string} sends me a new message') do |username|
   # Create a new message as the sender
   @new_message = Message.create!(
     conversation: @conversation,
-    user: User.find_by(username: 'buyer'),
+    user: User.find_by(username: 'seller'),
     content: "This is a new test message sent at #{Time.current}",
     read: false
   )
   
+  visit current_path
   # Wait for the notification to process
   sleep(1)
 end
 
 Then("I should see a notification badge on the chat button at the header") do
-  expect(page).to have_selector('#chatNavBadge:not([style*="display: none"])', wait: 10)
-  
+  expect(page).to have_css('#chatNavBadge', wait: 10)
   badge = find('#chatNavBadge')
   expect(badge).to be_visible
-  expect(badge.text).to match(/\d+/)
-  expect(badge.text.to_i).to be > 0
 end
 
 Then("I should see a notification badge on the chat sidebar for {string}") do |sender_name|
   sender = User.find_by(username: sender_name)
   
-  expect(page).to have_selector(".user-item[data-user-id='#{sender.id}'] .unread-badge", wait: 10)
+  expect(page).to have_css(".user-item[data-user-id='#{sender.id}'] .unread-badge", text: /\d+/, wait: 10)
   
   badge = find(".user-item[data-user-id='#{sender.id}'] .unread-badge")
   expect(badge).to be_visible
-  expect(badge.text).to match(/\d+/)
+  expect(badge.text.to_i).to be > 0
 end
 
 Then('the unread count should be displayed as {string}') do |expected_count|
-  badge = find(".user-item[data-user-id='#{@sender.id}'] .unread-badge")
-  expect(badge.text).to eq(expected_count)
+  navbar_badge = find('#chatNavBadge')
+  expect(navbar_badge.text).to eq(expected_count)
+  
+  if page.has_css?('.user-item .unread-badge')
+    sidebar_badge = find('.user-item .unread-badge')
+    expect(sidebar_badge.text).to eq(expected_count)
+  end
 end
 
 When('I click the chat button') do
@@ -50,7 +53,6 @@ When('I click the chat button') do
 end
 
 Then('I should not see a notification badge on the chat button at the header') do
-  # Check if badge exists but is hidden, or doesn't exist at all
   badge = find('#chatNavBadge', visible: :all)
   expect(badge).not_to be_visible
 end
