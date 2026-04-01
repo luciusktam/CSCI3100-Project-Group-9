@@ -29,7 +29,6 @@ function initializeChat() {
   
   function loadConversation(userId, username) {
     if (lastLoadedConversation === userId && isLoadingConversation === false) {
-      console.log("Already on this conversation, skipping");
       return;
     }
 
@@ -117,8 +116,6 @@ function initializeChat() {
           console.error('Error fetching user:', error);
         });
     }
-  } else {
-    console.log("No specific chat URL");
   }
   
   let isSendingMessage = false;
@@ -140,10 +137,8 @@ function initializeChat() {
     }
     
     const content = currentMessageInput.value.trim();
-    console.log("Content:", content);
     
     if (!content) {
-      console.log("No content, returning");
       return;
     }
     
@@ -152,8 +147,6 @@ function initializeChat() {
       console.error('CSRF token not found');
       return;
     }
-    
-    console.log("Sending to URL:", `/chat/${currentUserId}/send_message`);
     
     fetch(`/chat/${currentUserId}/send_message`, {
       method: 'POST',
@@ -165,17 +158,13 @@ function initializeChat() {
       body: JSON.stringify({ message: { content: content } })
     })
     .then(response => {
-      console.log("Response status:", response.status);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       return response.json();
     })
     .then(data => {
-      console.log("Response data:", data);
       if (data.success) {
-        console.log("Message sent successfully");
-        
         const currentMessagesArea = document.getElementById('messagesArea');
         if (!currentMessagesArea) {
           console.error('Messages area not found');
@@ -202,10 +191,7 @@ function initializeChat() {
         // Clear input
         const currentMessageInput = document.getElementById('messageInput');
         if (currentMessageInput) currentMessageInput.value = '';
-        
-        console.log("Message added to UI");
       } else if (data.errors) {
-        console.log("Errors from server:", data.errors);
         alert(data.errors.join(', '));
       }
     })
@@ -217,11 +203,9 @@ function initializeChat() {
   
   // Send message on button click
   if (sendButton) {
-    console.log("Adding click listener to send button");
     const newSendButton = sendButton.cloneNode(true);
     sendButton.parentNode.replaceChild(newSendButton, sendButton);
     newSendButton.addEventListener('click', function(e) {
-      console.log("Send button clicked!");
       sendMessage();
     });
   } else {
@@ -231,14 +215,11 @@ function initializeChat() {
   // Send message on Enter key
   const messageInputElement = document.getElementById('messageInput');
   if (messageInputElement) {
-    console.log("Adding keypress listener to message input");
     const newMessageInput = messageInputElement.cloneNode(true);
     messageInputElement.parentNode.replaceChild(newMessageInput, messageInputElement);
     
     newMessageInput.addEventListener('keypress', function(e) {
-      console.log("Key pressed:", e.key);
       if (e.key === 'Enter' && !e.shiftKey) {
-        console.log("Enter pressed, sending message");
         e.preventDefault();
         sendMessage();
       }

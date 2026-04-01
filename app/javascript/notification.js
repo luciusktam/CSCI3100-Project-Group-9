@@ -48,7 +48,6 @@ class ChatNotificationManager {
   
   async handleUserClick(userId, username) {
     if (this.clickLock.get(userId)) {
-      console.log(`Click for user ${userId} is locked, skipping`);
       return;
     }
 
@@ -57,11 +56,9 @@ class ChatNotificationManager {
 
     try {
       const currentUnread = this.unreadCount[userId] || 0;
-      console.log(`User clicked: ${userId}, current unread: ${currentUnread}`);
 
       // ONLY clear if there are actually unread messages
       if (currentUnread > 0) {
-        console.log(`Clearing unread for user ${userId} (${currentUnread} → 0)`);
         
         this.unreadCount[userId] = 0;
         this.updateHeaderChatButton();
@@ -72,8 +69,6 @@ class ChatNotificationManager {
           console.error('Mark as read failed:', err);
           // Optional: restore count on failure
         });
-      } else {
-        console.log(`No unread messages for user ${userId}, no need to clear`);
       }
 
       // Navigate AFTER UI update
@@ -92,7 +87,6 @@ class ChatNotificationManager {
 
   async loadUnreadCountsFromServer() {
     try {
-      console.log('Loading unread counts from server...');
       const response = await fetch('/chat/unread_counts.json');
       const data = await response.json();
       
@@ -112,13 +106,10 @@ class ChatNotificationManager {
       }
       
       if (hasChanges) {
-        console.log('Unread counts changed, updating:', newUnreadCount);
         this.unreadCount = newUnreadCount;
         this.updateHeaderChatButton();
         this.updateSidebarBadges();
         this.updatePageTitle();
-      } else {
-        console.log('No changes in unread counts');
       }
     } catch (error) {
       console.error('Error loading unread counts:', error);
@@ -161,7 +152,6 @@ class ChatNotificationManager {
   incrementUnreadCount(userId) {
     // Don't increment if this user is currently being clicked
     if (this.clickLock.get(userId)) {
-      console.log(`Not incrementing unread for user ${userId} - click in progress`);
       return;
     }
     
@@ -175,13 +165,11 @@ class ChatNotificationManager {
   clearUnreadCount(userId) {
     // Don't clear if already processing this user
     if (this.clickLock.get(userId)) {
-      console.log(`Not clearing unread for user ${userId} - click in progress`);
       return;
     }
     
     if (this.unreadCount[userId] && this.unreadCount[userId] > 0) {
       const oldCount = this.unreadCount[userId];
-      console.log(`Clearing unread count for user ${userId}: ${oldCount} -> 0`);
       this.unreadCount[userId] = 0;
       this.updateHeaderChatButton();
       this.updatePageTitle();
@@ -227,7 +215,6 @@ class ChatNotificationManager {
     }
     
     const totalUnread = Object.values(this.unreadCount).reduce((a, b) => a + b, 0);
-    console.log('Total unread messages:', totalUnread);
     
     if (totalUnread > 0) {
       const displayCount = totalUnread > 99 ? '99+' : totalUnread;
@@ -261,17 +248,13 @@ let initializationComplete = false;
 
 function initializeNotificationManager() {
   if (initializationComplete) {
-    console.log('Notification manager already initialized');
     return;
   }
-  
-  console.log('🚀 Initializing notification manager...');
   
   if (!window.notificationManager) {
     window.notificationManager = new ChatNotificationManager();
     initializationComplete = true;
   } else {
-    console.log('Notification manager already exists, refreshing...');
     window.notificationManager.initHeaderChatButton();
     window.notificationManager.loadUnreadCountsFromServer();
     window.notificationManager.setupConversationClickListener();
@@ -289,7 +272,6 @@ document.addEventListener('turbo:load', () => {
 // Also handle page visibility changes to refresh counts
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden && window.notificationManager) {
-    console.log('Page became visible, refreshing unread counts');
     window.notificationManager.loadUnreadCountsFromServer();
   }
 });
