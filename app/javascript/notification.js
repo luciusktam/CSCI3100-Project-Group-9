@@ -2,7 +2,6 @@ class ChatNotificationManager {
   constructor() {
     this.notifications = [];
     this.unreadCount = {};
-    this.processingClick = false;
     this.isSettingUpListeners = false;
     this.pendingClicks = new Map(); // Track pending clicks per user
     this.clickLock = new Map(); // Lock per user to prevent concurrent updates

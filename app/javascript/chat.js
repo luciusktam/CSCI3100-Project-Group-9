@@ -76,6 +76,16 @@ function initializeChat() {
             currentMessagesArea.scrollTop = currentMessagesArea.scrollHeight;
           }
         }
+        
+        if (window.notificationManager) {
+          const userIdStr = userId.toString();
+          if (window.notificationManager.unreadCount[userIdStr] > 0) {
+            console.log(`Clearing badge for user ${userId} after loading messages`);
+            window.notificationManager.unreadCount[userIdStr] = 0;
+            window.notificationManager.updateHeaderChatButton();
+            window.notificationManager.updateSidebarBadges();
+          }
+        }
       })
       .catch(error => {
         console.error('Error fetching messages:', error);
@@ -250,14 +260,17 @@ function initializeChat() {
   
   // Initialize unread counts from server-side badges
   function initializeUnreadCounts() {
+    if (!window.notificationManager) return;
+
     const userItems = document.querySelectorAll('.user-item');
     userItems.forEach(item => {
       const badge = item.querySelector('.unread-badge');
-      if (badge && badge.textContent) {
-        const userId = item.dataset.userId;
+      const userId = item.dataset.userId;
+
+      if (badge && badge.textContent && userId) {
         const count = parseInt(badge.textContent);
-        if (userId && !isNaN(count)) {
-          window.notificationManager.unreadCount[userId] = count;
+        if (!isNaN(count)) {
+          window.notificationManager.unreadCount[userId] = count;   // let server win if > 0
         }
       }
     });
