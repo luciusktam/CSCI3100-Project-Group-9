@@ -47,61 +47,46 @@ class ChatNotificationManager {
   }
   
   async handleUserClick(userId, username) {
-    // Prevent multiple simultaneous clicks for the same user
     if (this.clickLock.get(userId)) {
       console.log(`Click for user ${userId} is locked, skipping`);
       return;
     }
-    
-    // Check if we're already processing this click
-    if (this.pendingClicks.get(userId)) {
-      console.log(`Click for user ${userId} already pending, skipping`);
-      return;
-    }
-    
-    // Lock this user
+
     this.clickLock.set(userId, true);
     this.pendingClicks.set(userId, true);
-    
+
     try {
-      const currentUnreadForUser = this.unreadCount[userId] || 0;
-      console.log(`User clicked: ${userId}, unread count: ${currentUnreadForUser}`);
-      
-      // Only clear if there are unread messages
-      if (currentUnreadForUser > 0) {
-        console.log(`Clearing unread count for user ${userId}`);
-        this.processingClick = true;
+      const currentUnread = this.unreadCount[userId] || 0;
+      console.log(`User clicked: ${userId}, current unread: ${currentUnread}`);
+
+      // ONLY clear if there are actually unread messages
+      if (currentUnread > 0) {
+        console.log(`Clearing unread for user ${userId} (${currentUnread} → 0)`);
         
-        // Clear the unread count immediately in UI
-        const previousCount = this.unreadCount[userId];
         this.unreadCount[userId] = 0;
         this.updateHeaderChatButton();
         this.updateSidebarBadges();
-        
-        // Mark as read on server (async, don't wait)
-        this.markMessagesAsRead(userId).catch(error => {
-          console.error('Failed to mark messages as read:', error);
-          // If server update fails, restore the count
-          if (previousCount > 0 && this.unreadCount[userId] === 0) {
-            this.unreadCount[userId] = previousCount;
-            this.updateHeaderChatButton();
-            this.updateSidebarBadges();
-          }
+
+        // Mark as read on server (fire and forget)
+        this.markMessagesAsRead(userId).catch(err => {
+          console.error('Mark as read failed:', err);
+          // Optional: restore count on failure
         });
+      } else {
+        console.log(`No unread messages for user ${userId}, no need to clear`);
       }
-      
-      // Navigate to the chat page
+
+      // Navigate AFTER UI update
       window.location.href = `/chat/${userId}`;
-      
+
     } catch (error) {
-      console.error('Error handling user click:', error);
+      console.error('Error in handleUserClick:', error);
     } finally {
-      // Unlock after a short delay to allow navigation to complete
+      // Unlock after navigation starts
       setTimeout(() => {
         this.clickLock.delete(userId);
         this.pendingClicks.delete(userId);
-        this.processingClick = false;
-      }, 500);
+      }, 800);
     }
   }
 
@@ -210,20 +195,13 @@ class ChatNotificationManager {
   }
 
   async markMessagesAsRead(userId) {
-    // Prevent multiple mark as read requests for the same user
-    if (this.pendingClicks.get(`mark_read_${userId}`)) {
-      console.log(`Already marking messages as read for user ${userId}, skipping`);
-      return;
-    }
-    
+    if (this.pendingClicks.get(`mark_read_${userId}`)) return;
+
     this.pendingClicks.set(`mark_read_${userId}`, true);
-    
+
     try {
       const csrfToken = document.querySelector('[name="csrf-token"]')?.content;
-      if (!csrfToken) return;
-      
-      console.log(`Marking messages as read for user ${userId}`);
-      const response = await fetch('/chat/update_unread_count', {
+      await fetch('/chat/update_unread_count', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -231,17 +209,10 @@ class ChatNotificationManager {
         },
         body: JSON.stringify({ user_id: userId })
       });
-      
-      const data = await response.json();
-      console.log(`Marked as read response:`, data);
-      
     } catch (error) {
-      console.error('Failed to mark messages as read:', error);
-      throw error; // Re-throw to allow caller to handle
+      console.error('Failed to mark as read:', error);
     } finally {
-      setTimeout(() => {
-        this.pendingClicks.delete(`mark_read_${userId}`);
-      }, 1000);
+      setTimeout(() => this.pendingClicks.delete(`mark_read_${userId}`), 1500);
     }
   }
 

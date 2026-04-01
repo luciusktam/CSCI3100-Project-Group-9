@@ -23,6 +23,11 @@ class Conversation < ApplicationRecord
     other = other_user(user)
     messages.where(user: other, read: false).count
   end
+
+  def has_unread_messages_for?(user)
+    other = other_user(user)
+    messages.where(user: other, read: false).exists?
+  end
   
   def self.find_or_create_between(user1, user2)
     conversation = find_by(user1: user1, user2: user2) || 
