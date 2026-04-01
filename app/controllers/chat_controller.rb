@@ -75,14 +75,30 @@ end
   def unread_counts
     unread_counts = {}
     
-    # Get all users the current user has conversations with
-    User.where.not(id: current_user.id).each do |user|
-      conversation = Conversation.find_or_create_between(current_user, user)
-      count = conversation.unread_count_for(current_user)
-      unread_counts[user.id] = count if count > 0
+    # Get all conversations the current user is part of
+    conversations = Conversation.where("user1_id = ? OR user2_id = ?", 
+                                       current_user.id, 
+                                       current_user.id)
+    
+    conversations.each do |conversation|
+      unread_count = conversation.unread_count_for(current_user)
+      if unread_count > 0
+        other_user = conversation.other_user(current_user)
+        unread_counts[other_user.id.to_s] = unread_count
+      end
     end
     
     render json: { unread_counts: unread_counts }
+  end
+
+  def update_unread_count
+    other_user = User.find(params[:user_id])
+    conversation = Conversation.find_or_create_between(current_user, other_user)
+    
+    # Mark all messages from the other user as read
+    updated_count = conversation.messages.where(user: other_user, read: false).update_all(read: true)
+    
+    render json: { success: true, updated_count: updated_count }
   end
 
   private

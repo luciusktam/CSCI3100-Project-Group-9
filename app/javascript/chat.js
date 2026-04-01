@@ -1,8 +1,8 @@
 function initializeChat() {
-  console.log("Initializing chat...");
-  
   // Initialize notification manager
-  window.notificationManager = new ChatNotificationManager();
+  if (!window.notificationManager) {
+    window.notificationManager = new ChatNotificationManager();
+  }
   
   // Request desktop notification permission on user interaction
   const requestPermissionBtn = document.getElementById('enableNotifications');
@@ -24,16 +24,23 @@ function initializeChat() {
   const searchInput = document.getElementById('searchUsers');
   
   let currentUserId = null;
+  let isLoadingConversation = false;
+  let lastLoadedConversation = null;
   
   function loadConversation(userId, username) {
-    console.log("Loading conversation for:", userId, username);
-    currentUserId = userId;
-    window.currentUserId = userId; // Make available globally for notifications
-    
-    // Clear unread count for this user
-    if (window.notificationManager) {
-      window.notificationManager.clearUnreadCount(userId);
+    if (lastLoadedConversation === userId && isLoadingConversation === false) {
+      console.log("Already on this conversation, skipping");
+      return;
     }
+
+    if (isLoadingConversation) {
+      return;
+    }
+    
+    isLoadingConversation = true;
+    lastLoadedConversation = userId;
+    currentUserId = userId;
+    window.currentUserId = userId;
     
     if (activeUserName) activeUserName.textContent = username;
     if (activeAvatar) activeAvatar.textContent = username.charAt(0).toUpperCase();
@@ -41,10 +48,14 @@ function initializeChat() {
     if (chatPlaceholder) chatPlaceholder.style.display = 'none';
     if (activeChatView) activeChatView.style.display = 'flex';
     
+    const currentMessagesArea = document.getElementById('messagesArea');
+    if (currentMessagesArea) {
+      currentMessagesArea.innerHTML = '<div class="loading-messages">Loading messages...</div>';
+    }
+
     fetch(`/chat/${userId}/messages.json`)
       .then(response => response.json())
       .then(messages => {
-        console.log("Messages received:", messages);
         const currentMessagesArea = document.getElementById('messagesArea');
         if (currentMessagesArea) {
           currentMessagesArea.innerHTML = '';
@@ -88,11 +99,9 @@ function initializeChat() {
   
   // Check if we're on a specific chat URL
   const pathParts = window.location.pathname.split('/');
-  console.log("Path parts:", pathParts);
   
   if (pathParts[1] === 'chat' && pathParts[2]) {
     const userId = parseInt(pathParts[2]);
-    console.log("Found userId in URL:", userId);
     
     const userItem = document.querySelector(`.user-item[data-user-id="${userId}"]`);
     if (userItem) {
@@ -112,23 +121,12 @@ function initializeChat() {
     console.log("No specific chat URL");
   }
   
-  // Handle user clicks in sidebar
-  if (userListContainer) {
-    userListContainer.addEventListener('click', function(e) {
-      const userItem = e.target.closest('.user-item');
-      if (userItem) {
-        const userId = userItem.dataset.userId;
-        const username = userItem.dataset.username;
-        console.log("Clicked user:", username, userId);
-        window.location.href = `/chat/${userId}`;
-      }
-    });
-  }
-  
+  let isSendingMessage = false;
   // Send message function
   function sendMessage() {
-    console.log("=== SEND MESSAGE CALLED ===");
-    
+    if (isSendingMessage) {
+      return;
+    }
     if (!currentUserId) {
       console.error('No user selected');
       alert('Please select a user to chat with');
