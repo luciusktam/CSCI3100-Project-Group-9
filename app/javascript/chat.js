@@ -59,7 +59,7 @@ function initializeChat() {
               `;
               messagesArea.appendChild(messageDiv);
             });
-            messagesArea.scrollTop = messagesArea.scrollHeight;
+            scrollMessagesToBottom();
           }
         }
 
@@ -106,6 +106,9 @@ function initializeChat() {
 
     // Clear input immediately
     input.value = '';
+
+    // Auto-scroll immediately
+    scrollMessagesToBottom();
 
     fetch(`/chat/${currentUserId}/send_message`, {
       method: 'POST',
@@ -188,6 +191,13 @@ function initializeChat() {
 
   setTimeout(initializeUnreadCounts, 100);
 
+  function scrollMessagesToBottom() {
+    const messagesArea = document.getElementById('messagesArea');
+    if (messagesArea) {
+      messagesArea.scrollTop = 1000000;
+    }
+  }
+
   // Handle direct URL access
   const pathParts = window.location.pathname.split('/');
   if (pathParts[1] === 'chat' && pathParts[2]) {
@@ -229,9 +239,8 @@ document.addEventListener('turbo:before-stream-render', (event) => {
     if (statusIcon) statusIcon.remove();
   }
 
-  // Auto-scroll (nice UX)
-  const messagesArea = document.getElementById('messagesArea');
-  if (messagesArea) {
-    messagesArea.scrollTop = messagesArea.scrollHeight;
-  }
+  // Scroll after the new message is appended
+  setTimeout(() => {
+    scrollMessagesToBottom();
+  }, 30);
 });
