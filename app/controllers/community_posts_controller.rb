@@ -8,7 +8,10 @@ class CommunityPostsController < ApplicationController
   end
 
   def show
+    @comment = Comment.new
+    @comments = @community_post.comments.order(created_at: :desc)
   end
+
 
   def new
     @community_post = CommunityPost.new

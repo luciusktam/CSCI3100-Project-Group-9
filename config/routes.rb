@@ -30,6 +30,9 @@ Rails.application.routes.draw do
 
 
   # Community route
-  resources :community_posts, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
+  resources :community_posts, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] do
+    resources :comments, only: [ :create, :destroy ]
+  end
+
   get "/community", to: "community_posts#index", as: :community
 end

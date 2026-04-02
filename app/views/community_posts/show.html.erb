@@ -15,5 +15,58 @@
 <% end %>
 
 
+<hr>
+
+<h2>Comments</h2>
+
+<% if @comments.any? %>
+  <% @comments.each do |comment| %>
+    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+      <p><%= comment.body %></p>
+      <small>
+        <%= comment.user.username %> •
+        <%= comment.created_at.strftime("%Y-%m-%d %H:%M") %>
+      </small>
+
+      <% if user_signed_in? && comment.user == current_user %>
+        <%= button_to "Delete Comment",
+            community_post_comment_path(@community_post, comment),
+            method: :delete,
+            data: { turbo_confirm: "Are you sure?" } %>
+      <% end %>
+    </div>
+  <% end %>
+<% else %>
+  <p>No comments yet.</p>
+<% end %>
+
+<% if user_signed_in? %>
+  <h3>Add a comment</h3>
+  <% if @comment.errors.any? %>
+    <div>
+      <h3><%= pluralize(@comment.errors.count, "error") %> prevented this comment from being saved:</h3>
+      <ul>
+        <% @comment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: [@community_post, @comment], local: true do |f| %>
+    <div>
+      <%= f.label :body %>
+      <%= f.text_area :body, rows: 4 %>
+    </div>
+    <div>
+      <%= f.submit "Post Comment" %>
+    </div>
+  <% end %>
+<% else %>
+  <p>Please log in to comment.</p>
+<% end %>
+
+
+
 <%= link_to "Back to Community", community_path %>
 
