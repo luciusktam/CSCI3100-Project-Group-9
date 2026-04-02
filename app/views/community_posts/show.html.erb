@@ -1,0 +1,5 @@
+<h1><%= @community_post.title.presence || "Untitled Post" %></h1>
+<p><%= @community_post.content %></p>
+<p><%= @community_post.user.email if @community_post.user %></p>
+
+<%= link_to "Back to Community", community_path %>

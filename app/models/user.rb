@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   PASSWORD_RESET_EXPIRY = 30.minutes
 
+  has_many :community_posts, dependent: :destroy
+
   has_one_attached :avatar
   has_many :listings, dependent: :destroy
 
@@ -28,7 +30,7 @@ class User < ApplicationRecord
 
   def reset_password_token_matches?(token)
     return false if reset_password_token_digest.blank?
-    
+
     BCrypt::Password.new(reset_password_token_digest) == token
   rescue BCrypt::Errors::InvalidHash
     false

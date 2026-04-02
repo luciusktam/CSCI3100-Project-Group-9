@@ -8,8 +8,9 @@
       </div>
     <% end %>
     
-    <div class="card-status-badge status-<%= listing.status %>">
-      <%= listing.status.upcase %>
+    <% status = listing.status.presence || "unknown" %>
+    <div class="card-status-badge status-<%= status %>">
+      <%= status.upcase %>
     </div>
   </div>
   

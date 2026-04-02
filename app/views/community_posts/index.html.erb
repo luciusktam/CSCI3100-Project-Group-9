@@ -1,0 +1,19 @@
+<h1>Community</h1>
+
+<%= link_to "New Post", new_community_post_path %>
+
+<% if @community_posts.any? %>
+  <% @community_posts.each do |post| %>
+    <div style="border: 1px solid #ccc; padding: 12px; margin-bottom: 12px;">
+      <h3><%= link_to(post.title.presence || "Untitled Post", community_post_path(post)) %></h3>
+      <p><%= truncate(post.content, length: 150) %></p>
+      <small>
+        <%= post.user.username if post.user %>
+        •
+        <%= post.created_at.strftime("%Y-%m-%d %H:%M") %>
+      </small>
+    </div>
+  <% end %>
+<% else %>
+  <p>No community posts yet.</p>
+<% end %>
