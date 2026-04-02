@@ -3,12 +3,12 @@
 
 
 ## Overview
-CUSHMS is a CUHK-focused second-hand marketplace for students to buy/sell items (textbooks, furniture, daily goods).
+CUMarket is a CUHK-focused second-hand marketplace for students to buy/sell items (textbooks, furniture, daily goods).
 Key workflows: Listings + search/filtering + item status (Available → Reserved → Sold) + real-time chat/notifications.
 
 
 ## Project Scope
-CUSHMS focuses on a safer campus-only marketplace:
+CUMarket focuses on a safer campus-only marketplace:
 - Only CUHK students can register (email domain restricted to `@link.cuhk.edu.hk`)
 - Centralized listings for common campus needs (textbooks, electronics, dorm essentials)
 - Faster discovery via search/filtering (with fuzzy search as an enhancement)
