@@ -19,33 +19,26 @@ class ChatNotificationManager {
   setupConversationClickListener() {
     if (this.isSettingUpListeners) return;
     this.isSettingUpListeners = true;
-    
-    document.querySelectorAll('.user-item').forEach(item => {
-      // Remove any existing listeners by cloning
-      const newItem = item.cloneNode(true);
-      item.parentNode.replaceChild(newItem, item);
-      
-      // Add debounced click handler
-      newItem.addEventListener('click', (event) => {
+
+    // Simple event delegation - much safer with Turbo
+    const userList = document.getElementById('userListContainer');
+    if (userList) {
+      userList.addEventListener('click', (event) => {
+        const userItem = event.target.closest('.user-item');
+        if (!userItem) return;
+
         event.preventDefault();
-        event.stopPropagation();
-        
-        const userId = parseInt(newItem.dataset.userId);
-        const username = newItem.dataset.username;
-        
-        // Debounce the click to prevent rapid multiple clicks
-        if (this.debounceTimers.has(userId)) {
-          clearTimeout(this.debounceTimers.get(userId));
-        }
-        
-        this.debounceTimers.set(userId, setTimeout(() => {
+        const userId = parseInt(userItem.dataset.userId);
+        const username = userItem.dataset.username;
+
+        if (userId) {
           this.handleUserClick(userId, username);
-        }, 100));
+        }
       });
-    });
+    }
   }
   
-  async handleUserClick(userId, username) {
+  async handleUserClick(userId) {
     if (this.clickLock.get(userId)) {
       return;
     }
@@ -71,7 +64,11 @@ class ChatNotificationManager {
       }
 
       // Navigate AFTER UI update
-      window.location.href = `/chat/${userId}`;
+      if (window.Turbo) {
+        window.Turbo.visit(`/chat/${userId}`);
+      } else {
+        window.location.href = `/chat/${userId}`;
+      }
 
     } catch (error) {
       console.error('Error in handleUserClick:', error);

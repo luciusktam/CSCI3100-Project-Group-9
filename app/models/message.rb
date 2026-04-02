@@ -6,6 +6,7 @@ class Message < ApplicationRecord
   
   after_initialize :set_defaults, if: :new_record?
   after_create_commit :update_conversation_timestamp
+  after_create_commit :broadcast_to_conversation
   
   private
   
@@ -15,5 +16,14 @@ class Message < ApplicationRecord
 
   def update_conversation_timestamp
     conversation.update(updated_at: Time.current)
+  end
+
+  def broadcast_to_conversation
+    broadcast_append_to(
+      "conversation_#{conversation.id}",
+      target: "messagesArea",
+      partial: "messages/message",
+      locals: { message: self, current_user: user }
+    )
   end
 end

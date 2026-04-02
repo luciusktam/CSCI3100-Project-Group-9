@@ -54,6 +54,8 @@ gem "nokogiri", ">= 1.19.1"
 
 gem "rack", ">= 3.2.5"
 
+gem 'redis', '~> 5.0'
+
 group :development, :test do
   # Load environment variables from .env in local/dev workflows.
   gem "dotenv-rails"

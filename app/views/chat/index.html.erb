@@ -116,18 +116,15 @@
                         <%= @other_user&.username || '' %>
                     </div>
                 </div>
+
+                <% if @conversation %>
+                    <%= turbo_stream_from "conversation_#{@conversation.id}" %>
+                <% end %>
+
                 <div class="messages-area" id="messagesArea">
                     <% if @messages && @messages.any? %>
                         <% @messages.each do |message| %>
-                            <div class="message-bubble <%= message.user == current_user ? 'sent' : 'received' %>">
-                                <%= message.content %>
-                                <div class="message-time">
-                                    <%= time_ago_in_words(message.created_at) %> ago
-                                    <% if message.user == current_user %>
-                                        <i class="fas fa-check message-status"></i>
-                                    <% end %>
-                                </div>
-                            </div>
+                            <%= render "messages/message", message: message %>
                         <% end %>
                     <% else %>
                         <div class="empty-chat-note">No messages yet. Start the conversation!</div>
