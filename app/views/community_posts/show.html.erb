@@ -1,5 +1,19 @@
 <h1><%= @community_post.title.presence || "Untitled Post" %></h1>
+
 <p><%= @community_post.content %></p>
-<p><%= @community_post.user.email if @community_post.user %></p>
+
+<p>
+  Posted by <%= @community_post.user.username %>
+  on <%= @community_post.created_at.strftime("%Y-%m-%d %H:%M") %>
+</p>
+
+<% if user_signed_in? && @community_post.user == current_user %>
+  <%= link_to "Edit", edit_community_post_path(@community_post) %>
+  <%= button_to "Delete", community_post_path(@community_post),
+      method: :delete,
+      data: { turbo_confirm: "Are you sure?" } %>
+<% end %>
+
 
 <%= link_to "Back to Community", community_path %>
+

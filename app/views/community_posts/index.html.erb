@@ -12,8 +12,20 @@
         •
         <%= post.created_at.strftime("%Y-%m-%d %H:%M") %>
       </small>
+
+      <% if user_signed_in? && post.user == current_user %>
+        <div>
+            <%= link_to "Edit", edit_community_post_path(post) %>
+            <%= button_to "Delete", community_post_path(post),
+                method: :delete,
+                data: { turbo_confirm: "Are you sure?" } %>
+        </div>
+      <% end %>
+
+      
     </div>
   <% end %>
 <% else %>
   <p>No community posts yet.</p>
 <% end %>
+
