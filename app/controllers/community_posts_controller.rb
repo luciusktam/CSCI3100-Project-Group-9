@@ -4,12 +4,15 @@ class CommunityPostsController < ApplicationController
   before_action :require_owner, only: [ :edit, :update, :destroy ]
 
   def index
-    @community_posts = CommunityPost.order(created_at: :desc)
+    @query = params[:query].to_s.strip
+    @community_posts = CommunityPost.includes(:user, :comments)
+                                    .fuzzy_search(@query).reorder(created_at: :desc)
   end
 
+
   def show
+    @comments = @community_post.comments.order(created_at: :asc, id: :asc)
     @comment = Comment.new
-    @comments = @community_post.comments.order(created_at: :desc)
   end
 
 

@@ -12,7 +12,7 @@ class CommentsController < ApplicationController
     if @comment.save
       redirect_to community_post_path(@community_post), notice: "Comment added."
     else
-      @comments = @community_post.comments.select(&:persisted?).sort_by(&:created_at).reverse
+      @comments = @community_post.comments.reorder(created_at: :asc, id: :asc)
       render "community_posts/show", status: :unprocessable_entity
     end
   end

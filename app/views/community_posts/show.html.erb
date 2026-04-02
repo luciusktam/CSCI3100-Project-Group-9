@@ -25,7 +25,7 @@
     <div class="community-meta">
       Posted by <strong><%= @community_post.user.username %></strong>
       <span>•</span>
-      <%= @community_post.created_at.strftime("%Y-%m-%d %H:%M") %>
+      <%= @community_post.created_at.in_time_zone("Hong Kong").strftime("%Y-%m-%d %H:%M HKT") %>
     </div>
 
     <div class="community-content">
@@ -48,7 +48,7 @@
             <div class="comment-meta-row">
               <small>
                 <%= comment.user.username %> •
-                <%= comment.created_at.strftime("%Y-%m-%d %H:%M") %>
+                <%= comment.created_at.in_time_zone("Hong Kong").strftime("%Y-%m-%d %H:%M HKT") %>
               </small>
 
               <% if user_signed_in? && comment.user == current_user %>
