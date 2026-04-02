@@ -21,6 +21,6 @@ class ApplicationController < ActionController::Base
   return if user_signed_in?
 
   flash[:alert] = "Please log in before listing items for sale"
-  redirect_to login_path, status: :see_other   # ← 這一行最標準
+  redirect_to login_path, status: :see_other
   end
 end

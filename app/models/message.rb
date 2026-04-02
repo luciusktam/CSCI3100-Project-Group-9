@@ -23,7 +23,7 @@ class Message < ApplicationRecord
       "conversation_#{conversation.id}",
       target: "messagesArea",
       partial: "messages/message",
-      locals: { message: self, current_user: user }
+      locals: { message: self }
     )
   end
 end

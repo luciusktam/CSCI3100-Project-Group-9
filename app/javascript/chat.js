@@ -202,3 +202,36 @@ function initializeChat() {
 // Initialize
 document.addEventListener('DOMContentLoaded', initializeChat);
 document.addEventListener('turbo:load', initializeChat);
+document.addEventListener('turbo:before-stream-render', (event) => {
+  // Only handle appends to the messages area
+  if (event.target.action !== 'append' || event.target.target !== 'messagesArea') {
+    return;
+  }
+
+  const template = event.target.querySelector('template');
+  if (!template) return;
+
+  const newBubble = template.content.querySelector('.message-bubble');
+  if (!newBubble || !newBubble.dataset.senderId) return;
+
+  const senderId = parseInt(newBubble.dataset.senderId);
+  const currentUserId = window.currentUserId;   // already set by loadConversation()
+
+  if (senderId === currentUserId) {
+    newBubble.classList.add('received');
+    newBubble.classList.remove('sent');
+  } else {
+    newBubble.classList.add('sent');
+    newBubble.classList.remove('received');
+
+    // Remove checkmark for the receiver
+    const statusIcon = newBubble.querySelector('.message-status');
+    if (statusIcon) statusIcon.remove();
+  }
+
+  // Auto-scroll (nice UX)
+  const messagesArea = document.getElementById('messagesArea');
+  if (messagesArea) {
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+  }
+});
