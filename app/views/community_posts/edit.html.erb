@@ -1,7 +1,18 @@
-<h1>Edit Post</h1>
+<div class="community-page">
+  <div class="community-detail">
+    <div class="community-detail-header">
+      <div>
+        <p class="community-kicker">Campus Sharing</p>
+        <h1>Edit Post</h1>
+      </div>
 
-<%= render "form" %>
+      <div class="community-actions">
+        <%= link_to "Back to Community", community_path, class: "community-btn secondary" %>
+      </div>
+    </div>
 
-<%= link_to "Back to Post", community_post_path(@community_post) %>
-|
-<%= link_to "Back to Community", community_path %>
+    <%= render "form" %>
+  </div>
+</div>
+
+
