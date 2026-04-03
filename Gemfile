@@ -54,6 +54,8 @@ gem "nokogiri", ">= 1.19.1"
 
 gem "rack", ">= 3.2.5"
 
+gem 'redis', '~> 5.0'
+
 group :development, :test do
   # Load environment variables from .env in local/dev workflows.
   gem "dotenv-rails"
@@ -82,7 +84,7 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
-
+  gem 'database_cleaner-active_record'
   gem "cucumber-rails", "~> 3.0", require: false
 end
 

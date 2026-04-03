@@ -47,6 +47,14 @@ class UsersController < ApplicationController
     redirect_to login_path, notice: "If the account exists and is unverified, a new verification email has been sent."
   end
 
+  def show
+    @user = User.find(params[:id])
+    respond_to do |format|
+      format.json { render json: { id: @user.id, username: @user.username, email: @user.email } }
+      format.html
+    end
+  end
+
   private
 
   def user_params
