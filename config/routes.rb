@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   root "home#index"
 
   # Basic pages
-  get "community", to: "community#index"
   get "profile", to: "profile#index"
   patch "profile", to: "profile#update"
   delete "profile", to: "profile#destroy", as: :delete_profile
