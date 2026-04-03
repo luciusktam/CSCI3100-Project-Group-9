@@ -93,7 +93,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_02_154849) do
   end
 
   create_table "messages", force: :cascade do |t|
-    t.text "content"
     t.bigint "conversation_id", null: false
     t.datetime "created_at", null: false
     t.boolean "read"
