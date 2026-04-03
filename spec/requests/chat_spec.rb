@@ -52,6 +52,7 @@ RSpec.describe "Chat", type: :request do
       category: "Electronics",
       condition: "New",
       location: "CUHK",
+      status: "available",
       user: seller,
       photos: [fixture_file_upload(Rails.root.join("spec/fixtures/files/test_image.jpg"), "image/jpeg")]
     )

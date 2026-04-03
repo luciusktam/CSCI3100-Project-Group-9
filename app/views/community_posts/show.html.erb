@@ -1,0 +1,109 @@
+<div class="community-page">
+  <div class="community-detail">
+    <div class="community-detail-header">
+      <div>
+        <p class="community-kicker">Community Post</p>
+        <h1><%= @community_post.title.presence || "Untitled Post" %></h1>
+      </div>
+
+      <div class="community-actions">
+        <% if user_signed_in? && @community_post.user == current_user %>
+          <%= link_to "Edit", edit_community_post_path(@community_post), class: "community-btn secondary" %>
+
+          <%= button_to "Delete",
+              community_post_path(@community_post),
+              method: :delete,
+              data: { turbo_confirm: "Are you sure?" },
+              class: "community-btn danger",
+              form_class: "community-inline-form" %>
+        <% end %>
+
+        <%= link_to "Back to Community", community_path, class: "community-btn secondary" %>
+      </div>
+    </div>
+
+    <div class="community-meta">
+      Posted by <strong><%= @community_post.user.username %></strong>
+      <span>•</span>
+      <%= @community_post.created_at.in_time_zone("Hong Kong").strftime("%Y-%m-%d %H:%M HKT") %>
+    </div>
+
+    <div class="community-content">
+      <p><%= simple_format(@community_post.content) %></p>
+    </div>
+  </div>
+
+  <div class="community-comments-section">
+    <div class="community-section-title">
+      <h2>Comments</h2>
+      <span><%= @comments.count %></span>
+    </div>
+
+    <% if @comments.any? %>
+      <div class="community-comments-list">
+        <% @comments.each do |comment| %>
+          <div class="comment-card">
+            <p class="comment-body"><%= comment.body %></p>
+
+            <div class="comment-meta-row">
+              <small>
+                <%= comment.user.username %> •
+                <%= comment.created_at.in_time_zone("Hong Kong").strftime("%Y-%m-%d %H:%M HKT") %>
+              </small>
+
+              <% if user_signed_in? && comment.user == current_user %>
+                <%= button_to "Delete Comment",
+                    community_post_comment_path(@community_post, comment),
+                    method: :delete,
+                    data: { turbo_confirm: "Are you sure?" },
+                    class: "community-btn ghost-danger",
+                    form_class: "community-inline-form" %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="community-empty">
+        <p>No comments yet.</p>
+        <p>Be the first one to join the discussion.</p>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="comment-form-box">
+    <% if user_signed_in? %>
+      <h3>Add a comment</h3>
+
+      <% if @comment.errors.any? %>
+        <div class="community-error-box">
+          <h4><%= pluralize(@comment.errors.count, "error") %> prevented this comment from being saved:</h4>
+          <ul>
+            <% @comment.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= form_with model: [@community_post, @comment], local: true, class: "community-form" do |f| %>
+        <div class="community-form-group">
+          <%= f.label :body, "Your comment" %>
+          <%= f.text_area :body, rows: 4, class: "community-textarea", placeholder: "Share your thoughts here..." %>
+        </div>
+
+        <div>
+          <%= f.submit "Post Comment", class: "community-btn primary" %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="community-login-prompt">
+        <p>Please log in to comment.</p>
+          <%= link_to login_path, class: "login-btn" do %>
+            <i class="fas fa-sign-in-alt"></i> Login
+          <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+

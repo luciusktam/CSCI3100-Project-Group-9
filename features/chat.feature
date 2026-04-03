@@ -4,7 +4,7 @@ Feature: Buyer-Seller Chat
   So that I can ask questions about the items
 
   Background:
-    Given the following users exist:
+    Given the following users exist to chat:
       | username | email                    | password | password_confirmation |
       | buyer    | buyer@link.cuhk.edu.hk   | password | password              |
       | seller1  | seller1@link.cuhk.edu.hk | password | password              |

@@ -1,0 +1,27 @@
+<%= form_with model: @community_post, local: true, class: "community-form" do |f| %>
+  <% if @community_post.errors.any? %>
+    <div class="community-error-box">
+      <h4><%= pluralize(@community_post.errors.count, "error") %> prevented this post from being saved:</h4>
+      <ul>
+        <% @community_post.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="community-form-group">
+    <%= f.label :title, "Title" %>
+    <%= f.text_field :title, class: "community-input", placeholder: "Enter your post title" %>
+  </div>
+
+  <div class="community-form-group">
+    <%= f.label :content, "Content" %>
+    <%= f.text_area :content, rows: 8, class: "community-textarea", placeholder: "Share something with the CUHK community..." %>
+  </div>
+
+  <div class="community-actions">
+    <%= f.submit (@community_post.persisted? ? "Update Post" : "Create Post"), class: "community-btn primary" %>
+    <%= link_to "Cancel", community_path, class: "community-btn secondary" %>
+  </div>
+<% end %>

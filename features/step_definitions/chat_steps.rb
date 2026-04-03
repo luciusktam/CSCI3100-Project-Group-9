@@ -1,4 +1,4 @@
-Given(/the following users exist/) do |users_table|
+Given(/the following users exist to chat/) do |users_table|
     users_table.hashes.each do |user|
         User.create!(
             username: user['username'],
@@ -20,6 +20,7 @@ Given(/the following listings exist chat/) do |listings_table|
             category: listing['category'],
             condition: listing['condition'],
             location: listing['location'],
+            status: "available",
             user: User.find_by(username: listing['seller']),
             created_at: Time.current,
             photos: [fixture_file_upload(Rails.root.join("spec/fixtures/files/test_image.jpg"), "image/jpeg")]

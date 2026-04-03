@@ -1,0 +1,116 @@
+<div class="app">
+  <header class="navbar">
+    <%= link_to root_path, class: "logo" do %>
+      CUMarket
+    <% end %>
+
+    <div class="nav-links">
+      <%= link_to community_path do %>
+        <i class="fas fa-users"></i> Community
+      <% end %>
+      <%= link_to chat_path do %>
+        <i class="fas fa-comment-dots"></i> Chat
+      <% end %>
+      <%= link_to sell_path do %>
+        <i class="fas fa-euro-sign"></i> Sell
+      <% end %>
+      <%= link_to profile_path do %>
+        <i class="fas fa-user-circle"></i> Profile
+      <% end %>
+    </div>
+
+    <div class="right-corner">
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+        <i class="fas fa-moon"></i>
+        <span>Dark</span>
+      </button>
+
+      <% if user_signed_in? %>
+        <span class="session-badge">
+          <% if current_user.avatar.attached? %>
+            <%= image_tag current_user.avatar, alt: "User icon", class: "session-avatar-image" %>
+          <% else %>
+            <i class="fas fa-user-circle session-avatar-icon"></i>
+          <% end %>
+          <%= current_user.username %>
+          <% if current_user.admin? %>
+            <strong>Admin</strong>
+          <% end %>
+        </span>
+
+        <%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
+          <i class="fas fa-sign-out-alt"></i> Logout
+        <% end %>
+      <% else %>
+        <%= link_to login_path, class: "login-btn" do %>
+          <i class="fas fa-sign-in-alt"></i> Login
+        <% end %>
+      <% end %>
+    </div>
+  </header>
+
+  <section class="listings-header">
+    <div class="community-home-hero-content">
+      <h1>Explore Campus Conversations</h1>
+    </div>
+    <%= form_with url: community_path, method: :get, local: true do %>
+      <div class="search-row">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <%= text_field_tag :query, params[:query], placeholder: "Search posts by title or content..." %>
+        </div>
+
+        <%= submit_tag "Search", class: "search-btn" %>
+
+        <% if params[:query].present? %>
+          <%= link_to "Clear", community_path, class: "community-btn secondary" %>
+        <% end %>
+      </div>
+    <% end %>
+    
+  </section>
+
+  <section class="search-section community-feed-shell">
+    <div class="community-feed-header">
+      <h2>Community</h2>
+      <%= link_to "New Post", new_community_post_path, class: "create-listing-btn always-visible" %>
+    </div>
+    
+    <div class="community-list">
+      <% if @community_posts.any? %>
+        <% @community_posts.each do |post| %>
+          <div class="community-card">
+            <div class="community-card-top">
+              <h3><%= link_to post.title, community_post_path(post) %></h3>
+              <p><%= truncate(post.content, length: 180) %></p>
+            </div>
+
+            <div class="community-card-footer">
+              <small>
+                <%= post.user&.username || "Unknown user" %> - 
+                <%= post.created_at.in_time_zone("Hong Kong").strftime("%Y-%m-%d %H:%M HKT") %>
+              </small>
+
+              <% if current_user == post.user %>
+                <div class="community-actions">
+                  <%= link_to "Edit", edit_community_post_path(post), class: "community-btn secondary" %>
+                  <%= button_to "Delete",
+                        community_post_path(post),
+                        method: :delete,
+                        data: { turbo_confirm: "Delete this post?" },
+                        class: "community-btn danger" %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="community-empty">
+          <h3>No posts yet</h3>
+          <p>Be the first one to share something with the community.</p>
+          <%= link_to "Create First Post", new_community_post_path, class: "community-btn primary" %>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</div>

@@ -138,6 +138,21 @@
         </div>
 
         <div class="form-row">
+          <div class="form-group <%= 'has-error' if @listing.errors[:status].any? %>">
+            <%= f.label :status, "Status", class: "form-label" %>
+            <%= f.select :status, 
+                        [["Available", "available"], 
+                          ["Reserved", "reserved"], 
+                          ["Sold", "sold"]], 
+                        {},
+                        class: "form-select" %>
+            <% if @listing.errors[:status].any? %>
+              <span class="error-message"><%= @listing.errors[:status].first %></span>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-row">
           <div class="form-group <%= 'has-error' if @listing.errors[:condition].any? %>">
             <%= f.label :condition, class: "form-label" %>
             <%= f.select :condition, ["New", "Like New", "Good", "Fair", "Poor"], {}, class: "form-select" %>

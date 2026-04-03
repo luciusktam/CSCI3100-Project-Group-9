@@ -87,3 +87,8 @@ group :test do
   gem 'database_cleaner-active_record'
   gem "cucumber-rails", "~> 3.0", require: false
 end
+
+group :test do
+  gem 'database_cleaner-active_record'
+  gem 'rack_session_access'
+end

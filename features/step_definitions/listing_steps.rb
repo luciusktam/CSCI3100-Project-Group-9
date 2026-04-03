@@ -64,6 +64,7 @@ def create_test_listings(count = 8)
       category: [ "Electronics", "Books", "Furniture", "Clothing" ].sample,
       condition: [ "New", "Like New", "Good" ].sample,
       location: "Campus",
+      status: "available",
       user: user,
       created_at: Time.now - i.hours,
       photos: [ fixture_file_upload(test_image_path, "image/jpeg") ]

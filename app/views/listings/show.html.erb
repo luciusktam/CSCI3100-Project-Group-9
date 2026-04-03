@@ -72,9 +72,16 @@
 
     
     <div class="listing-header">
-      <h1><%= @listing.title %></h1>
-      <div class="price">
-        $<%= number_with_precision(@listing.price, precision: 2) %>
+      <div class="header-left">
+        <h1><%= @listing.title %></h1>
+        <span class="status-badge status-<%= @listing.status %>">
+          <%= @listing.status.upcase %>
+        </span>
+      </div>
+      <div class="header-right">
+        <div class="price">
+          $<%= number_with_precision(@listing.price, precision: 2) %>
+        </div>
       </div>
     </div>
 
