@@ -54,6 +54,7 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/cumarket_test
         run: |
+          bin/rails db:drop
           bin/rails db:create
           bin/rails db:migrate
 
