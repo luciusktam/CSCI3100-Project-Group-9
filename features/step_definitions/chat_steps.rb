@@ -1,4 +1,4 @@
-Given(/the following users exist/) do |users_table|
+Given(/the following users exist to chat/) do |users_table|
     users_table.hashes.each do |user|
         User.create!(
             username: user['username'],
