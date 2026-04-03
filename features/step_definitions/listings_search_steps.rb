@@ -14,6 +14,7 @@ Given("the following listings exist:") do |table|
       condition: row["condition"],
       location: row["location"],
       description: row["description"],
+      status: row["status"] || "available",
       user: user
     )
 
