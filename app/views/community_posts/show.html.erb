@@ -22,10 +22,30 @@
       </div>
     </div>
 
-    <div class="community-meta">
-      Posted by <strong><%= @community_post.user.username %></strong>
-      <span>•</span>
-      <%= @community_post.created_at.in_time_zone("Hong Kong").strftime("%Y-%m-%d %H:%M HKT") %>
+    <div class="community-meta-block">
+      <div class="community-meta-line">
+        <span>Posted by</span>
+        <button type="button" class="community-user-trigger">
+          <%= @community_post.user.username %>
+        </button>
+        <span class="community-time">
+          - <%= @community_post.created_at.in_time_zone("Hong Kong").strftime("%Y-%m-%d %H:%M HKT") %>
+        </span>
+      </div>
+
+      <% if @community_post.user.present? && (!user_signed_in? || current_user != @community_post.user) %>
+        <div class="community-user-actions">
+          <%= link_to chat_with_user_path(@community_post.user), class: "community-btn secondary" do %>
+            <i class="fas fa-comment-dots"></i>
+            Chat
+          <% end %>
+
+          <%= link_to listings_path(user_id: @community_post.user.id), class: "community-btn primary" do %>
+            <i class="fas fa-store"></i>
+            View listings
+          <% end %>
+        </div>
+      <% end %>
     </div>
 
     <div class="community-content">
@@ -46,10 +66,30 @@
             <p class="comment-body"><%= comment.body %></p>
 
             <div class="comment-meta-row">
-              <small>
-                <%= comment.user.username %> •
-                <%= comment.created_at.in_time_zone("Hong Kong").strftime("%Y-%m-%d %H:%M HKT") %>
-              </small>
+              <div class="comment-meta-left">
+                <div class="community-meta-line">
+                  <button type="button" class="community-user-trigger">
+                    <%= comment.user.username %>
+                  </button>
+                  <span class="community-time">
+                    - <%= comment.created_at.in_time_zone("Hong Kong").strftime("%Y-%m-%d %H:%M HKT") %>
+                  </span>
+                </div>
+
+                <% if comment.user.present? && (!user_signed_in? || current_user != comment.user) %>
+                  <div class="community-user-actions">
+                      <%= link_to chat_with_user_path(comment.user), class: "community-btn secondary" do %>
+                      <i class="fas fa-comment-dots"></i>
+                      Chat
+                      <% end %>
+
+                    <%= link_to listings_path(user_id: comment.user.id), class: "community-btn primary" do %>
+                      <i class="fas fa-store"></i>
+                      View listings
+                    <% end %>
+                    </div>
+                <% end %>
+              </div>
 
               <% if user_signed_in? && comment.user == current_user %>
                 <%= button_to "Delete Comment",
@@ -106,4 +146,3 @@
     <% end %>
   </div>
 </div>
-

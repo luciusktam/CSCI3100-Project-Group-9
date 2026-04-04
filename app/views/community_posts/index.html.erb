@@ -73,7 +73,15 @@
   <section class="search-section community-feed-shell">
     <div class="community-feed-header">
       <h2>Community</h2>
-      <%= link_to "New Post", new_community_post_path, class: "create-listing-btn always-visible" %>
+
+      <div class="community-actions">
+        <% if user_signed_in? %>
+          <%= link_to "Self Posts", community_path(user_id: current_user.id), class: "community-btn secondary" %>
+          <%= link_to "All Posts", community_path, class: "community-btn secondary" %>
+        <% end %>
+
+        <%= link_to "New Post", new_community_post_path, class: "create-listing-btn always-visible" %>
+      </div>
     </div>
     
     <div class="community-list">
@@ -86,22 +94,40 @@
             </div>
 
             <div class="community-card-footer">
-              <small>
-                <%= post.user&.username || "Unknown user" %> - 
-                <%= post.created_at.in_time_zone("Hong Kong").strftime("%Y-%m-%d %H:%M HKT") %>
-              </small>
-
-              <% if current_user == post.user %>
-                <div class="community-actions">
-                  <%= link_to "Edit", edit_community_post_path(post), class: "community-btn secondary" %>
-                  <%= button_to "Delete",
-                        community_post_path(post),
-                        method: :delete,
-                        data: { turbo_confirm: "Delete this post?" },
-                        class: "community-btn danger" %>
+              <div class="community-meta-block">
+                <div class="community-meta-line">
+                  <span class="community-author-name"><%= post.user&.username || "Unknown user" %></span>
+                  <span class="community-time">
+                    - <%= post.created_at.in_time_zone("Hong Kong").strftime("%Y-%m-%d %H:%M HKT") %>
+                    </span>
                 </div>
-              <% end %>
-            </div>
+
+                <% unless user_signed_in? && current_user == post.user %>
+                  <div class="community-user-actions">
+                    <%= link_to chat_with_user_path(post.user), class: "community-btn secondary" do %>
+                        <i class="fas fa-comment-dots"></i>
+                        Chat
+                    <% end %>
+
+                    <%= link_to listings_path(user_id: post.user.id), class: "community-btn primary" do %>
+                      <i class="fas fa-store"></i>
+                      View listings
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+
+  <% if current_user == post.user %>
+    <div class="community-actions">
+      <%= link_to "Edit", edit_community_post_path(post), class: "community-btn secondary" %>
+      <%= button_to "Delete",
+            community_post_path(post),
+            method: :delete,
+            data: { turbo_confirm: "Delete this post?" },
+            class: "community-btn danger" %>
+    </div>
+  <% end %>
+</div>
           </div>
         <% end %>
       <% else %>
@@ -111,6 +137,8 @@
           <%= link_to "Create First Post", new_community_post_path, class: "community-btn primary" %>
         </div>
       <% end %>
+      <%= paginate @community_posts %>
     </div>
   </section>
 </div>
+

@@ -5,8 +5,21 @@ class CommunityPostsController < ApplicationController
 
   def index
     @query = params[:query].to_s.strip
+
     @community_posts = CommunityPost.includes(:user, :comments)
-                                    .fuzzy_search(@query).reorder(created_at: :desc)
+
+    if @query.present?
+      @community_posts = @community_posts.fuzzy_search(@query)
+    end
+
+    if params[:user_id].present?
+      @target_user = User.find_by(id: params[:user_id])
+      @community_posts = @community_posts.where(user_id: params[:user_id])
+    end
+
+    @community_posts = @community_posts.reorder(created_at: :desc)
+                                       .page(params[:page])
+                                       .per(5)
   end
 
 
