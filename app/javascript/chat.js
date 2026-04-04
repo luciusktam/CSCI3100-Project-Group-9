@@ -1,12 +1,4 @@
 function initializeChat() {
-  
-  function scrollMessagesToBottom() {
-    const messagesArea = document.getElementById('messagesArea');
-    if (messagesArea) {
-      messagesArea.scrollTop = messagesArea.scrollHeight;
-    }
-  }
-  
   // Initialize notification manager
   if (!window.notificationManager) {
     window.notificationManager = new ChatNotificationManager();
@@ -67,7 +59,7 @@ function initializeChat() {
               `;
               messagesArea.appendChild(messageDiv);
             });
-          scrollMessagesToBottom();
+            scrollMessagesToBottom();
           }
         }
 
@@ -102,6 +94,8 @@ function initializeChat() {
     return div.innerHTML;
   }
 
+  let isSendingMessage = false;
+
   function sendMessage() {
     const input = document.getElementById('messageInput');
     const content = input?.value.trim();
@@ -129,6 +123,7 @@ function initializeChat() {
     .then(data => {
       if (!data.success) {
         console.error('Send failed:', data.errors);
+        // Optional: remove the optimistic message if failed
       }
     })
     .catch(error => {
@@ -195,6 +190,13 @@ function initializeChat() {
   }
 
   setTimeout(initializeUnreadCounts, 100);
+
+  function scrollMessagesToBottom() {
+    const messagesArea = document.getElementById('messagesArea');
+    if (messagesArea) {
+      messagesArea.scrollTop = 1000000;
+    }
+  }
 
   // Handle direct URL access
   const pathParts = window.location.pathname.split('/');
