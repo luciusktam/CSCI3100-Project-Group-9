@@ -80,7 +80,6 @@ Secondary = support / reviewer + contributed commits / tests.
 ## To Start Dev
 ```
 bundle install
-bin/rails generate migration EnablePgSearchForListings
 bin/rails db:create db:migrate
 bundle exec rspec
 bundle exec cucumber
