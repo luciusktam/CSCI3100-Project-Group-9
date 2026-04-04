@@ -3864,3 +3864,273 @@ body.dark-mode .pagination .disabled {
 }
 
 
+.community-author-block {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.community-user-trigger {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent-purple);
+  cursor: pointer;
+}
+
+.community-user-trigger:hover {
+  text-decoration: underline;
+}
+
+.community-user-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+body.dark-mode .community-user-trigger {
+  color: var(--accent-gold-soft);
+}
+
+
+
+.community-author-block {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.community-user-trigger {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent-purple);
+  cursor: pointer;
+}
+
+.community-user-trigger:hover {
+  text-decoration: underline;
+}
+
+.community-user-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.community-meta-block,
+.comment-meta-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+body.dark-mode .community-user-trigger {
+  color: var(--accent-gold-soft);
+}
+
+html,
+body {
+  min-height: 100%;
+  background: #f6f4fb !important;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.app,
+.listings-page,
+.community-page {
+  min-height: 100vh;
+  background: transparent !important;
+}
+
+body.dark-mode,
+html.dark-mode {
+  background: #24262b !important;
+}
+
+body.dark-mode .app,
+body.dark-mode .listings-page,
+body.dark-mode .community-page {
+  background: transparent !important;
+}
+
+.community-page {
+  padding-bottom: 64px;
+}
+
+.comment-form-box {
+  margin-bottom: 0;
+}
+
+
+.community-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+
+.community-author-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.community-user-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.community-card-footer small,
+.comment-meta-left small,
+.community-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+
+.comment-meta-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+
+.community-author-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.community-user-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.comment-meta-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+
+.community-meta-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.community-meta-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  color: #8a8199;
+  font-size: 14px;
+}
+
+.community-author-name {
+  font-weight: 600;
+  color: var(--accent-purple);
+}
+
+.community-user-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.community-card-footer {
+  align-items: flex-start;
+}
+
+.comment-meta-row {
+  align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+  .community-user-actions {
+    justify-content: flex-start;
+  }
+}
+
+.community-meta-block,
+.comment-meta-left {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
+}
+
+.community-meta-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.community-user-actions {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.community-card-footer,
+.comment-meta-row {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.community-card-footer > *,
+.comment-meta-row > * {
+  width: 100%;
+}
+
+
+
+.post-meta-line {
+  margin-bottom: 16px;
+}
+
+.post-user-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #f1ebfa;
+}
+
+body.dark-mode .post-user-actions {
+  border-top-color: #454a54;
+}

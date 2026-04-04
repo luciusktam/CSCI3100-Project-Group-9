@@ -58,8 +58,25 @@ class ListingsController < ApplicationController
       @listings = @listings.where(price_conditions.join(" OR "), *price_values) if price_conditions.any?
     end
 
-    @listings = @listings.order(created_at: :desc).page(params[:page]).per(20)
+      if params[:user_id].present?
+        @target_user = User.find_by(id: params[:user_id])
+        @listings = @listings.where(user_id: params[:user_id])
+      end
+
+      @listings = @listings.where(status: %w[available reserved])
+                           .order(created_at: :desc)
+                           .page(params[:page])
+                           .per(20)
   end
+
+
+
+
+
+
+
+
+
 
 
   def new
