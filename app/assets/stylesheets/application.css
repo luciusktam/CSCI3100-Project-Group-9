@@ -4134,3 +4134,305 @@ body.dark-mode .community-page {
 body.dark-mode .post-user-actions {
   border-top-color: #454a54;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== Mobile override: paste at the very bottom ===== */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+
+  .app,
+  .listings-page,
+  .listing-container,
+  .community-feed-shell,
+  .community-content-shell {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .app {
+    padding-top: 0.75rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .navbar {
+    padding: 0.9rem 1rem !important;
+    border-radius: 24px !important;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+
+  .logo {
+    font-size: 1.3rem !important;
+  }
+
+  .nav-links,
+  .right-corner {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .nav-links a,
+  .login-btn,
+  .theme-toggle,
+  .page-btn {
+    min-height: 44px;
+  }
+
+  .hero-panel,
+  .auth-layout,
+  .search-row,
+  .filter-dropdowns,
+  .community-feed-header,
+  .community-card-footer,
+  .community-detail-header,
+  .comment-meta-row,
+  .listing-header,
+  .listing-actions,
+  .owner-actions,
+  .form-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .search-section,
+  .hero-panel,
+  .auth-card,
+  .auth-intro,
+  .form-card,
+  .community-card,
+  .community-detail,
+  .community-comments-section,
+  .comment-form-box,
+  .product-card,
+  .listing-card {
+    padding: 1rem !important;
+    border-radius: 20px !important;
+  }
+
+  .hero-panel h1,
+  .auth-intro h1,
+  .page-title,
+  .community-detail h1,
+  .community-feed-header h2,
+  .filters-left h2,
+  .form-title {
+    font-size: clamp(1.5rem, 6vw, 2rem) !important;
+    line-height: 1.2;
+  }
+
+  .hero-copy,
+  .auth-intro p,
+  .community-card-top p,
+  .community-content p,
+  .comment-body {
+    max-width: 100%;
+  }
+
+  .search-box {
+    width: 100%;
+    min-width: 0 !important;
+    padding-left: 1rem !important;
+  }
+
+  .search-box input {
+    padding: 0.85rem 0.75rem !important;
+  }
+
+  .filter-dropdowns {
+    width: 100%;
+    margin-left: 0 !important;
+  }
+
+  .filter-tag,
+  .search-btn,
+  .create-listing-btn.always-visible,
+  .community-btn,
+  .submit-btn,
+  .delete-btn,
+  .cancel-btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .product-grid,
+  .listings-grid,
+  .community-list,
+  .community-comments-list {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .preview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .product-card img {
+    height: 190px !important;
+  }
+
+  .listing-container {
+    margin: 1rem auto !important;
+    padding: 1rem !important;
+  }
+
+  .image-track {
+    gap: 0.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.25rem;
+  }
+
+  .image-wrapper {
+    min-width: 85% !important;
+    max-width: 85% !important;
+    scroll-snap-align: center;
+  }
+
+  .nav-btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+  }
+
+  .info-row,
+  .form-row {
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding-inline: 0;
+  }
+
+  .pagination a,
+  .pagination span.current,
+  .pagination span.gap {
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  /* Chat page */
+  body:has(.main-chat-layout) .app {
+    padding: 0.5rem !important;
+    height: 100dvh;
+  }
+
+  body:has(.main-chat-layout) .navbar {
+    margin-bottom: 0.75rem !important;
+    border-radius: 20px !important;
+  }
+
+  .main-chat-layout {
+    flex-direction: column !important;
+    min-height: calc(100dvh - 88px);
+    border-radius: 20px !important;
+  }
+
+  .chat-sidebar {
+    width: 100% !important;
+    max-height: 36vh;
+    border-right: 0 !important;
+    border-bottom: 1px solid #e9eef2;
+  }
+
+  body.dark-mode .chat-sidebar {
+    border-bottom-color: #2a3942;
+  }
+
+  .chat-window,
+  #activeChatView {
+    min-height: 0;
+  }
+
+  .chat-header,
+  .chat-input-area,
+  .messages-area,
+  .search-container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .message-bubble {
+    max-width: 88% !important;
+  }
+
+  .notification-toast {
+    width: calc(100vw - 24px) !important;
+    right: 12px !important;
+    bottom: 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar,
+  .search-section,
+  .hero-panel,
+  .auth-card,
+  .auth-intro,
+  .form-card,
+  .community-card,
+  .community-detail,
+  .community-comments-section,
+  .comment-form-box,
+  .product-card,
+  .listing-card {
+    border-radius: 16px !important;
+  }
+
+  .nav-links {
+    gap: 0.5rem 1rem !important;
+  }
+
+  .nav-links a {
+    font-size: 0.95rem !important;
+  }
+
+  .search-box,
+  .filter-tag,
+  .login-btn,
+  .theme-toggle,
+  .page-btn,
+  .search-btn,
+  .community-btn,
+  .submit-btn,
+  .delete-btn,
+  .cancel-btn {
+    border-radius: 16px !important;
+  }
+
+  .product-card,
+  .listing-card-content {
+    padding: 0.9rem !important;
+  }
+
+  .image-wrapper {
+    min-width: 92% !important;
+    max-width: 92% !important;
+  }
+
+  .chat-sidebar {
+    max-height: 32vh;
+  }
+}
