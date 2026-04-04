@@ -6,7 +6,10 @@ class CommunityPostsController < ApplicationController
   def index
     @query = params[:query].to_s.strip
     @community_posts = CommunityPost.includes(:user, :comments)
-                                    .fuzzy_search(@query).reorder(created_at: :desc)
+                                    .fuzzy_search(@query)
+                                    .reorder(created_at: :desc)
+                                    .page(params[:page])
+                                    .per(5)
   end
 
 

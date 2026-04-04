@@ -111,6 +111,7 @@
           <%= link_to "Create First Post", new_community_post_path, class: "community-btn primary" %>
         </div>
       <% end %>
+      <%= paginate @community_posts %>
     </div>
   </section>
 </div>
