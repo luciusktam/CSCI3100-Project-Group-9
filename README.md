@@ -49,9 +49,9 @@ Walking Skeleton (Heroku): https://csci3100-group9-project-c5b9f4042600.herokuap
 ### Pages
 - login page
 - homepage (listed items + search function + filter function)
-- community page
+- community page (posts + comments)
 - chatpage 
-- search result page
+- listing page (search result)
 - profile
 
 ## Feature Ownership
