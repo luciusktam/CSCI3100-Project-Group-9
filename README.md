@@ -56,7 +56,8 @@ Walking Skeleton (Heroku): https://csci3100-group9-project-c5b9f4042600.herokuap
 
 ## Feature Ownership
 
-Primary = main implementer. Secondary = support/reviewer + contributed commits/tests.
+Primary = main implementer.  
+Secondary = support / reviewer + contributed commits / tests.
 
 | Feature Name | Primary Developer | Secondary Developer | Notes |
 | --- | --- | --- | --- |
@@ -64,22 +65,21 @@ Primary = main implementer. Secondary = support/reviewer + contributed commits/t
 | Deployment (Heroku) | Lau Chi Ho |  | Heroku config + deploy steps. |
 | CI pipeline (GitHub Actions) | Au Chi Hin | Tam Yiu Hei | Run RSpec + Cucumber in CI. |
 | User auth + roles | Tam Yiu Hei |  | Auth + authorization boundaries. |
-| User Profile | Tam Yiu Hei |  | User Profile for edit info |
+| User Profile | Tam Yiu Hei |  | User profile editing and related flows. |
 | CUHK email verification (@link.cuhk.edu.hk) | Tam Yiu Hei |  | Domain restriction + verification flow. |
 | Listings CRUD | Au Chi Hin |  | Create/edit/delete listings + validations. |
 | Image uploads | Au Chi Hin |  | Active Storage (or equivalent). |
 | Item status workflow | Au Chi Hin |  | Available → Reserved → Sold. |
-| Search & filtering | Lau Yat Laam |  | Keyword search + filters + fuzzy search. |
-| Community/college feature |  |  | College grouping/community space. |
-| ActionCable chat/notifications |  |  | Real-time messaging + notifications. |
-| RSpec + SimpleCov |  |  | Unit tests + coverage evidence. |
-| Cucumber BDD scenarios |  |  | Acceptance tests for key user stories. |
+| Search & filtering | Lau Yat Laam |  | Keyword search, filters, and fuzzy search. |
+| Community feature | Lau Yat Laam |  | Community feed, post CRUD, comments, UI polish, search, and fuzzy search. |
+| ActionCable chat / notifications |  |  | Real-time messaging + notifications. |
+| RSpec + SimpleCov | All members |  | Shared testing effort across features. |
+| Cucumber BDD scenarios | All members |  | Shared acceptance testing across features. |
 
 
 ## To Start Dev
 ```
 bundle install
-bin/rails generate migration EnablePgSearchForListings
 bin/rails db:create db:migrate
 bundle exec rspec
 bundle exec cucumber
@@ -106,7 +106,6 @@ brew services start postgresql
 git clone https://github.com/CSCI3100-Project-Group-9/CSCI3100-Project-Group-9.git
 cd CSCI3100-Project-Group-9
 bundle install
-bin/rails generate migration EnablePgSearchForListings
 bin/rails db:create db:migrate
 bin/rails server
 

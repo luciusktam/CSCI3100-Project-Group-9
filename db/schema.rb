@@ -93,12 +93,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_02_154849) do
   end
 
   create_table "messages", force: :cascade do |t|
-    t.text "content", null: false
     t.bigint "conversation_id", null: false
     t.datetime "created_at", null: false
-    t.boolean "read", default: false, null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.text "content", null: false
+    t.boolean "read", default: false, null: false
     t.index ["conversation_id", "created_at"], name: "index_messages_on_conversation_id_and_created_at"
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["user_id"], name: "index_messages_on_user_id"
