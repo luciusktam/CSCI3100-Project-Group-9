@@ -80,7 +80,6 @@ Secondary = support / reviewer + contributed commits / tests.
 ## To Start Dev
 ```
 bundle install
-bin/rails generate migration EnablePgSearchForListings
 bin/rails db:create db:migrate
 bundle exec rspec
 bundle exec cucumber
@@ -107,7 +106,6 @@ brew services start postgresql
 git clone https://github.com/CSCI3100-Project-Group-9/CSCI3100-Project-Group-9.git
 cd CSCI3100-Project-Group-9
 bundle install
-bin/rails generate migration EnablePgSearchForListings
 bin/rails db:create db:migrate
 bin/rails server
 
