@@ -107,7 +107,6 @@ brew services start postgresql
 git clone https://github.com/CSCI3100-Project-Group-9/CSCI3100-Project-Group-9.git
 cd CSCI3100-Project-Group-9
 bundle install
-bin/rails generate migration EnablePgSearchForListings
 bin/rails db:create db:migrate
 bin/rails server
 
