@@ -72,7 +72,7 @@ Secondary = support / reviewer + contributed commits / tests.
 | Item status workflow | Au Chi Hin |  | Available → Reserved → Sold. |
 | Search & filtering | Lau Yat Laam |  | Keyword search, filters, and fuzzy search. |
 | Community feature | Lau Yat Laam |  | Community feed, post CRUD, comments, UI polish, search, and fuzzy search. |
-| ActionCable chat / notifications |  |  | Real-time messaging + notifications. |
+| ActionCable chat / notifications | Lau Chi Ho |  | Real-time messaging + notifications. |
 | RSpec + SimpleCov | All members |  | Shared testing effort across features. |
 | Cucumber BDD scenarios | All members |  | Shared acceptance testing across features. |
 
