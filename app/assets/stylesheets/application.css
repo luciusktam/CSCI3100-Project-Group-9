@@ -522,11 +522,14 @@ body {
 }
 
 .flash {
-    margin: 1rem auto 0;
-    max-width: 1000px;
-    padding: 0.85rem 1rem;
-    border-radius: 16px;
+    margin: 0 auto !important;
+    max-width: 960px;
+    padding: 14px 20px;
+    border-radius: 12px;
     font-weight: 600;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 100;
 }
 
 .flash-notice {
@@ -3079,11 +3082,14 @@ body.dark-mode .form-title {
 
 
 .flash {
-  margin: 16px auto;
-  padding: 14px 18px;
-  border-radius: 12px;
+  margin: 0 auto !important;
   max-width: 960px;
+  padding: 14px 20px;
+  border-radius: 12px;
   font-weight: 600;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 100;
 }
 
 .flash.notice {
