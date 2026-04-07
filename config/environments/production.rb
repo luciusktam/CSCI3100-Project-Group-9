@@ -48,7 +48,7 @@ Rails.application.configure do
 
   # Replace the default in-process memory cache store with a durable alternative.
   config.cache_store = :redis_cache_store, {
-    url: ENV.fetch("rediss://default:gQAAAAAAATFwAAIncDI2Yzg1MDAyZTUwNWI0ZDllYmIwOTRiMzAyNDM0NTM5ZXAyNzgxOTI@first-clam-78192.upstash.io:6379"),
+    url: ENV.fetch("UPSTASH_REDIS_URL"),
     namespace: "CUMarket:cache",
     pool: { size: ENV.fetch("RAILS_MAX_THREADS", 5).to_i, timeout: 5 },
     connect_timeout: 5,
