@@ -69,6 +69,15 @@ Rails.application.configure do
     protocol: "https"
   }
 
+  # Action Cable URL and Origins for Redis
+  host = ENV.fetch('APP_HOST', 'csci3100-group9-project-c5b9f4042600.herokuapp.com')
+  config.action_cable.url = "wss://#{host}/cable"
+
+  config.action_cable.allowed_request_origins = [
+    "https://#{host}",
+    %r{^https?://#{host}(:\d+)?$}
+  ]
+
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
