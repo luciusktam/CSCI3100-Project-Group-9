@@ -18,9 +18,16 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
-  return if user_signed_in?
+    return if user_signed_in?
 
-  flash[:alert] = "Please log in before listing items for sale"
-  redirect_to login_path, status: :see_other
+    flash[:alert] = "Please log in before listing items for sale"
+    redirect_to login_path, status: :see_other
+  end
+
+  def authenticate_user_chat!
+    return if user_signed_in?
+
+    flash[:alert] = "Please log in before accessing the chat"
+    redirect_to login_path, status: :see_other
   end
 end

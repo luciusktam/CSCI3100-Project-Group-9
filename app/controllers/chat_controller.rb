@@ -1,5 +1,5 @@
 class ChatController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user_chat!
   
   def index
     # Get all conversations for sidebar
