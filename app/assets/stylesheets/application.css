@@ -17,17 +17,15 @@ body.dark-mode html {
     --text-muted: #6a6077;
 }
 
-/* === CHAT PAGE ONLY — Full height + scrollable chat (only on /chat pages) === */
-html, body {
+/* CHAT PAGE ONLY — Full height + scrollable chat */
+body:has(.main-chat-layout) {
+    overflow: hidden;
     height: 100%;
     margin: 0;
     padding: 0;
 }
 
-body:has(.main-chat-layout) {
-    overflow: hidden;
-}
-
+/* Make the whole app take full viewport height on chat page only */
 body:has(.main-chat-layout) .app {
     display: flex;
     flex-direction: column;
@@ -39,12 +37,12 @@ body:has(.main-chat-layout) .app {
     overflow: hidden;
 }
 
-/* Navbar stays fixed size on chat page */
+/* Navbar stays fixed size */
 body:has(.main-chat-layout) .navbar {
     flex-shrink: 0;
 }
 
-/* Main chat area now takes all remaining space */
+/* Main chat container takes remaining space */
 body:has(.main-chat-layout) .main-chat-layout {
     flex: 1;
     min-height: 0;
@@ -55,7 +53,7 @@ body:has(.main-chat-layout) .main-chat-layout {
     box-shadow: 0 8px 20px rgba(0,0,0,0.03);
 }
 
-/* Make sure the active chat view fills the space */
+/* Active chat view */
 body:has(.main-chat-layout) #activeChatView {
     flex: 1;
     display: flex;
@@ -63,7 +61,7 @@ body:has(.main-chat-layout) #activeChatView {
     min-height: 0;
 }
 
-/* The actual scrollable message area */
+/* Scrollable messages area */
 body:has(.main-chat-layout) .messages-area {
     flex: 1 1 auto;
     overflow-y: auto;
@@ -76,7 +74,7 @@ body:has(.main-chat-layout) .messages-area {
     border-bottom: 1px solid #eee;
 }
 
-/* Input stays glued to the bottom */
+/* Input area pinned to bottom */
 body:has(.main-chat-layout) .chat-input-area {
     flex-shrink: 0;
 }
