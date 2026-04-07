@@ -4436,3 +4436,60 @@ body.dark-mode .post-user-actions {
     max-height: 32vh;
   }
 }
+
+
+/* ===== Dark mode root background fix ===== */
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+}
+
+html.dark-mode,
+body.dark-mode {
+  background: #24262b !important;
+  background-color: #24262b !important;
+}
+
+/* Make page shells inherit dark root instead of exposing old light background */
+body.dark-mode,
+body.dark-mode .app,
+body.dark-mode .listings-page,
+body.dark-mode .community-page,
+body.dark-mode .listing-container,
+body.dark-mode .new-listing-container {
+  background-image: none !important;
+}
+
+body.dark-mode .app,
+body.dark-mode .listings-page,
+body.dark-mode .community-page,
+body.dark-mode .listing-container,
+body.dark-mode .new-listing-container {
+  background-color: transparent !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
