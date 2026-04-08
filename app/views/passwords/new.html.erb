@@ -3,7 +3,12 @@
     <%= link_to root_path, class: "logo" do %>
       CUMarket
     <% end %>
-    <div class="right-corner"></div>
+    <div class="right-corner">
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+        <span>Dark</span>
+      </button>
+    </div>
   </header>
 
   <section class="auth-layout auth-layout-single">

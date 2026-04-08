@@ -1,12 +1,13 @@
 <div class="app auth-page">
 	<header class="navbar auth-navbar">
 		<%= link_to root_path, class: "logo" do %>
-			CUSHMS
+			CUMarket
 		<% end %>
 		<div class="right-corner">
-			<%= link_to root_path, class: "login-btn" do %>
-				<i class="fas fa-home"></i> Home
-			<% end %>
+			<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+				<i class="fas fa-moon"></i>
+				<span>Dark</span>
+			</button>
 		</div>
 	</header>
 

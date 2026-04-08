@@ -4,6 +4,10 @@
 			CUMarket
 		<% end %>
 		<div class="right-corner">
+			<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+				<i class="fas fa-moon"></i>
+				<span>Dark</span>
+			</button>
 			<%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
 				<i class="fas fa-sign-out-alt"></i> Logout
 			<% end %>

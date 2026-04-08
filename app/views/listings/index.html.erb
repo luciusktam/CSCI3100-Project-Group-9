@@ -5,6 +5,9 @@
     <% end %>
 
     <div class="nav-links">
+      <%= link_to listings_path do %>
+        <i class="fas fa-store"></i> Market
+      <% end %>
       <%= link_to community_path do %>
         <i class="fas fa-users"></i> Community
       <% end %>
@@ -46,7 +49,6 @@
     </div>
   </header>
 
-<h1 class="form-title">Discover Amazing Items</h1>
 
 
   <%= render "listings/search_filters" %>

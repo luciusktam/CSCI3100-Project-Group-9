@@ -1,7 +1,7 @@
 <div class="app auth-page">
 	<header class="navbar auth-navbar">
 		<%= link_to root_path, class: "logo" do %>
-			 CUMarket
+			CUMarket
 		<% end %>
 		<div class="right-corner"></div>
 	</header>
@@ -19,7 +19,7 @@
 				<% end %>
 				<%= form_with url: login_path, method: :post, local: true, class: "auth-form" do |form| %>
 					<div class="field-group">
-						<%= form.label :email, "CUHK Email" %>
+						<%= form.label :email, "Email" %>
 						<%= form.email_field :email, name: :email, placeholder: "yourname@link.cuhk.edu.hk", value: @prefill_email || params[:email], required: true %>
 					</div>
 
