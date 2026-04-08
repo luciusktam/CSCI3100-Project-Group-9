@@ -197,6 +197,9 @@
 
 <!-- JavaScript -->
 <script>
+(function() {
+  'use strict';
+
   let imageUploaderInitialized = false;
 
   function initImageUploader() {
@@ -235,7 +238,7 @@
         const previewItem = document.createElement('div');
         previewItem.className = 'preview-item new-photo';
         previewItem.dataset.existing = 'false';
-        previewItem.dataset.newIndex = index; 
+        previewItem.dataset.newIndex = index;
 
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -253,34 +256,24 @@
 
     function handleFiles(newFilesList) {
       const validFiles = Array.from(newFilesList).filter(file => file.type.startsWith('image/'));
-      
+
       const currentTotal = existingPhotoCount + newFiles.length;
-      
+
       if (currentTotal + validFiles.length > MAX_PHOTOS) {
         alert(`Maximum ${MAX_PHOTOS} photos allowed`);
-        updateFileInput(); 
-        
+        updateFileInput();
         return;
       }
 
-
       newFiles = [...newFiles, ...validFiles];
-      
       updateFileInput();
-      
       renderNewPreviews();
       updatePhotoCount();
-      
-
-      console.log('New files in input:', fileInput.files.length);
     }
 
     function updateFileInput() {
-
       const dataTransfer = new DataTransfer();
       newFiles.forEach(file => dataTransfer.items.add(file));
-      
-
       fileInput.files = dataTransfer.files;
     }
 
@@ -360,12 +353,13 @@
   }
 
   document.addEventListener('DOMContentLoaded', initImageUploader);
-  
+
   document.addEventListener('turbo:load', initImageUploader);
-  
+
   document.addEventListener('turbo:before-cache', () => {
     imageUploaderInitialized = false;
   });
+})();
 </script>
 
 

@@ -183,10 +183,6 @@
 
       if (!fileInput || !uploadArea || !previewGrid || !photoCountSpan) return;
 
-
-      imageUploaderInitialized = false;
-
-      if (imageUploaderInitialized) return;
       imageUploaderInitialized = true;
 
       let currentFiles = [];
@@ -199,27 +195,22 @@
 
       const newFileInput = fileInput.cloneNode(true);
       fileInput.parentNode.replaceChild(newFileInput, fileInput);
-      
+
       const newUploadArea = uploadArea.cloneNode(true);
       uploadArea.parentNode.replaceChild(newUploadArea, uploadArea);
-    
-      const finalFileInput = document.getElementById('photo-upload');
-      const finalUploadArea = document.getElementById('upload-area');
-      const finalPreviewGrid = document.getElementById('preview-grid');
-      const finalPhotoCountSpan = document.getElementById('photo-count');
 
       function updatePhotoCount() {
-        finalPhotoCountSpan.textContent = currentFiles.length;
+        photoCountSpan.textContent = currentFiles.length;
       }
 
       function syncFilesToInput() {
         const dataTransfer = new DataTransfer();
         currentFiles.forEach(file => dataTransfer.items.add(file));
-        finalFileInput.files = dataTransfer.files;
+        fileInput.files = dataTransfer.files;
       }
 
       function renderPreviews() {
-        finalPreviewGrid.innerHTML = '';
+        previewGrid.innerHTML = '';
 
         currentFiles.forEach((file, index) => {
           const previewItem = document.createElement('div');
@@ -236,7 +227,7 @@
             `;
           };
           reader.readAsDataURL(file);
-          finalPreviewGrid.appendChild(previewItem);
+          previewGrid.appendChild(previewItem);
         });
       }
 
@@ -261,18 +252,18 @@
         updatePhotoCount();
       }
 
-      finalUploadArea.addEventListener('click', (e) => {
+      uploadArea.addEventListener('click', (e) => {
         e.preventDefault();
-        finalFileInput.value = '';
-        finalFileInput.click();
+        fileInput.value = '';
+        fileInput.click();
       });
 
-      finalFileInput.addEventListener('change', (e) => {
+      fileInput.addEventListener('change', (e) => {
         e.preventDefault();
         handleFiles(e.target.files);
       });
 
-      finalPreviewGrid.addEventListener('click', (e) => {
+      previewGrid.addEventListener('click', (e) => {
         const removeBtn = e.target.closest('.remove-image');
         if (removeBtn) {
           e.stopPropagation();

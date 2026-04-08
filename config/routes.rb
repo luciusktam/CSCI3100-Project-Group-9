@@ -16,7 +16,6 @@ Rails.application.routes.draw do
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
   resources :users, only: [:show, :new, :create]
-  resources :users, only: [ :new, :create ]
   get  "verify/:token", to: "users#verify", as: :verify_email
   post "verify/resend", to: "users#resend_verification", as: :resend_verification_email
 

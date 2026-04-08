@@ -49,14 +49,14 @@
 					<%= form.submit "Save profile", class: "search-btn auth-submit" %>
 				<% end %>
 
-				<div class="profile-actions">
-					<%= button_to delete_profile_path,
-												method: :delete,
-												class: "login-btn delete-account-btn",
-												data: { turbo_confirm: "Delete your account permanently? This action cannot be undone." } do %>
-						<i class="fas fa-user-times"></i> Delete account
-					<% end %>
-				</div>
+			<div class="profile-actions">
+				<%= button_to delete_profile_path,
+											method: :delete,
+											class: "login-btn delete-account-btn danger-btn",
+											data: { turbo_confirm: "Delete your account permanently? This action cannot be undone." } do %>
+					<i class="fas fa-exclamation-triangle"></i> Delete account
+				<% end %>
+			</div>
 			</section>
 		</div>
 	</section>

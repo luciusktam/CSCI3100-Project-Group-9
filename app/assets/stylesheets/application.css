@@ -3728,6 +3728,18 @@ body.dark-mode .delete-btn {
   color: #ff6b6b;
 }
 
+/* Dark mode - Delete account button */
+body.dark-mode .delete-account-btn {
+  background: #7f1d1d;
+  border-color: #7f1d1d;
+  color: #fecaca;
+}
+
+body.dark-mode .delete-account-btn:hover {
+  background: #991b1b;
+  border-color: #991b1b;
+}
+
 /* Dark mode - create listing btn in dark mode override */
 body.dark-mode .section-actions .create-listing-btn.always-visible,
 body.dark-mode .section-actions .create-listing-btn.always-visible:visited {

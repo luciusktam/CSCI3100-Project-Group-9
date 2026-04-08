@@ -58,9 +58,10 @@
       <% if user_signed_in? %>
         <%= link_to "Self Listings", listings_path(user_id: current_user.id), class: "community-btn secondary" %>
         <%= link_to "All Listings", listings_path, class: "community-btn secondary" %>
+        <%= link_to "Create a Listing", sell_path, class: "create-listing-btn" %>
+      <% else %>
+        <%= link_to "Create a Listing", login_path, class: "create-listing-btn always-visible", data: { turbo: false } %>
       <% end %>
-
-      <%= link_to "Create a Listing", sell_path, class: "create-listing-btn always-visible" %>
     </div>
   </div>
 
