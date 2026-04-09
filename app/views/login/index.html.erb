@@ -17,9 +17,8 @@
             <%= button_to "Resend verification email", resend_verification_email_path, method: :post, params: { email: @unverified_email }, class: "search-btn resend-verify-btn" %>
           </div>
         <% end %>
-        <%= form_with url: login_path, method: :post, local: true, class: "auth-form" do |form| %>
+        <%= form_with url: login_path, method: :post, local: true, html: { class: "auth-form" } do |form| %>
           <div class="field-group">
-            <%= form.label :email, "Email" %>
             <%= form.email_field :email, name: :email, placeholder: "yourname@link.cuhk.edu.hk", value: @prefill_email || params[:email], required: true %>
           </div>
 
@@ -28,7 +27,9 @@
             <%= form.password_field :password, name: :password, required: true %>
           </div>
 
-          <%= form.submit "Login", class: "search-btn auth-submit" %>
+          <div class="field-group">
+            <%= form.submit "Login", class: "search-btn auth-submit" %>
+          </div>
         <% end %>
         <p class="auth-switch"><%= link_to "Forgot password?", forgot_password_path, class: "auth-inline-link" %></p>
 

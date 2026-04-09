@@ -1335,9 +1335,17 @@ input:checked + .slider:before {
   justify-content: center;
 }
 
+.auth-card > h2 {
+  margin-bottom: var(--space-lg);
+}
+
 .auth-form {
   display: grid;
-  gap: 1rem;
+  gap: 1.25rem;
+}
+
+.auth-form .auth-submit {
+  margin-top: 0.5rem;
 }
 
 .field-group {

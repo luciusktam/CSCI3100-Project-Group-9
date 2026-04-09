@@ -25,7 +25,6 @@
 
         <%= form_with model: @user, url: users_path, local: true, class: "auth-form" do |form| %>
           <div class="field-group">
-            <%= form.label :email, "CUHK Email" %>
             <%= form.email_field :email, placeholder: "yourname@link.cuhk.edu.hk", required: true %>
           </div>
 
@@ -45,7 +44,9 @@
             <%= form.password_field :password_confirmation, required: true %>
           </div>
 
-          <%= form.submit "Create account", class: "search-btn auth-submit" %>
+          <div class="field-group">
+            <%= form.submit "Create account", class: "search-btn auth-submit" %>
+          </div>
         <% end %>
 
         <p class="auth-switch">Already registered? <%= link_to "Click here to login", login_path, class: "auth-inline-link" %></p>
