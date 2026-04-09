@@ -107,5 +107,6 @@ git clone https://github.com/CSCI3100-Project-Group-9/CSCI3100-Project-Group-9.g
 cd CSCI3100-Project-Group-9
 bundle install
 bin/rails db:create db:migrate
+redis-server
 bin/rails server
 
