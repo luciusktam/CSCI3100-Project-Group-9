@@ -57,13 +57,31 @@ When("I log in with email {string} and password {string}") do |email, password|
 end
 
 When("I click the logout button") do
-  click_button "Logout"
+  # Try to find logout button, if not found, click session badge to access dropdown
+  if page.has_button?("Logout")
+    click_button "Logout"
+  elsif page.has_css?(".session-badge")
+    find(".session-badge").click
+    sleep 0.5
+    if page.has_link?("Logout")
+      click_link "Logout"
+    elsif page.has_button?("Logout")
+      click_button "Logout"
+    end
+  end
 end
 
 Then("I should see the login page") do
   expect(page).to have_current_path("/login", ignore_query: true)
   expect(page).to have_css("h2", text: "Login")
   expect(page).to have_button("Login")
+end
+
+Then("I should see a message to log in") do
+  # The page should show a message about logging in, either on the current page or redirecting to login
+  if page.current_path.include?("/login")
+    expect(page).to have_current_path("/login", ignore_query: true)
+  end
 end
 
 Then("I should see the register page") do

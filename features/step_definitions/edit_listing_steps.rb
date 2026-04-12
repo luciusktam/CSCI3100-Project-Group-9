@@ -1,6 +1,19 @@
 
 Given("I am logged in as a different user") do
-  click_button "Logout"
+  # Logout first - try to find logout button or session badge
+  if page.has_button?("Logout")
+    click_button "Logout"
+  elsif page.has_css?(".session-badge")
+    find(".session-badge").click
+    sleep 0.5
+    if page.has_link?("Logout")
+      click_link "Logout"
+    elsif page.has_button?("Logout")
+      click_button "Logout"
+    end
+  end
+  sleep 0.5
+
   @user = User.create!(
     username: "testuser2",
     email: "test2@link.cuhk.edu.hk",

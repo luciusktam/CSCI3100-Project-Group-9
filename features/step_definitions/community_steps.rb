@@ -92,6 +92,10 @@ When('I press the community search button') do
   click_button 'Search'
 end
 
+When('I follow the community link {string}') do |link_text|
+  click_link link_text
+end
+
 
 When('I fill in the community field {string} with {string}') do |field, value|
   fill_in field, with: value

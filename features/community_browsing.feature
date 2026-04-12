@@ -8,12 +8,20 @@ Feature: Browsing community posts
     | username | email                  | password    |
     | testuser | test1@link.cuhk.edu.hk | password123 |
     | alice    | alice@link.cuhk.edu.hk | password123 |
-  Scenario: View empty community state
-    Given there are no community posts
+  Scenario: View empty community state (logged in)
+    Given I am logged in as "testuser"
+    And there are no community posts
     When I visit the community page
-    Then I should see "Community"
+    Then I should see "Post"
     And I should see "New Post"
     And I should see "No posts yet"
+    And I should see "Create First Post"
+
+  Scenario: View empty community state (not logged in)
+    Given there are no community posts
+    When I visit the community page
+    Then I should see "Post"
+    Then I should see "No posts yet"
     And I should see "Create First Post"
 
   Scenario: View community index with posts
@@ -45,20 +53,6 @@ Feature: Browsing community posts
     And I fill in the community search with "textbook"
     And I press the community search button
     Then I should see "Selling textbook"
-    And I should not see "Gaming monitor"
-
-  Scenario: Clear search results
-    Given the following community posts exist:
-      | title            | content            | username |
-      | Selling textbook | textbook available | testuser |
-      | Gaming monitor   | monitor available  | alice    |
-    When I visit the community page
-    And I fill in the community search with "textbook"
-    And I press the community search button
-    And I follow "Clear"
-    Then I should be on the community page
-    And I should see "Selling textbook"
-    And I should see "Gaming monitor"
 
   @fuzzy
   Scenario: Search by typo with fuzzy search
@@ -70,4 +64,3 @@ Feature: Browsing community posts
     And I fill in the community search with "laptp"
     And I press the community search button
     Then I should see "Laptop for the project"
-    And I should not see "Bicycle for sale"

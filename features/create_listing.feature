@@ -8,7 +8,7 @@ Feature: create listing items
 
     Scenario: A visitor tries to sell item
         Given I am not logged in
-        When I click on the sell button
+        When I visit the sell page directly
         Then I should see the login page
         And I should see "Please log in before listing items for sale"
 
@@ -33,4 +33,3 @@ Feature: create listing items
         And I should stay on the sell page
 
 
-    

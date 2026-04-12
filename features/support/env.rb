@@ -19,6 +19,8 @@ end
 
 # Isolate scenario state to avoid cross-scenario data and mail/job leakage.
 Before do
+  CommunityPost.delete_all
+  Comment.delete_all
   Message.destroy_all
   Conversation.destroy_all
   Listing.delete_all

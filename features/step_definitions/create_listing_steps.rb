@@ -7,7 +7,12 @@ Given("I am on the listings page") do
 end
 
 When("I click on the sell button") do
-    click_link "Sell"
+    # Sell button is now "Post Items" in the section-header
+    click_link "Post Items"
+end
+
+When("I visit the sell page directly") do
+    visit sell_path
 end
 
 Then("I should see 'Please log in before listing items for sale'") do

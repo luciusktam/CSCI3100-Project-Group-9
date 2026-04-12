@@ -11,6 +11,10 @@ Given(/the following users exist to chat/) do |users_table|
     end
 end
 
+When("I visit the chat page directly") do
+  visit chat_path
+end
+
 Given(/the following listings exist chat/) do |listings_table|
     listings_table.hashes.each do |listing|
         Listing.create!(
@@ -65,7 +69,15 @@ Then("the messages area should be empty") do
 end
 
 When("I click the {string} button") do |button_text|
-  click_link_or_button(button_text)
+  case button_text
+  when "Chat with seller"
+    click_link_or_button(button_text)
+  when "Chat"
+    # Click the chat icon button
+    find(".nav-chat-btn").click
+  else
+    click_link_or_button(button_text)
+  end
 end
 
 When("I type {string} in the message input") do |message|
@@ -163,7 +175,16 @@ Given("I send a message {string}") do |message|
 end
 
 When("I logout") do
-  click_button "Logout"
+  # Click on the user session badge to access logout
+  if page.has_css?(".session-badge")
+    find(".session-badge").click
+    sleep 0.5
+  end
+  if page.has_link?("Logout")
+    click_link "Logout"
+  elsif page.has_button?("Logout")
+    click_button "Logout"
+  end
   sleep 1
 end
 

@@ -58,6 +58,17 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 
+  # Global before hook to clean up dependent records before tests
+  config.before(:each) do
+    # Clean up in reverse dependency order to avoid foreign key constraint violations
+    CommunityPost.delete_all
+    Comment.delete_all
+    Message.delete_all
+    Conversation.delete_all
+    Listing.delete_all
+    User.delete_all
+  end
+
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
 

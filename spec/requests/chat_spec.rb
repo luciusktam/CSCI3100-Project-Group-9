@@ -3,11 +3,12 @@ require 'rails_helper'
 RSpec.describe "Chat", type: :request do
 
   before(:each) do
-    # Delete messages first (due to foreign key constraints)
+    # Delete dependent records first (due to foreign key constraints)
+    CommunityPost.delete_all
+    Comment.delete_all
     Message.delete_all
-    # Then delete conversations
     Conversation.delete_all
-    # Finally delete users
+    Listing.delete_all
     User.delete_all
   end
 

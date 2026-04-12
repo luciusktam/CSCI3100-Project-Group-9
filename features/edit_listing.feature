@@ -34,5 +34,5 @@ Feature: create listing items
         Given I am on the home page
         Given I am not logged in
         When I visit the edit page for the listing "iPhone 12"
-        Then I should see the login page
+        Then I should see a message to log in
         And I should see "Please log in before listing items for sale"

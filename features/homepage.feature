@@ -6,14 +6,20 @@ Feature: Homepage
   Background:
     Given I am on the home page
 
-  Scenario: View homepage layout and navigation elements
+  Scenario: View homepage layout for logged in user
+    Given I am logged in
     Then I should see the app logo "CUMarket"
     And I should see navigation links for:
       | Community |
       | Chat      |
       | Sell      |
       | Profile   |
+    And I should see my username in the session badge
+
+  Scenario: View homepage layout for visitors
+    Then I should see the app logo "CUMarket"
     And I should see a login button in the top right corner
+    And I should see the community button
 
   Scenario: Navigate to community page from homepage
     Given I am logged in

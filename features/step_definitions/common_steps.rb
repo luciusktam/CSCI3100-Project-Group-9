@@ -1,5 +1,28 @@
 Given("I am not logged in") do
-  click_button "Logout" if page.has_button?("Logout")
+  # First try to visit a page to ensure we have a page context
+  visit root_path
+  sleep 0.5
+
+  # Try multiple ways to logout
+  if page.has_button?("Logout")
+    click_button "Logout"
+  elsif page.has_link?("Logout")
+    click_link "Logout"
+  elsif page.has_css?(".session-badge")
+    # Click on the session badge to access dropdown
+    find(".session-badge").click
+    sleep 0.5
+    if page.has_link?("Logout")
+      click_link "Logout"
+    elsif page.has_button?("Logout")
+      click_button "Logout"
+    end
+  end
+
+  # Clear any session data
+  Capybara.reset_sessions!
+  visit root_path
+  sleep 0.5
 end
 
 Given("I am logged in") do
@@ -26,7 +49,6 @@ Given("I have a listing") do
   select "Like New", from: "Condition"
   fill_in "Location", with: "S.H. Ho College"
   fill_in "Description", with: "A like new iPhone 12 for sale!"
-
 
   files = []
   count = 2
