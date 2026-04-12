@@ -81,20 +81,22 @@
           <%= f.label :photos, "Images (8 images maximum)", class: "form-label" %>
           
           <div class="upload-container">
-          
-            <%= f.file_field :photos, 
-                             multiple: true, 
-                             accept: "image/*", 
+
+            <div class="preview-grid-wrapper">
+              <div class="preview-grid" id="preview-grid"></div>
+
+              <div class="upload-area" id="upload-area">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>click to upload images</p>
+                <small>maximum 8 photos (uploaded <span id="photo-count">0</span>/8)</small>
+              </div>
+            </div>
+
+            <%= f.file_field :photos,
+                             multiple: true,
+                             accept: "image/*",
                              class: "file-input-hidden",
                              id: "photo-upload" %>
-            
-            <div class="preview-grid" id="preview-grid"></div>
-            
-            <div class="upload-area" id="upload-area">
-              <i class="fas fa-cloud-upload-alt"></i>
-              <p>click to upload images</p>
-              <small>maximum 8 photos (uploaded <span id="photo-count">0</span>/8)</small>
-            </div>
           </div>
           <% if @listing.errors[:photos].any? %>
             <span class="error-message"><%= @listing.errors[:photos].first %></span>

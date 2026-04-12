@@ -82,14 +82,9 @@
           <%= f.label :photos, "Images (8 images maximum)", class: "form-label" %>
           
           <div class="upload-container">
-          
-            <%= f.file_field :photos, 
-                             multiple: true, 
-                             accept: "image/*", 
-                             class: "file-input-hidden",
-                             id: "photo-upload" %>
-            
-            <div class="preview-grid" id="preview-grid">
+
+            <div class="preview-grid-wrapper">
+              <div class="preview-grid" id="preview-grid">
               <% if @listing.photos.attached? %>
                 <% @listing.photos.select(&:persisted?).each do |photo| %>
                   <div class="preview-item existing-photo" data-photo-id="<%= photo.id %>" data-existing="true">
@@ -100,15 +95,22 @@
                   </div>
                 <% end %>
               <% end %>
+              </div>
+
+              <div class="upload-area" id="upload-area">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>click to add more images</p>
+                <small>maximum 8 photos (uploaded <span id="photo-count"><%= @listing.photos.count %></span>/8)</small>
+              </div>
             </div>
-            
+
             <%= hidden_field_tag :remove_photos, "", id: "remove-photos" %>
-            
-            <div class="upload-area" id="upload-area">
-              <i class="fas fa-cloud-upload-alt"></i>
-              <p>click to add more images</p>
-              <small>maximum 8 photos (uploaded <span id="photo-count"><%= @listing.photos.count %></span>/8)</small>
-            </div>
+
+            <%= f.file_field :photos,
+                             multiple: true,
+                             accept: "image/*",
+                             class: "file-input-hidden",
+                             id: "photo-upload" %>
           </div>
           <p class="form-help-text">You can upload up to 8 images. Click the × button to remove existing images.</p>
         </div>
