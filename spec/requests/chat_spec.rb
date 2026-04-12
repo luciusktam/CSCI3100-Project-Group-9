@@ -218,7 +218,7 @@ RSpec.describe "Chat", type: :request do
         content: "Unread message",
         read: false
       )
-      
+
       get chat_path
       expect(response.body).to include("unread-badge")
     end
@@ -231,9 +231,85 @@ RSpec.describe "Chat", type: :request do
         content: "Read message",
         read: true
       )
-      
+
       get chat_path
       expect(response.body).not_to include("unread-badge")
+    end
+  end
+
+  describe "GET /chat/unread_counts" do
+    it "returns empty counts when no unread messages" do
+      get chat_unread_counts_path
+      expect(response).to be_successful
+      json = JSON.parse(response.body)
+      expect(json["unread_counts"]).to be_empty
+    end
+
+    it "returns unread counts for conversations with unread messages" do
+      conversation = Conversation.create!(user1: buyer, user2: seller)
+      Message.create!(
+        conversation: conversation,
+        user: seller,
+        content: "Unread message 1",
+        read: false
+      )
+      Message.create!(
+        conversation: conversation,
+        user: seller,
+        content: "Unread message 2",
+        read: false
+      )
+
+      get chat_unread_counts_path
+      expect(response).to be_successful
+      json = JSON.parse(response.body)
+      expect(json["unread_counts"][seller.id.to_s]).to eq(2)
+    end
+
+    it "does not count own messages as unread" do
+      conversation = Conversation.create!(user1: buyer, user2: seller)
+      Message.create!(
+        conversation: conversation,
+        user: buyer,
+        content: "My message",
+        read: false
+      )
+
+      get chat_unread_counts_path
+      expect(response).to be_successful
+      json = JSON.parse(response.body)
+      expect(json["unread_counts"][seller.id.to_s]).to be_nil
+    end
+  end
+
+  describe "POST /chat/update_unread_count" do
+    let(:conversation) { Conversation.create!(user1: buyer, user2: seller) }
+
+    it "marks messages as read for a conversation" do
+      message = Message.create!(
+        conversation: conversation,
+        user: seller,
+        content: "Unread message",
+        read: false
+      )
+
+      expect(message.read).to be false
+
+      post chat_update_unread_count_path, params: { user_id: seller.id }
+      expect(response).to be_successful
+      json = JSON.parse(response.body)
+      expect(json["success"]).to be true
+
+      message.reload
+      expect(message.read).to be true
+    end
+
+    it "returns zero when no unread messages" do
+      post chat_update_unread_count_path, params: { user_id: seller.id }
+      expect(response).to be_successful
+      json = JSON.parse(response.body)
+      expect(json["success"]).to be true
+      expect(json["updated_count"]).to eq(0)
     end
   end
 end

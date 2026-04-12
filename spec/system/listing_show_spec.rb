@@ -1,6 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe "ListingShowPage", type: :system do
+  # System tests require Chrome/ChromeDriver to be installed and accessible.
+  # These tests are skipped in CI/headless environments where Chrome is not available.
+  # Run with `rspec spec/system/listing_show_spec.rb --tag ~skip_in_ci` to include.
+  before(:all) do
+    @chrome_available = system("which google-chrome-stable > /dev/null 2>&1 || which google-chrome > /dev/null 2>&1 || which chromium > /dev/null 2>&1 || which chromium-browser > /dev/null 2>&1")
+  end
+
+  before do
+    skip "Chrome not available in this environment" unless @chrome_available
+  end
+
   let(:user_email) { "user_#{SecureRandom.hex(4)}@link.cuhk.edu.hk" }
 
   let!(:user) do
@@ -99,15 +110,15 @@ RSpec.describe "ListingShowPage", type: :system do
       listing = create_listing_with_multiple_photos
       visit listing_path(listing)
 
-
       find('.nav-btn.next').click
-      sleep 0.2
+      sleep 0.3
 
       track = find('.image-track')
       initial_scroll = evaluate_script("arguments[0].scrollLeft", track)
 
       find('.nav-btn.prev').click
-      sleep 0.2
+      sleep 0.3
+      page.evaluate_script("arguments[0].scrollLeft", track)
 
       new_scroll = evaluate_script("arguments[0].scrollLeft", track)
       expect(new_scroll).to be < initial_scroll

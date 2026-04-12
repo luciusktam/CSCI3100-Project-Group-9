@@ -19,8 +19,8 @@ Given('I am logged in as {string}') do |username|
   user = User.find_by!(username: username)
 
   visit login_path
-  fill_in 'Email', with: user.email
-  fill_in 'Password', with: 'password123'
+  fill_in 'yourname@link.cuhk.edu.hk', with: user.email
+  fill_in 'password', with: 'password123'
   click_button 'Login'
 end
 

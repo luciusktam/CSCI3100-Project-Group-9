@@ -215,6 +215,89 @@ RSpec.describe Listing, type: :model do
     end
   end
 
+  describe "search_by_keyword (pg_search trigram)" do
+    def create_test_listing_with_photo(title:, description:, location:, category:)
+      listing = described_class.new(
+        title: title,
+        description: description,
+        location: location,
+        price: 100,
+        category: category,
+        condition: "Good",
+        user: user,
+        status: "available"
+      )
+      listing.photos.attach(
+        io: File.open(Rails.root.join("spec/fixtures/files/test_image.jpg")),
+        filename: "test_image.jpg",
+        content_type: "image/jpeg"
+      )
+      listing.save!
+      listing
+    end
+
+    let!(:post1) { create_test_listing_with_photo(
+      title: "Mechanical Keyboard",
+      description: "Cherry MX Brown switches",
+      location: "Sha Tin",
+      category: "Electronics"
+    ) }
+
+    let!(:post2) { create_test_listing_with_photo(
+      title: "Python Textbook",
+      description: "Introduction to programming",
+      location: "Campus",
+      category: "Textbooks"
+    ) }
+
+    let!(:post3) { create_test_listing_with_photo(
+      title: "Gaming Mouse",
+      description: "Logitech wireless mouse",
+      location: "Ma On Shan",
+      category: "Electronics"
+    ) }
+
+    it "matches by title" do
+      results = described_class.search_by_keyword("keyboard")
+      expect(results).to include(post1)
+    end
+
+    it "matches by description" do
+      results = described_class.search_by_keyword("switches")
+      expect(results).to include(post1)
+    end
+
+    it "matches by location" do
+      results = described_class.search_by_keyword("Sha Tin")
+      expect(results).to include(post1)
+    end
+
+    it "does not match unrelated terms" do
+      results = described_class.search_by_keyword("nonexistent_xyz_123")
+      expect(results).to be_empty
+    end
+  end
+
+  describe "#photos_must_be_attached" do
+    let(:listing_without_photo) do
+      described_class.new(
+        title: "No Photo Item",
+        price: 50,
+        category: "Electronics",
+        condition: "Good",
+        location: "Campus",
+        description: "Test",
+        user: user,
+        status: "available"
+      )
+    end
+
+    it "adds error when photos are not attached" do
+      listing_without_photo.valid?
+      expect(listing_without_photo.errors[:photos]).to include("must be attached")
+    end
+  end
+
   describe "database columns" do
     it "has the expected database columns" do
       expected_columns = %w[id title price condition description location category user_id created_at updated_at]

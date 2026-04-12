@@ -20,7 +20,7 @@ Feature: Buyer-Seller Chat
       Given I am not logged in
       When I click the "Chat" page button
       Then I should see the login page
-      And I should see "Please log in before listing items for sale"
+      And I should see "Please log in before accessing the chat"
 
     Scenario: Buyer sees empty chat page when no conversations exist
       When I click the "Chat" page button

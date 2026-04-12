@@ -21,6 +21,11 @@ Then("I should see listing titles, prices, and images") do
   expect(page).to have_css(".listing-card-image, .listing-image-placeholder", minimum: 1)
 end
 
+Then("I should see 20 listings per page with pagination") do
+  expect(page).to have_css(".listing-card", count: 20)
+  expect(page).to have_css(".pagination")
+end
+
 When("I click 'view all'") do
   click_link "view all"
 end

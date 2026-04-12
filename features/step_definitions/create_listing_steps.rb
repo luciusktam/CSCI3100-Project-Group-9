@@ -2,6 +2,10 @@ Given("I am on the sell page") do
   visit sell_path
 end
 
+Given("I am on the listings page") do
+  visit listings_path
+end
+
 When("I click on the sell button") do
     click_link "Sell"
 end

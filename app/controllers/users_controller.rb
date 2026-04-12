@@ -21,7 +21,7 @@ class UsersController < ApplicationController
     user = User.find_by(verification_token: params[:token])
 
     if user && !user.email_verified?
-      user.update!(email_verified: true, verified_at: Time.current)
+      user.update!(email_verified: true, verified_at: Time.current, verification_token: nil)
       redirect_to login_path, notice: "Email verified! You can now log in."
     elsif user&.email_verified?
       redirect_to login_path, notice: "Email already verified."

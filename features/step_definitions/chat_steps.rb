@@ -31,8 +31,8 @@ end
 Given(/I am logged in as a buyer/) do
     buyer = User.find_by(username: 'buyer')
     visit login_path
-    fill_in 'Email', with: 'buyer@link.cuhk.edu.hk'
-    fill_in 'Password', with: 'password'
+    fill_in 'yourname@link.cuhk.edu.hk', with: 'buyer@link.cuhk.edu.hk'
+    fill_in 'password', with: 'password'
     click_button 'Login'
 end
 
@@ -169,9 +169,9 @@ end
 
 When("I login as {string} with password {string}") do |email, password|
   visit login_path
-  fill_in "Email", with: email
-  fill_in "Password", with: password
-  click_button "Login"
+  fill_in 'yourname@link.cuhk.edu.hk', with: email
+  fill_in 'password', with: password
+  click_button 'Login'
   sleep 1
 end
 
