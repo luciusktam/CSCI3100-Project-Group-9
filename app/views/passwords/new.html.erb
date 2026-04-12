@@ -19,7 +19,7 @@
         <%= form_with url: forgot_password_path, method: :post, local: true, class: "auth-form" do |form| %>
           <div class="field-group">
             <%= form.label :email, "CUHK Email" %>
-            <%= form.email_field :email, name: :email, placeholder: "yourname@link.cuhk.edu.hk", required: true %>
+            <%= form.email_field :email, name: :email, placeholder: "sid@link.cuhk.edu.hk", required: true %>
           </div>
 
           <%= form.submit "Send reset link", class: "search-btn auth-submit" %>

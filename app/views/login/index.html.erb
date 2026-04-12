@@ -19,7 +19,7 @@
         <% end %>
         <%= form_with url: login_path, method: :post, local: true, html: { class: "auth-form" } do |form| %>
           <div class="field-group">
-            <%= form.email_field :email, name: :email, placeholder: "yourname@link.cuhk.edu.hk", value: @prefill_email || params[:email], required: true %>
+            <%= form.email_field :email, name: :email, placeholder: "sid@link.cuhk.edu.hk", value: @prefill_email || params[:email], required: true %>
           </div>
 
           <div class="field-group">
