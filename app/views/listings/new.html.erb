@@ -17,6 +17,11 @@
             <%= link_to sell_path do %>
                 <i class="fas fa-euro-sign"></i> Sell
             <% end %>
+            <% if user_signed_in? && current_user.admin? %>
+                <%= link_to admin_dashboard_path do %>
+                    <i class="fas fa-shield-alt"></i> Admin
+                <% end %>
+            <% end %>
             <%= link_to profile_path do %>
                 <i class="fas fa-user-circle"></i> Profile
             <% end %>
@@ -170,20 +175,16 @@
 
 <!--JavaScript -->
 <script>
-
   (function() {
-    let imageUploaderInitialized = false;
-
     function initImageUploader() {
       const fileInput = document.getElementById('photo-upload');
       const uploadArea = document.getElementById('upload-area');
       const previewGrid = document.getElementById('preview-grid');
       const photoCountSpan = document.getElementById('photo-count');
 
-
       if (!fileInput || !uploadArea || !previewGrid || !photoCountSpan) return;
-
-      imageUploaderInitialized = true;
+      if (uploadArea.dataset.initialized) return;
+      uploadArea.dataset.initialized = 'true';
 
       let currentFiles = [];
       const MAX_PHOTOS = 8;
@@ -192,12 +193,6 @@
       currentFiles = [];
       previewGrid.innerHTML = '';
       photoCountSpan.textContent = '0';
-
-      const newFileInput = fileInput.cloneNode(true);
-      fileInput.parentNode.replaceChild(newFileInput, fileInput);
-
-      const newUploadArea = uploadArea.cloneNode(true);
-      uploadArea.parentNode.replaceChild(newUploadArea, uploadArea);
 
       function updatePhotoCount() {
         photoCountSpan.textContent = currentFiles.length;
@@ -275,24 +270,6 @@
     }
 
 
-    document.addEventListener('turbo:load', function() {
-      initImageUploader();
-    });
-    
-    document.addEventListener('turbolinks:load', function() {
-      initImageUploader();
-    });
-    
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initImageUploader);
-    } else {
-      initImageUploader();
-    }
-    
-    window.addEventListener('pageshow', function(event) {
-      if (event.persisted) {
-        initImageUploader();
-      }
-    });
+    document.addEventListener('DOMContentLoaded', initImageUploader);
   })();
 </script>

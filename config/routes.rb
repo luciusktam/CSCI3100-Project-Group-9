@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  # Root path - homepage
-  root "home#index"
+  # Root path - listings page
+  root "listings#index"
 
   # Basic pages
   get "profile", to: "profile#index"
@@ -41,4 +41,14 @@ Rails.application.routes.draw do
   end
 
   get "/community", to: "community_posts#index", as: :community
+
+  # Admin routes
+  namespace :admin do
+    get "dashboard", to: "dashboard#index"
+    post "users/:id/ban", to: "dashboard#ban_user", as: :ban_user
+    post "users/:id/unban", to: "dashboard#unban_user", as: :unban_user
+    delete "users/:id", to: "dashboard#delete_user", as: :delete_user
+    delete "listings/:id", to: "dashboard#delete_listing", as: :delete_listing
+    delete "posts/:id", to: "dashboard#delete_post", as: :delete_post
+  end
 end

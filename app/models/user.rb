@@ -51,7 +51,17 @@ class User < ApplicationRecord
     Conversation.where("user1_id = ? OR user2_id = ?", id, id).order(updated_at: :desc)
   end
   
-  private
+  def banned_until
+    self[:banned_until]
+  end
+
+  def banned?
+    banned_until.present? && banned_until > Time.current
+  end
+
+  def suspended?
+    banned?
+  end
 
   def normalize_email
     self.email = email.to_s.strip.downcase

@@ -1,0 +1,253 @@
+<div class="app listings-page">
+  <header class="navbar">
+    <%= link_to root_path, class: "logo" do %>
+      CUMarket
+    <% end %>
+
+    <div class="nav-links">
+      <%= link_to listings_path do %>
+        <i class="fas fa-store"></i> Market
+      <% end %>
+      <%= link_to community_path do %>
+        <i class="fas fa-users"></i> Community
+      <% end %>
+      <%= link_to chat_path, id: "navChatLink", class: "nav-chat-link" do %>
+        <i class="fas fa-comment-dots"></i> Chat
+        <span id="chatNavBadge" class="nav-badge" style="display: none;">0</span>
+      <% end %>
+      <%= link_to sell_path do %>
+        <i class="fas fa-euro-sign"></i> Sell
+      <% end %>
+      <% if current_user.admin? %>
+        <%= link_to admin_dashboard_path do %>
+          <i class="fas fa-shield-alt"></i> Admin
+        <% end %>
+      <% end %>
+      <%= link_to profile_path do %>
+        <i class="fas fa-user-circle"></i> Profile
+      <% end %>
+    </div>
+
+    <div class="right-corner">
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+        <i class="fas fa-moon"></i>
+        <span>Dark</span>
+      </button>
+
+      <% if user_signed_in? %>
+        <span class="session-badge">
+          <i class="fas fa-user-check"></i>
+          <%= current_user.username %>
+          <% if current_user.admin? %>
+            <strong>Admin</strong>
+          <% end %>
+        </span>
+
+        <%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
+          <i class="fas fa-sign-out-alt"></i> Logout
+        <% end %>
+      <% else %>
+        <%= link_to login_path, class: "login-btn" do %>
+          <i class="fas fa-sign-in-alt"></i> Login
+        <% end %>
+      <% end %>
+    </div>
+  </header>
+
+  <div class="admin-dashboard">
+    <div class="section-header">
+      <h1><i class="fas fa-cog"></i> Admin Dashboard</h1>
+    </div>
+
+    <div class="admin-stats">
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #ede9fe; color: #5b2c83;">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-number"><%= @total_users %></span>
+          <span class="stat-label">Total Users</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #dcfce7; color: #16a34a;">
+          <i class="fas fa-user-check"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-number"><%= @verified_users %></span>
+          <span class="stat-label">Verified Users</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #fef3c7; color: #d97706;">
+          <i class="fas fa-crown"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-number"><%= @admin_users %></span>
+          <span class="stat-label">Admins</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #fce7f3; color: #be185d;">
+          <i class="fas fa-store"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-number"><%= @total_listings %></span>
+          <span class="stat-label">Total Listings</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #e0f2fe; color: #0369a1;">
+          <i class="fas fa-comments"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-number"><%= @total_posts %></span>
+          <span class="stat-label">Community Posts</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-tables">
+      <section class="admin-section">
+        <div class="admin-section-header">
+          <h2>Recent Users</h2>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Username</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Verified</th>
+              <th>Joined</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @recent_users.each do |user| %>
+              <tr>
+                <td><%= user.email %></td>
+                <td><%= user.username %></td>
+                <td>
+                  <% if user.admin? %>
+                    <span class="badge badge-admin">Admin</span>
+                  <% else %>
+                    <span class="badge badge-user">User</span>
+                  <% end %>
+                </td>
+                <td>
+                  <% if user.banned? %>
+                    <span class="badge badge-banned">Banned</span>
+                  <% else %>
+                    <span class="badge badge-status badge-available">Active</span>
+                  <% end %>
+                </td>
+                <td>
+                  <% if user.email_verified? %>
+                    <span class="badge badge-verified"><i class="fas fa-check"></i></span>
+                  <% else %>
+                    <span class="badge badge-unverified"><i class="fas fa-times"></i></span>
+                  <% end %>
+                </td>
+                <td><%= user.created_at.strftime("%Y-%m-%d") %></td>
+                <td class="action-cell">
+                  <% unless user.admin? %>
+                    <% if user.banned? %>
+                      <%= button_to "Unban", admin_unban_user_path(user), method: :post, class: "action-btn action-btn-unban", data: { confirm: "Unban this user?" } %>
+                    <% else %>
+                      <div class="action-group">
+                        <%= form_with(url: admin_ban_user_path(user), method: :post, local: true) do %>
+                          <select name="duration" class="ban-duration-select">
+                            <option value="1">1 day</option>
+                            <option value="7">7 days</option>
+                            <option value="30">30 days</option>
+                            <option value="permanent">Permanent</option>
+                          </select>
+                          <%= submit_tag "Ban", class: "action-btn action-btn-ban", data: { confirm: "Ban this user?" } %>
+                        <% end %>
+                      </div>
+                    <% end %>
+                    <%= button_to "Delete", admin_delete_user_path(user), method: :delete, class: "action-btn action-btn-delete", data: { confirm: "Permanently delete this user? This cannot be undone." } %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="admin-section">
+        <div class="admin-section-header">
+          <h2>Recent Listings</h2>
+          <%= link_to "View All Listings", listings_path, class: "view-all-link" %>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Status</th>
+              <th>Seller</th>
+              <th>Posted</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @recent_listings.each do |listing| %>
+              <tr>
+                <td><%= listing.title %></td>
+                <td><%= listing.category || "N/A" %></td>
+                <td><%= number_to_currency(listing.price, unit: "HK$") %></td>
+                <td>
+                  <span class="badge badge-status badge-<%= listing.status %>">
+                    <%= listing.status.capitalize %>
+                  </span>
+                </td>
+                <td><%= listing.user&.username || "Unknown" %></td>
+                <td><%= listing.created_at.strftime("%Y-%m-%d") %></td>
+                <td class="action-cell">
+                  <%= button_to "Delete", admin_delete_listing_path(listing), method: :delete, class: "action-btn action-btn-delete", data: { confirm: "Delete this listing?" } %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="admin-section">
+        <div class="admin-section-header">
+          <h2>Recent Community Posts</h2>
+          <%= link_to "View All Posts", community_path, class: "view-all-link" %>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Posted</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @recent_posts.each do |post| %>
+              <tr>
+                <td><%= truncate(post.title, length: 40) %></td>
+                <td><%= post.user&.username || "Unknown" %></td>
+                <td><%= post.created_at.strftime("%Y-%m-%d") %></td>
+                <td class="action-cell">
+                  <%= button_to "Delete", admin_delete_post_path(post), method: :delete, class: "action-btn action-btn-delete", data: { confirm: "Delete this post?" } %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+</div>

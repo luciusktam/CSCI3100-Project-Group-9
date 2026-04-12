@@ -18,7 +18,14 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
-    return if user_signed_in?
+    return if user_signed_in? && !current_user.banned?
+
+    if current_user&.banned?
+      reset_session
+      flash[:alert] = "Your account has been suspended. Please contact an administrator."
+      redirect_to login_path, status: :see_other
+      return
+    end
 
     flash[:alert] = "Please log in before listing items for sale"
     redirect_to login_path, status: :see_other

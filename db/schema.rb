@@ -104,6 +104,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_02_154849) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.datetime "banned_until"
     t.datetime "created_at", null: false
     t.string "email", null: false
     t.boolean "email_verified", default: false, null: false

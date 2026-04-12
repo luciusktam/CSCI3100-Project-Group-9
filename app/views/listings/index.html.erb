@@ -18,6 +18,11 @@
       <%= link_to sell_path do %>
         <i class="fas fa-euro-sign"></i> Sell
       <% end %>
+      <% if user_signed_in? && current_user.admin? %>
+        <%= link_to admin_dashboard_path do %>
+          <i class="fas fa-shield-alt"></i> Admin
+        <% end %>
+      <% end %>
       <%= link_to profile_path do %>
         <i class="fas fa-user-circle"></i> Profile
       <% end %>
