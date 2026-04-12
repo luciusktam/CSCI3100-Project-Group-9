@@ -1,8 +1,20 @@
-Welcome to CUMarket, <%= @user.username %>!
+═══════════════════════════════════════════════════════
+                    CU MARKET
+              CUHK Campus Marketplace
+═══════════════════════════════════════════════════════
 
-Thank you for registering. Please verify your CUHK email address to activate
-your account by opening the link below:
+Hey <%= @user.username %>, welcome aboard!
 
-  <%= @verify_url %>
+Thank you for joining CUMarket. To get started, please verify
+your CUHK email address by clicking the link below:
 
-If you did not create a CUMarket account, you can safely ignore this email.
+    ► <%= @verify_url %>
+
+This verification link expires in 24 hours.
+
+───────────────────────────────────────────────────────
+If you didn't create a CUMarket account, you can safely
+ignore this email.
+───────────────────────────────────────────────────────
+
+© <%= Time.current.year %> CU Market · CUHK Campus Marketplace

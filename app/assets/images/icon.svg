@@ -1,0 +1,22 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5b2c83"/>
+      <stop offset="100%" style="stop-color:#4b236c"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bgGrad)"/>
+  <!-- Shopping bag body -->
+  <path d="M128 192C128 159.9 153.9 134 186 134H326C358.1 134 384 159.9 384 192V352C384 384.1 358.1 410 326 410H186C153.9 410 128 384.1 128 352V192Z" fill="#f6f4fb"/>
+  <!-- Bag handle -->
+  <path d="M186 134V102C186 83.7 200.7 69 219 69H293C311.3 69 326 83.7 326 102V134" stroke="#b4975a" stroke-width="20" stroke-linecap="round" fill="none"/>
+  <!-- Front pocket -->
+  <rect x="170" y="230" width="172" height="130" rx="16" fill="#5b2c83"/>
+  <!-- Pocket detail lines -->
+  <line x1="200" y1="260" x2="312" y2="260" stroke="#b4975a" stroke-width="8" stroke-linecap="round"/>
+  <line x1="200" y1="295" x2="280" y2="295" stroke="#b4975a" stroke-width="6" stroke-linecap="round"/>
+  <!-- Gold coin accent -->
+  <circle cx="256" cy="330" r="18" fill="#b4975a"/>
+  <text x="256" y="337" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#4b236c" text-anchor="middle">$</text>
+</svg>
