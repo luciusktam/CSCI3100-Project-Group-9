@@ -1,29 +1,19 @@
 <div class="app">
   <header class="navbar">
-    <%= link_to root_path, class: "logo" do %>
-      CUMarket
-    <% end %>
+    <div class="navbar-left">
+      <%= link_to listings_path, class: "nav-market-btn#{' active' if request.path.start_with?('/listings')}", aria: { label: "Market" } do %>
+        <i class="fas fa-store"></i>
+      <% end %>
+      <%= link_to root_path, class: "logo" do %>
+        CUMarket
+      <% end %>
+    </div>
 
     <div class="nav-links">
-      <%= link_to listings_path do %>
-        <i class="fas fa-store"></i> Market
-      <% end %>
-      <%= link_to community_path do %>
-        <i class="fas fa-users"></i> Community
-      <% end %>
-      <%= link_to chat_path do %>
-        <i class="fas fa-comment-dots"></i> Chat
-      <% end %>
-      <%= link_to sell_path do %>
-        <i class="fas fa-euro-sign"></i> Sell
-      <% end %>
       <% if user_signed_in? && current_user.admin? %>
-        <%= link_to admin_dashboard_path do %>
+        <%= link_to admin_dashboard_path, class: "admin-nav-link#{' active' if request.path.start_with?('/admin')}" do %>
           <i class="fas fa-shield-alt"></i> Admin
         <% end %>
-      <% end %>
-      <%= link_to profile_path do %>
-        <i class="fas fa-user-circle"></i> Profile
       <% end %>
     </div>
 
@@ -34,7 +24,7 @@
       </button>
 
       <% if user_signed_in? %>
-        <span class="session-badge">
+        <%= link_to profile_path, class: "session-badge" do %>
           <% if current_user.avatar.attached? %>
             <%= image_tag current_user.avatar, alt: "User icon", class: "session-avatar-image" %>
           <% else %>
@@ -44,10 +34,11 @@
           <% if current_user.admin? %>
             <strong>Admin</strong>
           <% end %>
-        </span>
+        <% end %>
 
-        <%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
-          <i class="fas fa-sign-out-alt"></i> Logout
+        <%= link_to chat_path, class: "nav-chat-btn", "aria-label": "Chat" do %>
+          <i class="fas fa-comment-dots"></i>
+          <span id="chatNavBadge" class="nav-badge" style="display: none;">0</span>
         <% end %>
       <% else %>
         <%= link_to login_path, class: "login-btn" do %>
@@ -57,41 +48,33 @@
     </div>
   </header>
 
-  <section class="listings-header">
-    <div class="community-home-hero-content">
-      <h1>Explore Campus Conversations</h1>
-    </div>
-    <%= form_with url: community_path, method: :get, local: true do %>
-      <div class="search-row">
-        <div class="search-box">
-          <i class="fas fa-search"></i>
-          <%= text_field_tag :query, params[:query], placeholder: "Search posts by title or content..." %>
-        </div>
-
-        <%= submit_tag "Search", class: "search-btn" %>
-
-        <% if params[:query].present? %>
-          <%= link_to "Clear", community_path, class: "community-btn secondary" %>
-        <% end %>
+  <div class="search-section">
+    <div class="search-row">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <%= text_field_tag :query, params[:query], placeholder: "Search posts by title or content..." %>
       </div>
-    <% end %>
-    
-  </section>
 
-  <section class="search-section community-feed-shell">
+      <%= submit_tag "Search", class: "search-btn" %>
+
+      <% if params[:query].present? %>
+        <%= link_to "Clear", community_path, class: "community-btn secondary" %>
+      <% end %>
+    </div>
+  </div>
+
+  <section class="community-feed-shell">
     <div class="community-feed-header">
-      <h2>Community</h2>
+      <h2>Post</h2>
 
       <div class="community-actions">
         <% if user_signed_in? %>
-          <%= link_to "Self Posts", community_path(user_id: current_user.id), class: "community-btn secondary" %>
-          <%= link_to "All Posts", community_path, class: "community-btn secondary" %>
+          <%= link_to "Your Posts", community_path(user_id: current_user.id), class: "community-btn secondary" %>
+          <%= link_to "New Post", new_community_post_path, class: "community-btn primary" %>
         <% end %>
-
-        <%= link_to "New Post", new_community_post_path, class: "create-listing-btn always-visible" %>
       </div>
     </div>
-    
+
     <div class="community-list">
       <% if @community_posts.any? %>
         <% @community_posts.each do |post| %>
@@ -113,8 +96,8 @@
                 <% unless user_signed_in? && current_user == post.user %>
                   <div class="community-user-actions">
                     <%= link_to chat_with_user_path(post.user), class: "community-btn secondary" do %>
-                        <i class="fas fa-comment-dots"></i>
-                        Chat
+                      <i class="fas fa-comment-dots"></i>
+                      Chat
                     <% end %>
 
                     <%= link_to listings_path(user_id: post.user.id), class: "community-btn primary" do %>
@@ -125,17 +108,17 @@
                 <% end %>
               </div>
 
-  <% if current_user == post.user %>
-    <div class="community-actions">
-      <%= link_to "Edit", edit_community_post_path(post), class: "community-btn secondary" %>
-      <%= button_to "Delete",
-            community_post_path(post),
-            method: :delete,
-            data: { turbo_confirm: "Delete this post?" },
-            class: "community-btn danger" %>
-    </div>
-  <% end %>
-</div>
+              <% if current_user == post.user %>
+                <div class="community-actions">
+                  <%= link_to "Edit", edit_community_post_path(post), class: "community-btn secondary" %>
+                  <%= button_to "Delete",
+                        community_post_path(post),
+                        method: :delete,
+                        data: { turbo_confirm: "Delete this post?" },
+                        class: "community-btn danger" %>
+                </div>
+              <% end %>
+            </div>
           </div>
         <% end %>
       <% else %>
@@ -149,4 +132,3 @@
     </div>
   </section>
 </div>
-

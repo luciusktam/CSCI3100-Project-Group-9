@@ -1,30 +1,14 @@
-<div class="app listings-page">
+<div class="app">
   <header class="navbar">
     <%= link_to root_path, class: "logo" do %>
       CUMarket
     <% end %>
 
     <div class="nav-links">
-      <%= link_to listings_path do %>
-        <i class="fas fa-store"></i> Market
-      <% end %>
-      <%= link_to community_path do %>
-        <i class="fas fa-users"></i> Community
-      <% end %>
-      <%= link_to chat_path, id: "navChatLink", class: "nav-chat-link" do %>
-        <i class="fas fa-comment-dots"></i> Chat
-        <span id="chatNavBadge" class="nav-badge" style="display: none;">0</span>
-      <% end %>
-      <%= link_to sell_path do %>
-        <i class="fas fa-euro-sign"></i> Sell
-      <% end %>
       <% if current_user.admin? %>
-        <%= link_to admin_dashboard_path do %>
+        <%= link_to admin_dashboard_path, class: "admin-nav-link#{' active' if request.path.start_with?('/admin')}" do %>
           <i class="fas fa-shield-alt"></i> Admin
         <% end %>
-      <% end %>
-      <%= link_to profile_path do %>
-        <i class="fas fa-user-circle"></i> Profile
       <% end %>
     </div>
 
@@ -42,9 +26,9 @@
             <strong>Admin</strong>
           <% end %>
         </span>
-
-        <%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
-          <i class="fas fa-sign-out-alt"></i> Logout
+        <%= link_to chat_path, class: "nav-chat-btn", "aria-label": "Chat" do %>
+          <i class="fas fa-comment-dots"></i>
+          <span id="chatNavBadge" class="nav-badge" style="display: none;">0</span>
         <% end %>
       <% else %>
         <%= link_to login_path, class: "login-btn" do %>

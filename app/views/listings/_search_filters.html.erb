@@ -10,11 +10,11 @@
   "over_1000" => "Over $1000"
 } %>
 
-<div class="search-section search-section-modern">
-  <%= form_with url: listings_path, method: :get, local: true,
+<div class="search-section">
+  <%= form_with url: listings_path, method: :get,
               id: "listing-search-form",
-              class: "modern-search-form" do %>
-    <div class="search-row modern-search-row">
+              data: { turbo_frame: "listings" } do %>
+    <div class="search-row">
       <div class="search-box">
         <i class="fas fa-search"></i>
         <%= text_field_tag :q, params[:q], placeholder: "Search for an item" %>

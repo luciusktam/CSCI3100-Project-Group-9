@@ -1,55 +1,43 @@
 <div class="app">
-   <header class="navbar">
-        <%= link_to root_path, class: "logo" do %>
-            CUMarket
-        <% end %>
-        <div class="nav-links">
-          <%= link_to listings_path do %>
-            <i class="fas fa-store"></i> Market
-          <% end %>
-            <%= link_to community_path do %>
-                <i class="fas fa-users"></i> Community
-            <% end %>
-            <%= link_to chat_path, id: "navChatLink", class: "nav-chat-link" do %>
-                <i class="fas fa-comment-dots"></i> Chat
-                <span id="chatNavBadge" class="nav-badge" style="display: none;">0</span>
-            <% end %>
-            <%= link_to sell_path do %>
-                <i class="fas fa-euro-sign"></i> Sell
-            <% end %>
-            <% if user_signed_in? && current_user.admin? %>
-                <%= link_to admin_dashboard_path do %>
-                    <i class="fas fa-shield-alt"></i> Admin
-                <% end %>
-            <% end %>
-            <%= link_to profile_path do %>
-                <i class="fas fa-user-circle"></i> Profile
-            <% end %>
-        </div>
-        <div class="right-corner">
-            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
-                <i class="fas fa-moon"></i>
-                <span>Dark</span>
-            </button>
-            <% if user_signed_in? %>
-                <span class="session-badge">
-                    <i class="fas fa-user-check"></i>
-                    <%= current_user.username %>
-                    <% if current_user.admin? %>
-                        <strong>Admin</strong>
-                    <% end %>
-                </span>
-                <%= button_to logout_path, method: :delete, class: "login-btn logout-btn" do %>
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                <% end %>
-            <% else %>
-            <%= link_to login_path, class: "login-btn" do %>
-                <i class="fas fa-sign-in-alt"></i> Login
-            <% end %>
-            <% end %>
-        </div>
-    </header>
+  <header class="navbar">
+    <div class="navbar-left">
+      <%= link_to root_path, class: "logo" do %>
+        CUMarket
+      <% end %>
+    </div>
 
+    <div class="nav-links">
+      <% if user_signed_in? && current_user.admin? %>
+        <%= link_to admin_dashboard_path, class: "admin-nav-link#{' active' if request.path.start_with?('/admin')}" do %>
+          <i class="fas fa-shield-alt"></i> Admin
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="right-corner">
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+        <i class="fas fa-moon"></i>
+        <span>Dark</span>
+      </button>
+      <% if user_signed_in? %>
+        <%= link_to profile_path, class: "session-badge" do %>
+          <i class="fas fa-user-check"></i>
+          <%= current_user.username %>
+          <% if current_user.admin? %>
+            <strong>Admin</strong>
+          <% end %>
+        <% end %>
+        <%= link_to chat_path, class: "nav-chat-btn", "aria-label": "Chat" do %>
+          <i class="fas fa-comment-dots"></i>
+          <span id="chatNavBadge" class="nav-badge" style="display: none;">0</span>
+        <% end %>
+      <% else %>
+        <%= link_to login_path, class: "login-btn" do %>
+          <i class="fas fa-sign-in-alt"></i> Login
+        <% end %>
+      <% end %>
+    </div>
+  </header>
 
   <div class="listing-container">
   <% photo_count = @listing.photos.count %>
@@ -70,15 +58,10 @@
         <button class="nav-btn next" onclick="scrollGallery(1)">❯</button>
       <% end %>
 
-    
     </div>
-
-  
     <div id="imageModal" class="modal" onclick="closeModal()">
       <img id="modalImg">
     </div>
-
-    
     <div class="listing-header">
       <div class="header-left">
         <h1><%= @listing.title %></h1>
@@ -94,7 +77,6 @@
     </div>
 
     <hr>
-   
     <div class="listing-info-grid">
       <div class="info-row">
         <div class="info-col">
@@ -128,10 +110,6 @@
     </div>
 
     <hr>
-
-    
-
-    
     <div class="listing-actions">
       <% if user_signed_in? && current_user == @listing.user %>
         
@@ -164,10 +142,6 @@
         <% end %>
       <% end %>
     </div>
-
-
-   
-
   </div>
 </div>
 

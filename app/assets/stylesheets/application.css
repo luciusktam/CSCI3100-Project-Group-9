@@ -40,6 +40,7 @@
   --text-dark: #334155;
 
   /* Borders & Dividers */
+  --border: var(--border-light);
   --border-light: #e2e8f0;
   --border-medium: #cbd5e1;
   --border-dark: #454a54;
@@ -415,7 +416,7 @@ body,
 
 .nav-links {
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
   align-items: center;
   font-weight: 500;
 }
@@ -423,25 +424,286 @@ body,
 .nav-links a {
   text-decoration: none;
   color: var(--text-dark);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: color 0.2s;
+  display: inline-block;
+  position: relative;
+  padding-bottom: 4px;
   font-size: 1rem;
+  transition: color 0.2s;
 }
 
-.nav-links a i {
-  font-size: 1.2rem;
+.nav-search-form {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem;
+}
+
+.nav-search-form .search-row {
+  width: 100%;
+  max-width: 560px;
+  background: transparent;
+  border-radius: var(--radius-full);
+  padding: 0;
+  box-shadow: none;
+}
+
+.nav-search-form .search-box {
+  flex: 1;
+  background: var(--bg-white);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-full);
+  padding: 0.5rem 1.2rem;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.nav-search-form .search-box:focus-within {
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.nav-search-form .search-box input {
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+}
+
+.nav-search-form .search-box input::placeholder {
   color: var(--text-muted);
-  transition: color 0.2s;
+}
+
+.nav-search-form .community-btn.secondary {
+  background: transparent;
+  border: 1.5px solid var(--border-light);
+  padding: 0.3rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+body.dark-mode .nav-search-form .search-box {
+  background: var(--bg-dark);
+  border-color: var(--border-dark);
+}
+
+body.dark-mode .nav-search-form .search-box input {
+  color: var(--text-light);
+}
+
+body.dark-mode .nav-search-form .search-box input::placeholder {
+  color: var(--text-muted-dark);
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent-purple);
+  border-radius: 2px;
+  transition: width 0.25s ease;
 }
 
 .nav-links a:hover {
   color: var(--accent-purple);
 }
 
-.nav-links a:hover i {
-  color: var(--accent-gold);
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-links a.active {
+  color: var(--accent-purple);
+  font-weight: 600;
+}
+
+.nav-links a.active::after {
+  width: 100%;
+}
+
+.nav-links .admin-nav-link {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+
+/* Chat icon button (right-corner) */
+.nav-chat-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-full);
+  background: #efe8f8;
+  color: var(--accent-purple);
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+
+/* Community icon button (left side) */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nav-community-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: #efe8f8;
+  color: var(--accent-purple);
+  font-size: 1.2rem;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+
+.nav-market-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: #efe8f8;
+  color: var(--accent-purple);
+  font-size: 1.2rem;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+
+.nav-market-btn:hover {
+  background: var(--accent-purple);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+.nav-market-btn.active {
+  background: var(--accent-purple);
+  color: #fff;
+}
+
+.nav-links a.nav-market-btn {
+  position: static;
+  padding-bottom: 0;
+}
+
+.nav-links a.nav-market-btn::after {
+  display: none;
+}
+
+.nav-community-btn:hover {
+  background: var(--accent-purple);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+.nav-community-btn.active {
+  background: var(--accent-purple);
+  color: #fff;
+}
+
+/* Remove underline from nav-community-btn even when inside .nav-links */
+.nav-links a.nav-community-btn {
+  position: static;
+  padding-bottom: 0;
+}
+
+.nav-links a.nav-community-btn::after {
+  display: none;
+}
+
+.nav-chat-btn:hover {
+  background: #e0d0f0;
+  box-shadow: var(--focus-ring);
+}
+
+.nav-chat-btn.active {
+  background: var(--accent-purple);
+  color: #fff;
+}
+
+body.dark-mode .nav-chat-btn {
+  background: #2d3036;
+  color: var(--accent-gold-soft);
+}
+
+body.dark-mode .nav-chat-btn:hover {
+  background: #3a3f4a;
+}
+
+body.dark-mode .nav-chat-btn.active {
+  background: var(--accent-purple);
+  color: #fff;
+}
+
+body.dark-mode .nav-community-btn {
+  background: #2d3036;
+  color: var(--accent-gold-soft);
+}
+
+body.dark-mode .nav-community-btn:hover {
+  background: #3a3f4a;
+}
+
+body.dark-mode .nav-community-btn.active {
+  background: var(--accent-purple);
+  color: #fff;
+}
+
+body.dark-mode .nav-market-btn {
+  background: #2d3036;
+  color: var(--accent-gold-soft);
+}
+
+body.dark-mode .nav-market-btn:hover {
+  background: #3a3f4a;
+}
+
+body.dark-mode .nav-market-btn.active {
+  background: var(--accent-purple);
+  color: #fff;
+}
+
+.nav-create-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-full);
+  background: var(--accent-purple);
+  color: #fff;
+  font-size: 1.2rem;
+  text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+
+.nav-create-btn:hover {
+  background: #7c4dff;
+  box-shadow: var(--focus-ring);
+}
+
+body.dark-mode .nav-create-btn {
+  background: var(--accent-purple);
+}
+
+body.dark-mode .nav-create-btn:hover {
+  background: #7c4dff;
 }
 
 .right-corner {
@@ -627,6 +889,14 @@ input:checked + .slider:before {
   background: #efe8f8;
   color: var(--accent-purple);
   font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.session-badge:hover {
+  background: #e0d0f0;
+  box-shadow: var(--focus-ring);
 }
 
 .session-badge strong {
@@ -841,8 +1111,8 @@ input:checked + .slider:before {
 
 .filters-left h2 {
   margin: 0;
-  font-size: 1.9rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .selected-chips {
@@ -3022,22 +3292,23 @@ body:has(.main-chat-layout) .chat-input-area {
    20. Navigation Badges
    ========================================================================== */
 
-.nav-chat-link {
+.nav-chat-btn {
   position: relative;
 }
 
 .nav-badge {
   position: absolute;
-  top: -8px;
-  right: -12px;
+  top: -4px;
+  right: -4px;
   background-color: var(--badge-red);
   color: white;
   border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 11px;
-  font-weight: bold;
+  padding: 2px 5px;
+  font-size: 0.65rem;
+  font-weight: 700;
   min-width: 18px;
   text-align: center;
+  border: 2px solid var(--window-bg);
   line-height: 1.2;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   animation: pulse 1.5s ease-in-out infinite;
@@ -3217,6 +3488,10 @@ body.dark-mode hr {
 body.dark-mode .session-badge {
   background: #2d3036;
   color: var(--accent-gold-soft);
+}
+
+body.dark-mode .session-badge:hover {
+  background: #3a3f4a;
 }
 
 body.dark-mode .session-badge strong {
@@ -3832,8 +4107,21 @@ body.dark-mode .section-actions .create-listing-btn.always-visible:active {
     align-items: stretch;
   }
 
+  .navbar-left {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
   .logo {
     font-size: 1.3rem !important;
+  }
+
+  .nav-community-btn {
+    width: 42px;
+    height: 42px;
+    font-size: 1.1rem;
   }
 
   .nav-links,
