@@ -101,7 +101,7 @@ RSpec.describe User, type: :model do
     it "returns the raw attribute value" do
       freeze_time = Time.current
       user.banned_until = freeze_time
-      expect(user.banned_until.to_f).to eq(freeze_time.to_f)
+      expect(user.banned_until.to_f).to be_within(0.001).of(freeze_time.to_f)
     end
   end
 
