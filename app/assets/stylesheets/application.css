@@ -1211,6 +1211,12 @@ input:checked + .slider:before {
   color: white;
 }
 
+.create-listing-btn:visited,
+.create-listing-btn:focus,
+.create-listing-btn:active {
+  color: white;
+}
+
 .create-listing-btn.always-visible {
   display: inline-flex;
   align-items: center;
