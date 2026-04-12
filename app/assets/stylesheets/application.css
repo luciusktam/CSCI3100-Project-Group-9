@@ -3217,13 +3217,13 @@ body.dark-mode .session-avatar-image {
   border-color: #5a6270;
 }
 
-body.dark-mode .flash-notice {
+body.dark-mode .flash.notice {
   background: var(--notice-dark-bg);
   color: var(--accent-gold-soft);
   border-color: #454a54;
 }
 
-body.dark-mode .flash-alert,
+body.dark-mode .flash.alert,
 body.dark-mode .form-errors {
   background: var(--alert-dark-bg);
   color: var(--accent-gold-soft);
