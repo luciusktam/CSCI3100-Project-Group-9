@@ -42,7 +42,7 @@ When("I click the register link on the login page") do
 end
 
 When("I register with email {string}, username {string}, password {string}, and confirmation {string}") do |email, username, password, confirmation|
-  fill_in 'yourname@link.cuhk.edu.hk', with: email
+  fill_in 'sid@link.cuhk.edu.hk', with: email
   fill_in 'cuhkstudent', with: username
   find('input[name="user[password]"]').fill_in(with: password)
   find('input[name="user[password_confirmation]"]').fill_in(with: confirmation)
@@ -51,7 +51,7 @@ end
 
 When("I log in with email {string} and password {string}") do |email, password|
   visit login_path
-  fill_in 'yourname@link.cuhk.edu.hk', with: email
+  fill_in 'sid@link.cuhk.edu.hk', with: email
   fill_in 'password', with: password
   click_button 'Login'
 end
