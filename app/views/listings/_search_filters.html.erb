@@ -12,8 +12,7 @@
 
 <div class="search-section">
   <%= form_with url: listings_path, method: :get,
-              id: "listing-search-form",
-              data: { turbo_frame: "listings" } do %>
+              id: "listing-search-form" do %>
     <div class="search-row">
       <div class="search-box">
         <i class="fas fa-search"></i>
@@ -21,45 +20,50 @@
       </div>
 
       <div class="filter-dropdowns">
-        <button type="button" class="filter-tag filter-toggle" data-target="category-panel">
-          <i class="fas fa-tag"></i> Category
+        <button type="button" class="filter-tag filter-toggle<%= ' has-selection' if selected_categories.any? %>" data-target="category-panel">
+          <i class="fas fa-tag"></i> Category<%= '<span class="filter-count">'.html_safe + selected_categories.count.to_s + '</span>'.html_safe if selected_categories.any? %>
         </button>
 
-        <button type="button" class="filter-tag filter-toggle" data-target="price-panel">
-          <i class="fas fa-dollar-sign"></i> Price
+        <button type="button" class="filter-tag filter-toggle<%= ' has-selection' if selected_price_ranges.any? %>" data-target="price-panel">
+          <i class="fas fa-dollar-sign"></i> Price<%= '<span class="filter-count">'.html_safe + selected_price_ranges.count.to_s + '</span>'.html_safe if selected_price_ranges.any? %>
         </button>
 
-        <button type="button" class="filter-tag filter-toggle" data-target="location-panel">
-          <i class="fas fa-map-pin"></i> Location
+        <button type="button" class="filter-tag filter-toggle<%= ' has-selection' if selected_locations.any? %>" data-target="location-panel">
+          <i class="fas fa-map-pin"></i> Location<%= '<span class="filter-count">'.html_safe + selected_locations.count.to_s + '</span>'.html_safe if selected_locations.any? %>
         </button>
 
-        <button type="button" class="filter-tag filter-toggle" data-target="condition-panel">
-          <i class="fas fa-star"></i> Condition
+        <button type="button" class="filter-tag filter-toggle<%= ' has-selection' if selected_conditions.any? %>" data-target="condition-panel">
+          <i class="fas fa-star"></i> Condition<%= '<span class="filter-count">'.html_safe + selected_conditions.count.to_s + '</span>'.html_safe if selected_conditions.any? %>
         </button>
       </div>
 
       <%= submit_tag "Search", class: "search-btn" %>
     </div>
 
+    <% if selected_categories.any? || selected_conditions.any? || selected_locations.any? || selected_price_ranges.any? %>
     <div class="filter-chip filter-chip-row selected-filters-bar">
       <div class="filters-left">
-        <h2><i class="fas fa-sliders-h filter-title-icon"></i> Filters</h2>
+        <h2 class="filter-heading"><i class="fas fa-sliders-h filter-title-icon"></i> Filters</h2>
 
         <div class="selected-chips">
           <% selected_categories.each do |category| %>
-            <span class="selected-chip"><%= category %></span>
+            <% params_without = request.params.merge(categories: selected_categories - [category]).reject { |k, v| k == "categories" && v.empty? } %>
+            <%= link_to "#{category} <i class='fas fa-times'></i>".html_safe, listings_path(params_without), class: "selected-chip" %>
           <% end %>
 
           <% selected_conditions.each do |condition| %>
-            <span class="selected-chip"><%= condition %></span>
+            <% params_without = request.params.merge(conditions: selected_conditions - [condition]).reject { |k, v| k == "conditions" && v.empty? } %>
+            <%= link_to "#{condition} <i class='fas fa-times'></i>".html_safe, listings_path(params_without), class: "selected-chip" %>
           <% end %>
 
           <% selected_locations.each do |location| %>
-            <span class="selected-chip"><%= location %></span>
+            <% params_without = request.params.merge(locations: selected_locations - [location]).reject { |k, v| k == "locations" && v.empty? } %>
+            <%= link_to "#{location} <i class='fas fa-times'></i>".html_safe, listings_path(params_without), class: "selected-chip" %>
           <% end %>
 
           <% selected_price_ranges.each do |price_range| %>
-            <span class="selected-chip"><%= price_labels[price_range] || price_range %></span>
+            <% params_without = request.params.merge(price_ranges: selected_price_ranges - [price_range]).reject { |k, v| k == "price_ranges" && v.empty? } %>
+            <%= link_to "#{price_labels[price_range] || price_range} <i class='fas fa-times'></i>".html_safe, listings_path(params_without), class: "selected-chip" %>
           <% end %>
         </div>
       </div>
@@ -68,6 +72,7 @@
         <i class="fas fa-trash-alt"></i> clear all
       <% end %>
     </div>
+    <% end %>
 
     <div class="filter-panels">
       <div id="category-panel" class="filter-panel hidden">

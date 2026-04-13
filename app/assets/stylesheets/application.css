@@ -1009,6 +1009,27 @@ input:checked + .slider:before {
   border-color: #d2c2e5;
 }
 
+.filter-count {
+  background: var(--accent-purple);
+  color: white;
+  border-radius: var(--radius-full);
+  padding: 0.1rem 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 0.25rem;
+  line-height: 1.2;
+}
+
+.filter-tag.has-selection {
+  background: #efe8f8;
+  border-color: var(--accent-purple);
+  color: var(--accent-purple);
+}
+
+.filter-tag.has-selection i {
+  color: var(--accent-purple);
+}
+
 .search-btn {
   background: var(--accent-purple);
   border: 1px solid var(--accent-purple);
@@ -1108,23 +1129,29 @@ input:checked + .slider:before {
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
+  flex: 1;
 }
 
-.filters-left h2 {
+.filters-left h2,
+.filter-heading {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .selected-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
+  flex: 1;
+  align-items: center;
 }
 
 .selected-chip {
   display: inline-flex;
   align-items: center;
+  gap: 0.4rem;
   background: #efe8f8;
   color: var(--accent-purple);
   border: 1px solid #ddd6eb;
@@ -1132,6 +1159,20 @@ input:checked + .slider:before {
   padding: 0.45rem 0.9rem;
   font-size: 0.9rem;
   font-weight: 600;
+  text-decoration: none;
+}
+
+.selected-chip:hover {
+  background: #e0d4f0;
+}
+
+.selected-chip i {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.selected-chip:hover i {
+  opacity: 1;
 }
 
 .section-actions {
@@ -3478,6 +3519,21 @@ body.dark-mode .filter-tag:hover {
   border-color: var(--accent-purple);
 }
 
+body.dark-mode .filter-count {
+  background: var(--accent-gold-soft);
+  color: var(--text-dark);
+}
+
+body.dark-mode .filter-tag.has-selection {
+  background: #2d3036;
+  border-color: var(--accent-gold-soft);
+  color: var(--accent-gold-soft);
+}
+
+body.dark-mode .filter-tag.has-selection i {
+  color: var(--accent-gold-soft);
+}
+
 body.dark-mode .filter-chip {
   border-top-color: #2a2a2a;
 }
@@ -3957,6 +4013,10 @@ body.dark-mode .selected-chip {
   background: #2d3036;
   color: var(--accent-gold-soft);
   border-color: var(--border-dark);
+}
+
+body.dark-mode .selected-chip:hover {
+  background: #3a3f47;
 }
 
 body.dark-mode .filter-panel {
