@@ -117,3 +117,18 @@ document.addEventListener("turbo:load", () => {
   initFilterPanels()
   initFormEnterSubmit()
 })
+
+// Handle Turbo frame loads (for Turbo Frame updates)
+document.addEventListener("turbo:frame-load", () => {
+  initFilterPanels()
+  initFormEnterSubmit()
+})
+
+// Backup initialization for edge cases (full page refresh, etc.)
+window.addEventListener("load", () => {
+  // Small delay to ensure all DOM is ready
+  requestAnimationFrame(() => {
+    initFilterPanels()
+    initFormEnterSubmit()
+  })
+})
