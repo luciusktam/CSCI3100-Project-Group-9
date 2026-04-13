@@ -53,10 +53,14 @@
   <div class="section-header">
     <h2></h2>
     <div class="section-actions">
-      <% if user_signed_in? %>
-        <%= link_to "Your Listings", listings_path(user_id: current_user.id), class: "community-btn secondary" %>
-        <%= link_to "Post Items", sell_path, class: "community-btn primary" %>
-      <% end %>
+        <% if user_signed_in? %>
+          <% if params[:user_id].present? && params[:user_id].to_i == current_user.id %>
+            <%= link_to "All Listings", listings_path, class: "community-btn secondary" %>
+          <% else %>
+            <%= link_to "Your Listings", listings_path(user_id: current_user.id), class: "community-btn secondary" %>
+          <% end %>
+          <%= link_to "Post Items", sell_path, class: "community-btn primary" %>
+        <% end %>
     </div>
   </div>
 
