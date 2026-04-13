@@ -1,4 +1,4 @@
-<%= link_to listing_path(listing), class: "listing-card" do %>
+<%= link_to listing_path(listing), class: "listing-card", data: { turbo_frame: "_top" } do %>
   <div class="listing-image-wrapper">
     <% if listing.photos.attached? && listing.photos.first.present? %>
       <%= image_tag listing.photos.first, class: "listing-card-image", alt: listing.title %>
