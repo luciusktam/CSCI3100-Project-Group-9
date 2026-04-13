@@ -75,7 +75,7 @@ Secondary = support / reviewer + contributed commits / tests.
 | Image uploads | Au Chi Hin | | Active Storage. |
 | Item status workflow | Au Chi Hin | | Available → Reserved → Sold. |
 | Search & filtering | Lau Yat Laam | | Keyword search, filters, and fuzzy search. |
-| Community feature | Lau Yat Laam | | Community feed, post CRUD, comments, UI polish, search, and fuzzy search. |
+| Community posts | Lau Yat Laam | | Community feed, post CRUD, comments, UI polish, search, and fuzzy search. |
 | ActionCable chat / notifications | Lau Chi Ho | | Real-time messaging + notifications over Redis. |
 | User banning / suspension | Tam Yiu Hei | | Admin-controlled, time-limited bans. |
 | Admin dashboard | Tam Yiu Hei | | User management + content moderation. |
