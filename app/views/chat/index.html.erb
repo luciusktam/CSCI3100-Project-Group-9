@@ -1,15 +1,4 @@
 <div class="app">
-  <script>
-    // Auto-refresh the page once to ensure JavaScript loads properly
-    (function() {
-      if (!window.location.search.includes('refreshed=true')) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('refreshed', 'true');
-        window.location.href = url.toString();
-      }
-    })();
-  </script>
-
   <header class="navbar">
     <div class="navbar-left">
       <%= link_to community_path, class: "nav-community-btn#{' active' if request.path.start_with?('/community')}", aria: { label: "Community" } do %>
