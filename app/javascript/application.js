@@ -20,6 +20,8 @@ function applyStoredTheme() {
   const storedTheme = localStorage.getItem(THEME_KEY)
   if (storedTheme) {
     applyTheme(storedTheme, document.getElementById("theme-toggle"))
+    // Also sync cookie for server-side rendering
+    document.cookie = `theme_preference=${storedTheme};path=/;max-age=${60*60*24*365}`
   }
 }
 
@@ -29,6 +31,8 @@ function applyStoredTheme() {
   if (storedTheme === "dark") {
     document.body.classList.add("dark-mode")
     document.documentElement.classList.add("dark-mode")
+    // Sync cookie for server-side rendering
+    document.cookie = "theme_preference=dark;path=/;max-age=" + (60*60*24*365)
   }
 })()
 
@@ -39,6 +43,8 @@ document.addEventListener("click", (event) => {
 
   const nextTheme = document.body.classList.contains("dark-mode") ? "light" : "dark"
   localStorage.setItem(THEME_KEY, nextTheme)
+  // Also set cookie for server-side rendering
+  document.cookie = `theme_preference=${nextTheme};path=/;max-age=${60*60*24*365}`
   applyTheme(nextTheme, button)
 })
 

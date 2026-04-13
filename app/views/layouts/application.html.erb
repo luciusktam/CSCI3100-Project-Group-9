@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html class="<%= 'dark-mode' if dark_mode? %>">
   <head>
+    <!-- Preload dark mode to prevent flash - must be before any CSS -->
+    <script>!function(){var t=localStorage.getItem("theme-preference");if("dark"===t){document.write('<style id="dm-preload">.dark-mode,html.dark-mode,body.dark-mode{background:#24262b!important;background-color:#24262b!important}</style>')}}();</script>
     <title>CUMarket</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="description" content="CUHK Campus Marketplace - Buy and sell items within the CUHK community">
@@ -21,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   </head>
 
-  <body>
+  <body class="<%= 'dark-mode' if dark_mode? %>">
     <%= render "application/flashes" %>
     <%= yield %>
   </body>

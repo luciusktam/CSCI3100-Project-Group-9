@@ -84,12 +84,16 @@ class ChatNotificationManager {
   async loadUnreadCountsFromServer() {
     try {
       const response = await fetch('/chat/unread_counts.json');
-      const data = await response.json();
       
+      // Silently handle non-OK responses (e.g., 401 redirect returns HTML)
+      if (!response.ok) return;
+      
+      const data = await response.json();
+
       // Only update if the counts have changed
       const newUnreadCount = data.unread_counts || {};
       let hasChanges = false;
-      
+
       // Check for changes
       const allUserIds = new Set([...Object.keys(this.unreadCount), ...Object.keys(newUnreadCount)]);
       for (const userId of allUserIds) {
@@ -100,7 +104,7 @@ class ChatNotificationManager {
           break;
         }
       }
-      
+
       if (hasChanges) {
         this.unreadCount = newUnreadCount;
         this.updateHeaderChatButton();
