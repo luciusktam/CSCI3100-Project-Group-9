@@ -49,7 +49,7 @@
   </header>
 
   <div class="search-section">
-    <div class="search-row">
+    <%= form_with url: community_path, method: :get, local: true, class: "search-row" do %>
       <div class="search-box">
         <i class="fas fa-search"></i>
         <%= text_field_tag :query, params[:query], placeholder: "Search posts by title or content..." %>
@@ -60,7 +60,7 @@
       <% if params[:query].present? %>
         <%= link_to "Clear", community_path, class: "community-btn secondary" %>
       <% end %>
-    </div>
+    <% end %>
   </div>
 
   <section class="community-feed-shell">

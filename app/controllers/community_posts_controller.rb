@@ -20,6 +20,9 @@ class CommunityPostsController < ApplicationController
     @community_posts = @community_posts.reorder(created_at: :desc)
                                        .page(params[:page])
                                        .per(5)
+
+  Rails.logger.debug "PARAMS: #{params.to_unsafe_h}"
+  Rails.logger.debug "POSTS: #{@community_posts.map(&:title)}"
   end
 
 
