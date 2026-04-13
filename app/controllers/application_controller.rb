@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
 
   def current_user
     @current_user ||= User.find_by(id: session[:user_id]) if session[:user_id]
+    @current_user unless @current_user&.banned?
   end
 
   def user_signed_in?
@@ -28,14 +29,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
-    return if user_signed_in? && !current_user.banned?
-
-    if current_user&.banned?
-      reset_session
-      flash[:alert] = "Your account has been suspended. Please contact an administrator."
-      redirect_to login_path, status: :see_other
-      return
-    end
+    return if user_signed_in?
 
     flash[:alert] = "Please log in before listing items for sale"
     redirect_to login_path, status: :see_other
