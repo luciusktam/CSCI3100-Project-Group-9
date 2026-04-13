@@ -7,6 +7,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @user.verification_token = SecureRandom.hex(32)
     @user.email_verified = false
+    @user.verification_sent_at = Time.current
 
     if @user.save
       UserMailer.verification_email(@user).deliver_later
@@ -21,7 +22,9 @@ class UsersController < ApplicationController
   def verify
     user = User.find_by(verification_token: params[:token])
 
-    if user && !user.email_verified?
+    if user && user.verification_expired?
+      redirect_to login_path, alert: "Verification link has expired. Please request a new one."
+    elsif user && !user.email_verified?
       user.update!(email_verified: true, verified_at: Time.current, verification_token: nil)
       redirect_to login_path, notice: "Email verified! You can now log in."
     elsif user&.email_verified?
@@ -36,8 +39,7 @@ class UsersController < ApplicationController
     user = User.find_by(email: email)
 
     if user && !user.email_verified?
-      # Regenerate token and enqueue email asynchronously
-      user.update(verification_token: SecureRandom.hex(32))
+      user.update(verification_token: SecureRandom.hex(32), verification_sent_at: Time.current)
       UserMailer.verification_email(user).deliver_later if user.persisted?
     end
 

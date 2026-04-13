@@ -29,7 +29,8 @@ RSpec.describe "Logins", type: :request do
         username: "pending",
         password: "Password123",
         password_confirmation: "Password123",
-        email_verified: false
+        email_verified: false,
+        verification_sent_at: Time.current
       )
     end
 
@@ -71,7 +72,8 @@ RSpec.describe "Logins", type: :request do
         password: "Password123",
         password_confirmation: "Password123",
         email_verified: false,
-        verification_token: SecureRandom.hex(32)
+        verification_token: SecureRandom.hex(32),
+        verification_sent_at: Time.current
       )
     end
 

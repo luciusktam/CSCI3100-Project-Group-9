@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   PASSWORD_RESET_EXPIRY = 30.minutes
+  VERIFICATION_EXPIRY = 24.hours
 
   has_many :community_posts, dependent: :destroy
 
@@ -42,6 +43,10 @@ class User < ApplicationRecord
 
   def password_reset_token_expired?
     reset_password_token_digest.blank? || reset_password_sent_at.blank? || reset_password_sent_at < PASSWORD_RESET_EXPIRY.ago
+  end
+
+  def verification_expired?
+    verification_sent_at.blank? || verification_sent_at < VERIFICATION_EXPIRY.ago
   end
 
   has_many :conversations_as_user1, class_name: "Conversation", foreign_key: "user1_id", dependent: :destroy

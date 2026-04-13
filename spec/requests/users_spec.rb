@@ -18,7 +18,8 @@ RSpec.describe "Email verification flow", type: :request do
       password:           "Password123",
       password_confirmation: "Password123",
       verification_token: verification_token,
-      email_verified:     false
+      email_verified:     false,
+      verification_sent_at: Time.current
     )
   end
 

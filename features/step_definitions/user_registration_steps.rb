@@ -21,7 +21,8 @@ Given("an unverified user exists with email {string} and password {string}") do 
     password: password,
     password_confirmation: password,
     email_verified: false,
-    verified_at: nil
+    verified_at: nil,
+    verification_sent_at: Time.current
   )
   user.save!
 end
