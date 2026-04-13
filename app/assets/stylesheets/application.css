@@ -1724,6 +1724,54 @@ input:checked + .slider:before {
   justify-content: center;
 }
 
+.verify-title {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.verify-email-info {
+  background: #ede9fe;
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.verify-email-info p {
+  margin: 0;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.verify-email-info strong {
+  word-break: break-all;
+}
+
+.verify-footer {
+  margin-top: 1.5rem;
+  padding: 0.875rem 1rem;
+  background: var(--surface-light);
+  border-radius: var(--radius-md);
+  display: flex;
+  gap: 0.625rem;
+  align-items: flex-start;
+}
+
+.verify-footer i {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+.verify-footer p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
 .auth-switch {
   margin: 0.25rem 0 0;
   color: var(--text-light);
@@ -3463,6 +3511,23 @@ body.dark-mode .listing-seller,
 body.dark-mode .listing-location,
 body.dark-mode .listing-condition,
 body.dark-mode .page-subtitle {
+  color: #9ca3af;
+}
+
+body.dark-mode .verify-email-info {
+  background: rgba(91, 44, 131, 0.2);
+}
+
+body.dark-mode .verify-email-info p,
+body.dark-mode .verify-email-info strong {
+  color: #e5e7eb;
+}
+
+body.dark-mode .verify-footer {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .verify-footer p {
   color: #9ca3af;
 }
 

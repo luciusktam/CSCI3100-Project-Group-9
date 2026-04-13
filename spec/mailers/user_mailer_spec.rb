@@ -3,10 +3,14 @@ require "rails_helper"
 RSpec.describe UserMailer, type: :mailer do
   describe "#verification_email" do
     let(:user) do
-      User.new(
+      User.create!(
         email:              "student@link.cuhk.edu.hk",
         username:           "testuser",
-        verification_token: "tok_abc123XYZ"
+        password:           "Password123",
+        password_confirmation: "Password123",
+        verification_token: "tok_abc123XYZ",
+        email_verified:     false,
+        verification_sent_at: Time.current
       )
     end
 

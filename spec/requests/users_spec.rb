@@ -23,24 +23,13 @@ RSpec.describe "Email verification flow", type: :request do
     )
   end
 
-  describe "GET /verify/:token" do
+  describe "GET /verify/:user_id/:token" do
     context "with a valid, unused token" do
-      it "marks the user as verified and redirects to login" do
-        get verify_email_path(token: verification_token)
-        expect(response).to redirect_to(login_path)
-        expect(user.reload.email_verified).to be true
-        expect(user.reload.verified_at).not_to be_nil
-      end
-
-      it "clears the verification token after use" do
-        get verify_email_path(token: verification_token)
-        expect(user.reload.verification_token).to be_nil
-      end
-
-      it "shows a success flash message" do
-        get verify_email_path(token: verification_token)
-        follow_redirect!
-        expect(response.body).to include("Email verified! You can now log in.")
+      it "renders the confirmation page without verifying the user" do
+        get verify_email_path(user_id: user.id, token: verification_token)
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include("Verify Your Email")
+        expect(user.reload.email_verified).to be false
       end
     end
 
@@ -48,7 +37,7 @@ RSpec.describe "Email verification flow", type: :request do
       before { user.update!(email_verified: true, verified_at: Time.current, verification_token: nil) }
 
       it "redirects to root with an invalid-link message" do
-        get verify_email_path(token: verification_token)
+        get verify_email_path(user_id: user.id, token: verification_token)
         expect(response).to redirect_to(root_path)
         follow_redirect!
         expect(response.body).to include("Invalid or expired verification link.")
@@ -57,7 +46,49 @@ RSpec.describe "Email verification flow", type: :request do
 
     context "with an invalid token" do
       it "redirects to the home page with an error" do
-        get verify_email_path(token: "nonexistent_token")
+        get verify_email_path(user_id: user.id, token: "nonexistent_token")
+        expect(response).to redirect_to(root_path)
+        follow_redirect!
+        expect(response.body).to include("Invalid or expired verification link.")
+      end
+    end
+  end
+
+  describe "POST /verify/:user_id/:token (confirm_verify)" do
+    context "with a valid, unused token" do
+      it "marks the user as verified and redirects to login" do
+        post confirm_verify_email_path(user_id: user.id, token: verification_token)
+        expect(response).to redirect_to(login_path)
+        expect(user.reload.email_verified).to be true
+        expect(user.reload.verified_at).not_to be_nil
+      end
+
+      it "clears the verification token after use" do
+        post confirm_verify_email_path(user_id: user.id, token: verification_token)
+        expect(user.reload.verification_token).to be_nil
+      end
+
+      it "shows a success flash message" do
+        post confirm_verify_email_path(user_id: user.id, token: verification_token)
+        follow_redirect!
+        expect(response.body).to include("Email verified! You can now log in.")
+      end
+    end
+
+    context "when the token has already been used" do
+      before { user.update!(email_verified: true, verified_at: Time.current, verification_token: nil) }
+
+      it "redirects to root with an invalid-link message" do
+        post confirm_verify_email_path(user_id: user.id, token: verification_token)
+        expect(response).to redirect_to(root_path)
+        follow_redirect!
+        expect(response.body).to include("Invalid or expired verification link.")
+      end
+    end
+
+    context "with an invalid token" do
+      it "redirects to root with an invalid-link message" do
+        post confirm_verify_email_path(user_id: user.id, token: "nonexistent_token")
         expect(response).to redirect_to(root_path)
         follow_redirect!
         expect(response.body).to include("Invalid or expired verification link.")

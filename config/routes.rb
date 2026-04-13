@@ -16,7 +16,8 @@ Rails.application.routes.draw do
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
   resources :users, only: [:show, :new, :create]
-  get  "verify/:token", to: "users#verify", as: :verify_email
+  get  "verify/:user_id/:token", to: "users#verify",        as: :verify_email
+  post "verify/:user_id/:token", to: "users#confirm_verify", as: :confirm_verify_email
   post "verify/resend", to: "users#resend_verification", as: :resend_verification_email
 
   # Listings routes (basic CRUD for now)

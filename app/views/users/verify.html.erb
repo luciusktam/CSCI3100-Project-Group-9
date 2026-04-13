@@ -1,0 +1,35 @@
+<div class="app auth-page">
+  <header class="navbar auth-navbar">
+    <%= link_to root_path, class: "logo" do %>
+      CUMarket
+    <% end %>
+    <div class="right-corner"></div>
+  </header>
+
+  <section class="auth-layout auth-layout-single">
+    <div class="auth-card-grid">
+      <section class="auth-card">
+        <h2 class="verify-title">Verify Your Email</h2>
+
+        <div class="verify-email-info">
+          <p>Click the button below to confirm that <strong><%= @user.email %></strong> belongs to you.</p>
+        </div>
+
+        <%= form_with(
+              url: confirm_verify_email_path(token: @user.verification_token),
+              method: :post,
+              local: true
+            ) do %>
+          <div class="field-group">
+            <%= submit_tag "Confirm & Verify Email", class: "search-btn auth-submit" %>
+          </div>
+        <% end %>
+
+        <div class="verify-footer">
+          <i class="fas fa-shield-alt"></i>
+          <p>Didn't request this? You can safely ignore this email — your account will not be activated.</p>
+        </div>
+      </section>
+    </div>
+  </section>
+</div>

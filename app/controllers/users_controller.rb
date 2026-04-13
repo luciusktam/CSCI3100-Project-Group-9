@@ -20,15 +20,29 @@ class UsersController < ApplicationController
   end
 
   def verify
-    user = User.find_by(verification_token: params[:token])
+    user = User.find_by(id: params[:user_id], verification_token: params[:token])
 
-    if user && !user.email_verified?
-      user.update!(email_verified: true, verified_at: Time.current, verification_token: nil)
-      redirect_to login_path, notice: "Email verified! You can now log in."
-    elsif user&.email_verified?
+    if user.nil?
+      redirect_to root_path, alert: "Invalid or expired verification link."
+    elsif user.email_verified?
       redirect_to login_path, notice: "Email already verified."
     else
+      @user = user
+    end
+  end
+
+  def confirm_verify
+    user = User.find_by(id: params[:user_id], verification_token: params[:token])
+
+    if user.nil?
       redirect_to root_path, alert: "Invalid or expired verification link."
+    elsif user.email_verified?
+      redirect_to login_path, notice: "Email already verified."
+    elsif user.verification_expired?
+      redirect_to login_path, alert: "Verification link has expired. Please request a new one."
+    else
+      user.update!(email_verified: true, verified_at: Time.current, verification_token: nil)
+      redirect_to login_path, notice: "Email verified! You can now log in."
     end
   end
 

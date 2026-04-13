@@ -133,12 +133,12 @@ When("I follow the verification link in the email") do
   else
     email.body.decoded
   end
-  token_match = body.match(%r{https?://\S*/verify/(\S+)}i) ||
-                body.match(%r{/verify/([0-9a-f]+)})
-  expect(token_match).not_to be_nil, "Could not find a /verify/:token link in the email body"
-  visit "/verify/#{token_match[1]}"
+  token_match = body.match(%r{/verify/(\d+)/([0-9a-f]+)}i)
+  expect(token_match).not_to be_nil, "Could not find a /verify/:user_id/:token link in the email body"
+  visit "/verify/#{token_match[1]}/#{token_match[2]}"
+  click_button "Confirm & Verify Email"
 end
 
 When("I visit the verification link with token {string}") do |token|
-  visit "/verify/#{token}"
+  visit "/verify/invalid_user/#{token}"
 end
