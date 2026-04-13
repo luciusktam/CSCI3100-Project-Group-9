@@ -12,8 +12,8 @@ function applyTheme(theme, button) {
 
   button.setAttribute("aria-pressed", String(isDark))
   button.innerHTML = isDark
-    ? '<i class="fas fa-sun"></i><span>Light</span>'
-    : '<i class="fas fa-moon"></i><span>Dark</span>'
+    ? '<i class="fas fa-sun"></i>'
+    : '<i class="fas fa-moon"></i>'
 }
 
 function applyStoredTheme() {

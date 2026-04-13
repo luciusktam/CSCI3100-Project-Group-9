@@ -778,20 +778,21 @@ body.dark-mode .nav-create-btn:hover {
 .theme-toggle {
   background: var(--window-bg);
   border: 1.5px solid var(--border-light);
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
   border-radius: var(--radius-lg);
   font-weight: 600;
   font-size: 0.9rem;
   color: var(--text-dark);
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
 }
 
 .theme-toggle i {
   color: var(--accent-gold);
+  font-size: 1.1rem;
 }
 
 .theme-toggle:hover {
