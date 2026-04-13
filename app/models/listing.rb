@@ -12,8 +12,7 @@ class Listing < ApplicationRecord
         any_word: true
       },
       trigram: {
-        threshold: 0.1,
-        word_similarity: true
+        threshold: 0.3,
       }
     }
 
