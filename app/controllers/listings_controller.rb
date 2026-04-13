@@ -7,8 +7,10 @@ class ListingsController < ApplicationController
     @available_locations = Listing.distinct.order(:location).pluck(:location)
     @listings = Listing.all
 
-    if params[:q].present?
-      @listings = @listings.search_by_keyword(params[:q])
+    keyword = params[:q].presence || params[:query].presence
+
+    if keyword.present?
+      @listings = @listings.search_by_keyword(keyword)
     end
 
     category_values =
@@ -58,23 +60,16 @@ class ListingsController < ApplicationController
       @listings = @listings.where(price_conditions.join(" OR "), *price_values) if price_conditions.any?
     end
 
-      if params[:user_id].present?
-        @target_user = User.find_by(id: params[:user_id])
-        @listings = @listings.where(user_id: params[:user_id])
-      end
+    if params[:user_id].present?
+      @target_user = User.find_by(id: params[:user_id])
+      @listings = @listings.where(user_id: params[:user_id])
+    end
 
-      @listings = @listings.where(status: %w[available reserved])
-                           .order(created_at: :desc)
-                           .page(params[:page])
-                           .per(20)
+    @listings = @listings.where(status: %w[available reserved])
+                         .order(created_at: :desc)
+                         .page(params[:page])
+                         .per(20)
   end
-
-
-
-
-
-
-
 
 
 

@@ -5,12 +5,17 @@ class Listing < ApplicationRecord
   has_many_attached :photos
 
   pg_search_scope :search_by_keyword,
-                  against: %i[title description location],
-                  using: {
-                    trigram: {
-                      threshold: 0.1
-                    }
-                  }
+    against: %i[title description location],
+    using: {
+      tsearch: {
+        prefix: true,
+        any_word: true
+      },
+      trigram: {
+        threshold: 0.1,
+        word_similarity: true
+      }
+    }
 
   validates :title, presence: true
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
