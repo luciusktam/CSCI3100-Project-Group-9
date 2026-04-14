@@ -51,11 +51,10 @@ https://csci3100-group9-project-c5b9f4042600.herokuapp.com/
 - Deployment: Heroku
 
 ### Pages
-- Login / Register page
+- Login / Register / Verify page
 - Homepage (listed items + search function + filter function)
 - Community page (posts + comments)
 - Chat page (real-time messaging)
-- Listing page (search results + view all)
 - Profile page
 - Admin dashboard
 
