@@ -36,10 +36,10 @@ https://csci3100-group9-project-c5b9f4042600.herokuapp.com/
 - Real-time chat & notifications (ActionCable)
 
 ### Advanced
-- CUHK email verification (restricted to `@link.cuhk.edu.hk`) with **24-hour token expiry** (anti-Gmail-preload security)
-- User banning / suspension (admin-controlled, time-limited)
+- CUHK email verification (restricted to `@link.cuhk.edu.hk`)
 - Admin dashboard (user management + content moderation)
 - Fuzzy search + filtering
+- Real-time chat
 
 ## Tech Stack
 - Ruby on Rails 8.1
