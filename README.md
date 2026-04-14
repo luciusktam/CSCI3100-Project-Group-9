@@ -16,6 +16,7 @@ CUMarket focuses on a safer campus-only marketplace:
 
 
 ## Demo Video
+https://drive.google.com/file/d/1x9IBHuQ20HOSNvihqyCJx6Pg8jX86SUR/view?usp=sharing
 
 ## Project Proposal
 https://docs.google.com/document/d/1pZFI09Xlm_pA6fKjwJcew4SsQhj_CRPV6WBCmB0rNFI/edit?usp=sharing
