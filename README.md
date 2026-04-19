@@ -1,4 +1,4 @@
-# CSCI3100-Project Group 9
+# CSCI 3100 - Project Group 9
 # CUMarket — CUHK Second-Hand Marketplace SaaS
 
 
